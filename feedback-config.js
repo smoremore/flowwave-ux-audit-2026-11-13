@@ -22,9 +22,13 @@
     U2: 'Intake importieren steht nicht beim Leerzustand',
     U3: 'Die Ladephase sieht kurz wie ein leerer Arbeitsbereich aus',
     R7: 'Originalexport ohne Suchen in einer anderen Ansicht',
-    N3: 'Hub und Designs benennen denselben Ort'
+    N3: 'Hub und Designs benennen denselben Ort',
+    B1: "Große Workflow-Stapel brauchen eine scanbare Queue",
+    B2: "Aus einer Meldung direkt zum genauen Auftrag",
+    B3: "Import mit automatischem Start klar benennen",
+    B4: "Große Importprüfungen gezielt eingrenzen"
   };
-  const screens = { designs: 'Designhub', review: 'Review', listings: 'Listings', upload: 'Upload' };
+  const screens = {"designs": "Designhub", "review": "Review", "listings": "Listings", "upload": "Upload vorbereiten", "uploadqueue": "Upload-Queue", "create": "Create Artworks", "sets": "Create Sets", "import": "Import", "remaster": "Remaster", "collections": "Imported Sets", "vectorize": "Vectorize", "upscale": "Upscale", "halftone": "Halftone", "effects": "Effects", "repairs": "Repairs", "autopilot": "Autopilot", "checks": "IP Checks", "live": "Live Designs", "management": "Design management", "activity": "Aktivität", "settings": "Einstellungen"};
   const topics = Object.create(null);
   Object.entries(findings).forEach(([id, title]) => {
     topics[`finding-${id}`] = Object.freeze({

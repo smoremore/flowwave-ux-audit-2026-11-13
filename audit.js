@@ -341,7 +341,131 @@ window.flowwaveFindings.push(...[
     "basis": "UI und Code"
   }
 ]);
-const auditPriorityOrder = ["D1", "R1", "R2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3"];
+window.flowwaveFindings.push(...[
+  {
+    "id": "B1",
+    "priority": "P1",
+    "category": "Autopilot",
+    "title": "Große Workflow-Stapel brauchen eine scanbare Queue",
+    "summary": "Autopilot navigiert gespeicherte Workflows über eine Auswahlliste und Back/Next. Die große Einzelansicht erschwert das Abarbeiten vieler unterschiedlicher Zustände.",
+    "problem": "Die Oberfläche bietet an dieser Stelle keine suchbare Statusliste mit mehreren gleichzeitig sichtbaren Workflows. Bei großen Beständen müssen Titel und Zustände im Select oder nacheinander verglichen werden.",
+    "suggestion": "Eine kompakte Workflow-Queue mit Suche, Statusgruppen, nächster Aktion und exakter Mehrfachauswahl anbieten. Den Sequenzeditor nur für den gewählten Auftrag öffnen.",
+    "preserve": "Manual, Semi und Full Auto; gespeicherte Routen, Stop und Recovery; aktuelle Grenze von 25 Workflows pro Start. Finale Freigabe bleibt im Review.",
+    "acceptance": [
+      "Auch 1.000 Workflows lassen sich nach Aufgabe eingrenzen, ohne den Einzelinspektor durchzublättern.",
+      "Ein Start benennt seine genauen IDs und höchstens 25 startbare Workflows.",
+      "Fertige Geschwister bleiben erhalten; unklare Starts werden zuerst abgeglichen."
+    ],
+    "evidence": [
+      {
+        "file": "public/index.html",
+        "line": 3010,
+        "detail": "Saved workflow Select, Back/Next und Einzelinspektor bis Zeile3055."
+      },
+      {
+        "file": "public/autopilot.js",
+        "line": 288,
+        "detail": "Alle Workflow-Optionen werden aus rows erzeugt; aktueller Datensatz wird im Stepper inspiziert."
+      },
+      {
+        "file": "public/index.html",
+        "line": 2987,
+        "detail": "Full Auto nennt die bestehende Grenze von25 Workflows pro Start."
+      }
+    ],
+    "basis": "Code · 1.4.286"
+  },
+  {
+    "id": "B2",
+    "priority": "P1",
+    "category": "Aktivität",
+    "title": "Aus einer Meldung direkt zum genauen Auftrag",
+    "summary": "Activity kennt die ID der gemeldeten Arbeit. Open führt jedoch nur in den allgemeinen Bereich.",
+    "problem": "Die Zeile bindet row.id an ihre Aktion, ruft aber openArea(area) ohne diese Identität auf. In großen Queues beginnt die Suche nach dem betroffenen Auftrag im Ziel erneut.",
+    "suggestion": "Job-/Record-ID, aktuelle Version und Rückkehrkontext mitgeben. Der Zielbereich zeigt direkt diesen Auftrag und seine passende Recovery.",
+    "preserve": "Vorhandene Bereichsrouten und Stop-Grenzen. Gemeinsame Zugangs-, Ordner- oder Quota-Blocker einmal bündeln; unklare Originalaufrufe nicht neu absenden.",
+    "acceptance": [
+      "Open aus Activity fokussiert genau den gemeldeten Auftrag.",
+      "Die Rückkehr erhält Liste, Filter und Auswahl.",
+      "Ein gemeinsamer Blocker erzeugt eine konkrete Recovery statt derselben Warnung pro Motiv."
+    ],
+    "evidence": [
+      {
+        "file": "public/activity-overview.js",
+        "line": 361,
+        "detail": "Die Aktion setzt activityOpen=row.id, ihr Handler öffnet aber nur openArea(area)."
+      },
+      {
+        "file": "public/activity-overview.js",
+        "line": 521,
+        "detail": "openArea schließt Activity und ruft lediglich area.open() auf."
+      }
+    ],
+    "basis": "Code · 1.4.286"
+  },
+  {
+    "id": "B3",
+    "priority": "P1",
+    "category": "Import",
+    "title": "Import mit automatischem Start klar benennen",
+    "summary": "Der Import-Button nennt nur das Importieren. Bei aktivem Auto wird zusätzlich der Produktionsworkflow angestoßen.",
+    "problem": "Auto ist standardmäßig an, sofern auf diesem Mac nicht anders gespeichert. Button und kurze Konsequenz beschreiben nur Import/Kopieren; der Request trägt bei aktivem Auto zusätzlich autoStart.",
+    "suggestion": "Die Aktion bei aktivem Auto als „n importieren + Workflow starten“ beschriften. Zielroute, gewählte Motive und ausgelassene Problemfälle direkt daneben zeigen; gemerkte Wahl erhalten.",
+    "preserve": "Originale, Importentscheidungen und gespeicherte Auto-Einstellung. Kein zusätzlicher Bestätigungsdialog für denselben bereits klar benannten Umfang.",
+    "acceptance": [
+      "Der Auslöser benennt die tatsächliche Folgeaktion bei Auto an und aus.",
+      "Problematische Geschwister bleiben ausgenommen; gültige Motive können weiter.",
+      "Der Import bleibt vor dem ersten Klick eine Vorschau."
+    ],
+    "evidence": [
+      {
+        "file": "public/folder-import.js",
+        "line": 313,
+        "detail": "Auto ist an, außer die gespeicherte Wahl ist false."
+      },
+      {
+        "file": "public/folder-import.js",
+        "line": 367,
+        "detail": "Button und Konsequenz benennen Import/Kopieren."
+      },
+      {
+        "file": "public/folder-import.js",
+        "line": 633,
+        "detail": "Der Import-Request übergibt bei aktivem Auto zusätzlich die Produktionsroute."
+      }
+    ],
+    "basis": "Code · 1.4.286"
+  },
+  {
+    "id": "B4",
+    "priority": "P2",
+    "category": "Import",
+    "title": "Große Importprüfungen gezielt eingrenzen",
+    "summary": "Import bietet All und Needs a look, aber keine Suche, Sortierung oder Seiten. Alle passenden Datensätze werden gleichzeitig gerendert.",
+    "problem": "Bei Hunderten oder Tausenden Entscheidungen fehlt die gezielte Orientierung nach Titel, ID und Problemart. Das vollständige Rendern ist zusätzlich ein Skalierungsrisiko; eine tatsächliche Verlangsamung wurde nicht gemessen.",
+    "suggestion": "Suche, kompakte Zustandsgruppen und eine begrenzte Seite oder virtuelle Liste einführen. Entscheidungen an genaue IDs binden und über Filter-/Seitenwechsel erhalten.",
+    "preserve": "Versionen, Alternativen, mitgebrachte Listings, per-Record Entscheidungen und ausgelassene Geschwister. Keine künstliche Obergrenze für den Gesamtbestand.",
+    "acceptance": [
+      "Die Suche erreicht auch den letzten Datensatz eines großen Importbestands.",
+      "Nur ein begrenzter sichtbarer Ausschnitt wird gerendert; vollständige Zähler bleiben korrekt.",
+      "Seitenauswahl und alle gefilterten Treffer sind getrennt; keine Entscheidung geht beim Blättern verloren."
+    ],
+    "evidence": [
+      {
+        "file": "public/index.html",
+        "line": 5309,
+        "detail": "Importfilter All / Needs a look; keine Suche, Sortierung oder Pagination."
+      },
+      {
+        "file": "public/folder-import.js",
+        "line": 374,
+        "detail": "renderList ersetzt die Liste durch sämtliche passenden Records per map."
+      }
+    ],
+    "basis": "Code · 1.4.286"
+  }
+]);
+const auditPriorityOrder = ["D1", "R1", "R2", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4"];
 window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPriorityOrder.indexOf(b.id));
 
 (function () {
