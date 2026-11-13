@@ -1,5 +1,6 @@
-/* Sanitized audit content. References resolve to installed FlowWave 1.4.286,
-   source 9c4f181. Root can extend this array without changing the renderer. */
+/* Sanitized audit content. The original findings retain their installed
+   1.4.286 / 9c4f181 evidence. S1/S2 add a versioned native follow-up in
+   1.4.287 / 85e457e; they do not revalidate the older findings globally. */
 window.flowwaveFindings = [
   {
     id: 'R1', priority: 'P1', category: 'Listings',
@@ -465,7 +466,51 @@ window.flowwaveFindings.push(...[
     "basis": "Code · 1.4.286"
   }
 ]);
-const auditPriorityOrder = ["D1", "R1", "R2", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4"];
+window.flowwaveFindings.push(
+  {
+    id: 'S1', priority: 'P1', category: 'Imported Sets',
+    title: 'Der Leerzustand führt nicht zuverlässig ins Import-Setup.',
+    summary: '„Go to Import setup“ ließ im beobachteten Versuch den Leerzustand stehen und fokussierte den Canvas. „Import a new set“ öffnete dasselbe Setup anschließend korrekt.',
+    problem: 'Native Nachbegehung in 1.4.287: Im leeren Imported-Sets-Bereich wurde „Go to Import setup“ einmal aktiviert. Das Setup erschien dabei nicht. Die Gegenprobe über „Import a new set“ öffnete Dateien-/Ordnerauswahl mit 50-MB-Limit und dem Hinweis auf null Generierungen. Beide Auslöser rufen laut Code openCollectionSetup(\'\') auf; die Ursache der unterschiedlichen beobachteten Wirkung ist damit nicht erklärt.',
+    suggestion: 'Beide Einstiege als denselben zuverlässigen Ein-Klick-Weg prüfen und integrieren. Das geöffnete Setup und der Fokus auf dem ersten bedienbaren Feld müssen die erfolgreiche Navigation erkennbar machen.',
+    preserve: 'Dateien- und Ordneraufnahme, Größenlimit, bestehende Importziele und gestagte Dateien. Das Öffnen des Setups startet weder Import noch Generierung.',
+    acceptance: [
+      'Der Leerzustand-Einstieg und „Import a new set“ öffnen aus derselben Ausgangslage jeweils das Setup.',
+      'Nach dem Öffnen liegt der Tastaturfokus auf dem ersten bedienbaren Feld; beim Schließen kehrt er zum Auslöser zurück.',
+      'Die Prüfung startet keinen Import und keine Generierung.'
+    ],
+    basis: 'Native UI und Code · 1.4.287',
+    sourceVersion: '1.4.287', sourceCommit: '85e457e',
+    evidence: [
+      {file: 'Native UI · 1.4.287', detail: 'Einmaliger Leerzustand-Klick ohne sichtbares Setup; anschließende Gegenprobe über „Import a new set“ erfolgreich. Kein Import und keine Generierung ausgeführt.'},
+      {file: 'public/app.js', line: 31794, detail: 'Der Leerzustand-Button ruft openCollectionSetup(\'\') auf (bis Zeile 31796).'},
+      {file: 'public/app.js', line: 33669, detail: 'Der obere Import-Auslöser verwendet denselben Funktionsaufruf.'},
+      {file: 'public/app.js', line: 33204, detail: 'Die gemeinsame Funktion öffnet den Setup-Controller und fokussiert bei sichtbarem Dialog das Dateifeld (bis Zeile 33211). Das erklärt die beobachtete Abweichung noch nicht.'}
+    ]
+  },
+  {
+    id: 'S2', priority: 'P1', category: 'Repairs',
+    title: '„All“ stellt die vorhandenen Repairs-Motive nicht wieder her.',
+    summary: 'Repairs zeigte zunächst drei Records. Nach „Needs attention“ blieben 0 von 3 sichtbar; „All“ brachte die Records nicht zurück. Der Codebeleg liegt im gemeinsamen Filter-Controller.',
+    problem: 'In der nativen App 1.4.287 blockierte der Weg All → Needs attention → All die Rückkehr zur vorhandenen Sammlung. Ein Inhaltsverlust wurde dabei nicht beobachtet. Der gemeinsame Controller liest options.valueOf auch dann, wenn nur die geerbte Object.prototype.valueOf-Methode vorhanden ist. Repairs liefert keinen eigenen valueOf-Callback: Der daraus entstehende Wert „[object Object]“ passt zu keinem erlaubten Filter und schließt alle Records aus.',
+    suggestion: 'Die Ermittlung zulässiger Filterwerte im gemeinsamen Owner korrigieren. Ohne eigenen Callback muss der tatsächliche data-filter-value-Wert gelten; fremde oder ungültige Werte dürfen nicht als aktive Auswahl übernommen werden.',
+    preserve: 'Alle Records, gespeicherte Reparaturen und Versionen. Anzeige, aria-pressed, Tastaturzustand und gegebenenfalls Seitenauswahl müssen denselben echten Filterwert abbilden; Auswahl und aktuelle Sammlung bleiben erhalten.',
+    acceptance: [
+      'Eine fokussierte Regression durchläuft All → Needs attention → All im tatsächlichen Repairs-Renderer und zeigt anschließend wieder die ursprünglichen drei Records.',
+      'Nur zulässige Filterwerte werden übernommen; aktive Darstellung und aria-pressed stimmen mit der sichtbaren Teilmenge überein.',
+      'Suche, Sortierung und Auswahl bleiben konsistent; der Filterwechsel verändert keine gespeicherten Inhalte.'
+    ],
+    basis: 'Native UI und Code · 1.4.287',
+    sourceVersion: '1.4.287', sourceCommit: '85e457e',
+    evidence: [
+      {file: 'Native UI · 1.4.287', detail: 'Anfangs drei Records unter All; nach Needs attention 0 von 3. All stellte die drei Records im beobachteten Ablauf nicht wieder her.'},
+      {file: 'public/app.js', line: 130, detail: 'options.valueOf?.(control) wird vor data-filter-value ausgewertet; eine geerbte valueOf-Methode verhindert den vorgesehenen Fallback (bis Zeile 131).'},
+      {file: 'public/artwork-repairs.js', line: 651, detail: 'Repairs übergibt getSelectedValue und onSelect, aber keinen eigenen valueOf-Callback (bis Zeile 652).'},
+      {file: 'public/artwork-repairs.js', line: 142, detail: 'itemMatches akzeptiert nur all, repaired, unrepaired oder attention; „[object Object]“ erfüllt keine Bedingung (bis Zeile 144).'}
+    ]
+  }
+);
+const auditPriorityOrder = ["D1", "S1", "S2", "R1", "R2", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4"];
 window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPriorityOrder.indexOf(b.id));
 
 (function () {
@@ -485,7 +530,7 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
   grid.innerHTML = findings.map(finding => `<article class="finding-card" id="${escape(finding.id)}" data-priority-value="${escape(finding.priority)}" data-category="${escape(finding.category)}">
     <div class="finding-card-top"><div class="finding-meta"><a class="finding-id" href="#${escape(finding.id)}" aria-label="Direktlink zu Finding ${escape(finding.id)}">${escape(finding.id)}</a><span class="finding-priority"><i class="priority-dot ${finding.priority === 'P1' ? 'p1' : 'p2'}" aria-hidden="true"></i>${escape(finding.priority)}</span><span class="finding-category">${escape(finding.category)}</span></div><h3>${escape(finding.title)}</h3><p class="finding-summary">${escape(finding.summary)}</p></div>
     <details class="finding-details"><summary>Beleg und Verbesserung<span class="sr-only"></span></summary><div class="finding-detail-body">${renderPart('Evidenzart', finding.basis || (['R1','R2','R3','R4','R6'].includes(finding.id) ? 'Native UI und Code' : 'Codebefund'))}${renderPart('Das Problem',finding.problem)}${renderPart('Der Vorschlag',finding.suggestion)}${renderPart('Das bleibt erhalten',finding.preserve)}${renderPart('Abnahmekriterium',finding.acceptance,'acceptance')}
-      <div class="detail-part"><h4>Quelle</h4><ul class="evidence-list">${(finding.evidence || []).map(evidence => `<li><code>${escape(evidence.file)}:${escape(evidence.line)}</code>${evidence.detail ? `<span>${escape(evidence.detail)}</span>` : ''}</li>`).join('')}</ul><p class="source-version">Installierte FlowWave 1.4.286 · Quellstand 9c4f181</p></div>
+      <div class="detail-part"><h4>Quelle</h4><ul class="evidence-list">${(finding.evidence || []).map(evidence => `<li><code>${escape(evidence.file)}${evidence.line == null ? '' : `:${escape(evidence.line)}`}</code>${evidence.detail ? `<span>${escape(evidence.detail)}</span>` : ''}</li>`).join('')}</ul><p class="source-version">Installierte FlowWave ${escape(finding.sourceVersion || '1.4.286')} · Quellstand ${escape(finding.sourceCommit || '9c4f181')}</p></div>
     </div></details><div class="finding-feedback af-topic-action"><button class="af-feedback-button" type="button" data-feedback-topic="finding-${escape(finding.id)}" aria-label="Feedback zu Finding ${escape(finding.id)}: ${escape(finding.title)}">Kommentieren <span aria-hidden="true">↗</span></button></div></article>`).join('');
 
   const categories = [...new Set(findings.map(finding => finding.category))].sort((a,b) => a.localeCompare(b,'de'));

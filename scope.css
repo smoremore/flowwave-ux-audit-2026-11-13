@@ -12,6 +12,8 @@
 .scope-group strong span{color:#777f6b}
 .scope-group small{display:block;font-size:12px;line-height:1.6;color:var(--muted);margin-top:4px}
 .scope-method{flex-shrink:0;font-size:10px;color:#5b6651;white-space:nowrap}
+.scope-native{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px;margin:0 0 22px;padding:16px 18px;border:1px solid #c5cbb9;border-radius:12px;background:#e8ebdf;font-size:12px;color:#4c5940}
+.scope-native strong{font-size:13px;color:#314128}.scope-native a{font-weight:600;text-decoration:underline;text-underline-offset:4px}.scope-native-details{padding-left:20px;max-width:1000px}.scope-native-details li{font-size:13px;line-height:1.7;margin:10px 0;color:var(--muted)}
 .scope-positive{display:grid;grid-template-columns:1fr 2fr auto;align-items:center;gap:20px;padding:22px;margin-top:20px;border-radius:14px;background:var(--olive)}
 .scope-positive strong{font-size:14px}.scope-positive p{font-size:13px;line-height:1.7;margin:0;color:#57634b}
 .scope-positive a{font-size:12px;font-weight:600;text-decoration:underline;text-underline-offset:4px}

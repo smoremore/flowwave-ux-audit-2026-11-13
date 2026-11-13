@@ -3,6 +3,8 @@
   'use strict';
   const findings = {
     D1: 'Rohfehler verdrängen die nächste Handlung',
+    S1: 'Der Leerzustand führt nicht zuverlässig ins Import-Setup',
+    S2: '„All“ stellt die vorhandenen Repairs-Motive nicht wieder her',
     R1: '„Ready“ braucht eine eindeutige Bedeutung',
     R2: 'Eine Ursache sollte eine Hauptaufgabe ergeben',
     N1: 'Werkzeuge sind zwei Ebenen tief versteckt',

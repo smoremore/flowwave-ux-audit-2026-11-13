@@ -169,12 +169,51 @@
     { id:'accounts', title:'Konten und Bildqualität', note:'Beste verfügbare Aboqualität anfordern. Bildmodell und Qualitätsstufe sind in dieser Vorschau nicht verifiziert.', fields:[['image','Bilderzeugung',['Beste verfügbare Aboqualität']],['export','Upload-Standard',['Amazon-Entwurf','Nur ausfüllen']]], defaults:{image:'Beste verfügbare Aboqualität',export:'Amazon-Entwurf'} },
     { id:'files', title:'Dateien und Wiederherstellung', note:'Originale, gespeicherte Requests und fertige Ergebnisse bleiben erhalten.', fields:[['history','Versionsverlauf',['Original und alle Versionen']],['recovery','Wiederaufnahme',['Gespeicherten Stand prüfen']]], defaults:{history:'Original und alle Versionen',recovery:'Gespeicherten Stand prüfen'} }
   ];
-  const settingSaved = new Map(settingSpecs.map(spec => [spec.id, {...spec.defaults}])), settingDrafts = new Map();
+  const settingSaved = new Map(settingSpecs.map(spec => [spec.id, {...spec.defaults}]));
+  const settingPrevious = new Map(), settingNotes = new Map();
   let settingsContainer = null;
+  function updateSettingsGroup(group, restoreInputs = false) {
+    const panel = settingsContainer?.querySelector(`[data-ops-setting-panel="${group}"]`);
+    if (!panel) return;
+    panel.querySelector('[data-ops-setting-note]').textContent = settingNotes.get(group) || 'Lokaler Beispielstand';
+    panel.querySelector('[data-ops-undo-group]').hidden = !settingPrevious.has(group);
+    if (restoreInputs) panel.querySelectorAll('[data-ops-setting-group]').forEach(input => { input.value = settingSaved.get(group)[input.dataset.opsSettingKey]; });
+  }
   function renderSettings() {
     if (!settingsContainer) return;
-    settingsContainer.innerHTML = `<div class="fw-heading"><div><h2>Einstellungen</h2><p>Thematische Gruppen, eigene Speichergrenzen. Keine echten FlowWave-Einstellungen werden verändert.</p></div><span class="fw-ops-demo">Lokale Vorschau</span></div><div class="fw-ops-settings-grid">${settingSpecs.map(spec => { const draft = settingDrafts.get(spec.id) || settingSaved.get(spec.id), dirty = JSON.stringify(draft) !== JSON.stringify(settingSaved.get(spec.id)); return `<section class="fw-ops-setting"><h3>${spec.title}</h3><p>${spec.note}</p>${spec.fields.map(([key, title, options]) => options.length === 1 ? `<dl class="fw-ops-fixed-value"><dt>${esc(title)}</dt><dd>${esc(draft[key])}</dd></dl>` : `<label class="fw-field-label">${title}<select data-ops-setting-group="${spec.id}" data-ops-setting-key="${key}">${options.map(option => `<option ${draft[key] === option ? 'selected' : ''}>${option}</option>`).join('')}</select></label>`).join('')}<div class="fw-ops-setting-actions"><button class="fw-button" type="button" data-ops-save-group="${spec.id}" ${dirty ? '' : 'disabled'}>Diese Gruppe speichern</button><button class="fw-button fw-quiet" type="button" data-ops-undo-group="${spec.id}" ${dirty ? '' : 'disabled'}>Zurücksetzen</button></div><span class="fw-secondary-text">${dirty ? 'Ungespeicherte Änderung nur in dieser Gruppe' : 'Lokaler Beispielstand'}</span></section>`; }).join('')}</div>`;
+    settingsContainer.innerHTML = `<div class="fw-heading"><div><h2>Einstellungen</h2><p>Änderungen werden automatisch übernommen – nur in dieser Vorschau.</p></div><span class="fw-ops-demo">Lokale Vorschau</span></div><div class="fw-ops-settings-grid">${settingSpecs.map(spec => { const values = settingSaved.get(spec.id); return `<section class="fw-ops-setting" data-ops-setting-panel="${spec.id}"><h3>${spec.title}</h3><p>${spec.note}</p>${spec.fields.map(([key, title, options]) => options.length === 1 ? `<dl class="fw-ops-fixed-value"><dt>${esc(title)}</dt><dd>${esc(values[key])}</dd></dl>` : `<label class="fw-field-label">${title}<select data-ops-setting-group="${spec.id}" data-ops-setting-key="${key}">${options.map(option => `<option ${values[key] === option ? 'selected' : ''}>${option}</option>`).join('')}</select></label>`).join('')}<div class="fw-ops-setting-actions"><button class="fw-button fw-quiet" type="button" data-ops-undo-group="${spec.id}" ${settingPrevious.has(spec.id) ? '' : 'hidden'}>Letzte Änderung zurücksetzen</button><span class="fw-secondary-text" data-ops-setting-note role="status" aria-live="polite">${settingNotes.get(spec.id) || 'Lokaler Beispielstand'}</span></div></section>`; }).join('')}</div>`;
   }
-  core.register('settings', { title:'Einstellungen', render(container) { settingsContainer = container; if (!bound.has(container)) { bound.add(container); container.addEventListener('change', event => { const group = event.target.dataset.opsSettingGroup; if (!group) return; const draft = {...(settingDrafts.get(group) || settingSaved.get(group)), [event.target.dataset.opsSettingKey]:event.target.value}; settingDrafts.set(group, draft); renderSettings(); }); container.addEventListener('click', event => { const button = event.target.closest('button'); if (!button) return; const save = button.dataset.opsSaveGroup, undo = button.dataset.opsUndoGroup; if (save) { settingSaved.set(save, {...settingDrafts.get(save)}); settingDrafts.delete(save); core.announce(`${settingSpecs.find(spec => spec.id === save).title}: Nur diese Gruppe im Konzept gespeichert.`); renderSettings(); } if (undo) { settingDrafts.delete(undo); renderSettings(); } }); } renderSettings(); } });
+  core.register('settings', {
+    title:'Einstellungen',
+    render(container) {
+      settingsContainer = container;
+      if (!bound.has(container)) {
+        bound.add(container);
+        container.addEventListener('change', event => {
+          const {opsSettingGroup: group, opsSettingKey: key} = event.target.dataset;
+          const spec = settingSpecs.find(item => item.id === group);
+          const field = spec?.fields.find(item => item[0] === key);
+          if (!field || !field[2].includes(event.target.value)) return;
+          const previous = settingSaved.get(group);
+          if (previous[key] === event.target.value) return;
+          settingPrevious.set(group, {...previous});
+          settingSaved.set(group, {...previous, [key]:event.target.value});
+          settingNotes.set(group, 'Automatisch übernommen · nur Vorschau');
+          updateSettingsGroup(group);
+        });
+        container.addEventListener('click', event => {
+          const button = event.target.closest('button');
+          const group = button?.dataset.opsUndoGroup;
+          if (!group || !settingPrevious.has(group)) return;
+          settingSaved.set(group, {...settingPrevious.get(group)});
+          settingPrevious.delete(group);
+          settingNotes.set(group, 'Vorherigen Gruppenstand wiederhergestellt · nur Vorschau');
+          updateSettingsGroup(group, true);
+          container.querySelector(`[data-ops-setting-group="${group}"]`)?.focus({preventScroll:true});
+        });
+      }
+      renderSettings();
+    }
+  });
   window.FlowWaveOperationsDemo = Object.freeze({ snapshot: () => ({ total: records.length, views: views.map(view => ({ view, selected:state[view].selected.size, scoped:state[view].scope?.size ?? records.length, matching:data(view).matches.length, rendered:containers.get(view)?.querySelectorAll('tbody > tr').length || 0 })) }) });
 })();
