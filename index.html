@@ -8,6 +8,9 @@
   <title>FlowWave — UI/UX Audit</title>
   <link rel="stylesheet" href="style.css">
   <script src="audit.js" defer></script>
+  <script src="feedback-config.js" defer></script>
+  <script src="comments.js" defer></script>
+  <link rel="stylesheet" href="comments.css">
 </head>
 <body>
   <a class="skip-link" href="#findings">Zu den Findings</a>
@@ -26,7 +29,7 @@
         <h1 id="hero-title">Weniger Reibung.<br><em>Mehr Flow.</em></h1>
         <p class="hero-lede">FlowWave braucht eine klarere nächste Aktion, weniger konkurrierende Zustände und mehr Ruhe rund um das Artwork.</p>
         <div class="hero-actions"><a class="button button-dark" href="#findings">Findings erkunden <span aria-hidden="true">↓</span></a><a class="text-link" href="#concept">Bento-Konzepte ansehen <span aria-hidden="true">↗</span></a></div>
-        <div class="audit-meta"><span>Installierte App <strong>1.4.286</strong></span><span>Quellstand <strong>9c4f181</strong></span><span>Audit und Konzept · keine Produktänderung</span></div>
+        <div class="audit-meta"><span>Installierte App <strong>1.4.286</strong></span><span>Quellstand <strong>9c4f181</strong></span><span>Audit und Konzept · Teamfeedback an Findings und Screens</span></div>
       </div>
       <aside class="hero-direction" aria-label="Zielbild des Audits">
         <div class="direction-top"><span class="tiny-caps">Die nächste Aufgabe gewinnt</span><span class="direction-index">ZIELBILD</span></div>
@@ -51,7 +54,7 @@
     </section>
 
     <section class="findings-section section-wrap" id="findings" aria-labelledby="findings-title">
-      <div class="section-heading findings-heading"><div><p class="eyebrow">Beobachtung → Verbesserung</p><h2 id="findings-title">Die Findings.</h2></div><p><span id="findingTotal">7</span> konkrete Ansatzpunkte. Öffne ein Finding für Beleg, Vorschlag und Abnahmekriterium.</p></div>
+      <div class="section-heading findings-heading"><div><p class="eyebrow">Beobachtung → Verbesserung</p><h2 id="findings-title">Die Findings.</h2></div><p><span id="findingTotal">7</span> konkrete Ansatzpunkte. Öffne ein Finding für Beleg, Vorschlag und Abnahmekriterium. Über Kommentieren kann dein Team Feedback und Antworten hinterlassen.</p></div>
       <div class="finding-controls">
         <div class="filter-group" role="group" aria-label="Findings nach Priorität filtern"><button type="button" data-priority="all" aria-pressed="true">Alle <span id="allCount"></span></button><button type="button" data-priority="P1" aria-pressed="false"><i class="priority-dot p1" aria-hidden="true"></i>P1 · Reibung</button><button type="button" data-priority="P2" aria-pressed="false"><i class="priority-dot p2" aria-hidden="true"></i>P2 · Klarheit</button></div>
         <label class="category-control">Bereich <select id="categoryFilter"><option value="all">Alle Bereiche</option></select></label>
@@ -81,7 +84,7 @@
 
     <section class="concept-section section-wrap" id="concept" aria-labelledby="concept-title">
       <div class="section-heading"><div><p class="eyebrow">Designrichtung zum Diskutieren</p><h2 id="concept-title">Bento, das Arbeit ordnet.</h2></div><p>Screen-Konzepte, keine implementierte Produktfunktion. Inhalt und Zustände sind zur Veranschaulichung bereinigt.</p></div>
-      <div class="concept-frame"><div class="concept-frame-bar"><span><i aria-hidden="true"></i> FlowWave · Screen-Vorschläge</span><a href="concept.html" target="_blank" rel="noopener">Groß öffnen <span aria-hidden="true">↗</span></a></div><div class="concept-inline"><div id="flowwave-bento-concept" lang="de">
+      <div class="concept-frame"><div class="concept-frame-bar"><span><i aria-hidden="true"></i> FlowWave · Screen-Vorschläge</span><div class="concept-feedback-actions"><button class="af-feedback-button" type="button" data-feedback-screen><span data-feedback-label>Designs kommentieren</span> <span aria-hidden="true">↗</span></button><a href="concept.html" target="_blank" rel="noopener">Groß öffnen <span aria-hidden="true">↗</span></a></div></div><div class="concept-inline"><div id="flowwave-bento-concept" lang="de">
   <div class="fw-demo-label"><span>INTERAKTIVES KONZEPT</span><span>Beispieldaten · keine Verarbeitung</span></div>
   <div class="fw-window">
     <header class="fw-shell">
@@ -292,6 +295,6 @@
     </div></section>
   </main>
 
-  <footer class="site-footer section-wrap"><div><a class="footer-brand" href="#top">FlowWave <span>UI/UX Audit</span></a><p>13. November 2026 · Grundlage: installierte native UI und ihr lokaler Quellstand 1.4.286 / 9c4f181. Der ältere Repository-Stand 1.4.243 wurde beim Versionsabgleich ausgeschlossen.</p></div><p>Bereinigter Teambericht.<br>Keine Nutzermotive oder privaten Entscheidungsdetails.<br>Beobachtungen und Konzepte sind getrennt gekennzeichnet.</p></footer>
+  <footer class="site-footer section-wrap"><div><a class="footer-brand" href="#top">FlowWave <span>UI/UX Audit</span></a><p>13. November 2026 · Grundlage: installierte native UI und ihr lokaler Quellstand 1.4.286 / 9c4f181. Der ältere Repository-Stand 1.4.243 wurde beim Versionsabgleich ausgeschlossen.</p></div><p>Bereinigter Teambericht.<br>Keine Nutzermotive oder privaten Entscheidungsdetails.<br>Öffentliche Kommentare und Antworten mit GitHub-Anmeldung.</p></footer>
 </body>
 </html>

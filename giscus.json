@@ -1,0 +1,5 @@
+{
+  "origins": ["https://smoremore.github.io"],
+  "originsRegex": ["^http://(?:localhost|127\\.0\\.0\\.1):58114$"],
+  "defaultCommentOrder": "oldest"
+}

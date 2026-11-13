@@ -1,0 +1,40 @@
+/* Audit feedback is real site chrome, separate from the FlowWave product concept. */
+.af-topic-action{display:flex;justify-content:flex-start;gap:12px;padding:14px 24px;border-top:1px solid #e0e3d7}
+.af-button,.af-feedback-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid #bac3ad;border-radius:8px;background:#edf0e5;color:#2c3823;padding:10px 14px;font:600 13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;text-decoration:none}
+.af-button:hover,.af-feedback-button:hover{background:#e2e8d5}
+.af-button:focus-visible,.af-feedback-button:focus-visible,.af-close:focus-visible,.af-link:focus-visible,.af-copy-fallback input:focus-visible{outline:3px solid #a87210;outline-offset:3px}
+.af-button:disabled{opacity:.6;cursor:default}
+.af-link{display:inline-flex;align-items:center;min-height:44px;gap:6px;color:#526542;text-underline-offset:4px;font:500 13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.af-dialog{box-sizing:border-box;width:min(850px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);padding:0;border:1px solid #c3cbb7;border-radius:18px;background:#fbfaf5;color:#252b20;box-shadow:0 24px 80px #10160e35;overflow:auto;overscroll-behavior:contain;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.af-dialog::backdrop{background:#11170e91;backdrop-filter:blur(3px)}
+.af-dialog-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:24px 24px 0}
+.af-dialog-head>div{min-width:0}
+.af-eyebrow{font-size:11px;font-weight:650;letter-spacing:1px;text-transform:uppercase;color:#66745a;margin:0 0 9px}
+.af-dialog h2{font-family:inherit;font-size:24px;line-height:1.25;font-weight:600;letter-spacing:-.6px;margin:0;overflow-wrap:anywhere}
+.af-close{flex:0 0 auto;width:44px;min-height:44px;padding:0;border:1px solid #cbd1c2;border-radius:9px;background:transparent;color:#39462f;font:300 28px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.af-close:hover{background:#edf0e5}
+.af-privacy{font-size:13px;line-height:1.6;color:#626d58;margin:13px 24px 0}
+.af-toolbar{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin:17px 24px 0;padding-bottom:14px;border-bottom:1px solid #dde1d3}
+.af-announcement{font-size:13px;line-height:1.5;color:#596b48;margin:10px 24px;min-height:0}
+.af-announcement:empty{display:none}
+.af-frame-zone{padding:0 16px 16px}
+.af-topic-frame{width:100%;height:560px;border:0;display:block;background:#fbfaf5;min-width:0}
+.af-topic-frame[hidden],.af-dialog [hidden],.af-host-page [hidden]{display:none!important}
+.af-copy-fallback{margin:14px 24px}
+.af-copy-fallback label{display:block;margin-bottom:7px;font-size:12px;color:#59664d}
+.af-copy-fallback input{box-sizing:border-box;width:100%;min-height:44px;border:1px solid #bbc5ae;border-radius:7px;padding:10px;font-size:14px;background:white;color:#27351e}
+.af-host-page{margin:0;padding:0;background:#fbfaf5;color:#252b20;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.6;color-scheme:light}
+.af-host{box-sizing:border-box;margin:0;padding:8px 8px 16px;min-width:0}
+.af-host-status{margin:10px 0 14px;padding:12px 14px;background:#edf0e5;border-radius:8px;color:#465b36;font-size:13px;overflow-wrap:anywhere}
+.af-host-status--error{background:#f4ead6;color:#704900}
+.af-host-recovery{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 16px}
+.af-host-recovery details{flex-basis:100%;font-size:12px;color:#667158}
+.af-host-recovery summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
+.af-host-recovery details p{margin:0 0 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.af-host .giscus{min-width:0}
+.af-host .giscus-frame{display:block;width:100%;border:0;color-scheme:light}
+@media(max-width:580px){.af-dialog{width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:13px}.af-dialog-head{padding:18px 16px 0;gap:10px}.af-dialog h2{font-size:21px}.af-privacy{margin-inline:16px}.af-toolbar{margin-inline:16px;gap:10px 18px}.af-frame-zone{padding:0 4px 10px}.af-announcement,.af-copy-fallback{margin-inline:16px}.af-host{padding-inline:4px}.af-topic-action{padding-inline:21px}.af-copy-fallback input{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.af-dialog::backdrop{backdrop-filter:none}}
+@media print{.af-dialog,.af-topic-action,.af-feedback-button,[data-feedback-topic],[data-feedback-screen]{display:none!important}}
+
+.concept-feedback-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}.concept-feedback-actions .af-feedback-button{font-size:12px}.standalone-feedback-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;border-radius:12px;background:#f1f1e8;color:#2c3823;font:13px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.standalone-feedback-bar>a{color:inherit;text-underline-offset:4px}.standalone-feedback-bar>span{font-size:12px;color:#606a55}@media(max-width:580px){.concept-frame-bar{align-items:flex-start;flex-wrap:wrap}.concept-feedback-actions{justify-content:flex-start;gap:10px 18px}.standalone-feedback-bar>span{flex-basis:100%}}@media print{.standalone-feedback-bar,.concept-feedback-actions,.finding-feedback{display:none!important}}
