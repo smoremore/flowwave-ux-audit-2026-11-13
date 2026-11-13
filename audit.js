@@ -56,9 +56,9 @@ window.flowwaveFindings = [
     title: 'Offene Aufgaben vor vollständigen Text stellen.',
     summary: 'Ein geöffneter Review-Record zeigt direkt alle vier Listing-Felder und die komplette Gate-Liste. Detailtiefe und aktueller Handlungsbedarf erhalten ähnlich viel Gewicht.',
     problem: 'Die Listing-Copy ist standardmäßig vollständig geöffnet. Rechts erscheinen für jeden Gate Zustand und Konsequenz. Bei langen Texten und Begründungen wird die nächste Handlung visuell schwerer auffindbar.',
-    suggestion: 'Die bestehende Drei-Zonen-Komposition als ruhiges Bento ordnen: Artwork, relevante Textzusammenfassung und „Jetzt erledigen“. Vollständige Copy, erledigte Checks und weitere Evidence bleiben lokal aufklappbar.',
+    suggestion: 'Review als kompakte Stapelliste ordnen: Motiv, aktueller Stand, nächste Aufgabe und passende Aktion pro Zeile. Details öffnen am Record; Artwork, Text und Nachweise bleiben dort in drei klar getrennten Zonen. Große Vorschau nur bei Bedarf.',
     preserve: 'Vollständige Sichtprüfung vor Ready, relevante Textstellen und aktuelle Fehler. Keine neuen Task-Tabs und kein ausgelagerter Inspector; Text und Nachweise bleiben am exakten Record.',
-    acceptance: ['Artwork und nächste offene Aufgabe sind im ersten Blick klar priorisiert.', 'Vollständige Copy und Evidence bleiben per Tastatur ohne Ortswechsel erreichbar.'],
+    acceptance: ['Mehrere Records mit Status und nächster offener Aufgabe sind gleichzeitig scanbar.', 'Vollständige Copy und Evidence bleiben per Tastatur ohne Ortswechsel erreichbar.', 'Suche, Statusfilter und Seitenauswahl behalten die genaue Auswahl und gespeicherte Entwürfe.'],
     evidence: [{file:'public/app.js',line:18297,detail:'Listing-Disclosure ist standardmäßig open und rendert vier Textfelder.'},{file:'public/app.js',line:18179,detail:'Alle Gate-Zeilen rendern Status, Konsequenz und Aktionen.'},{file:'public/app.js',line:18367,detail:'Listing und vollständige Gates sind benachbarte Record-Zonen.'}]
   },
   {
@@ -81,9 +81,9 @@ window.flowwaveFindings.push(...[
     "title": "Werkzeuge sind zwei Ebenen tief versteckt",
     "summary": "Ein konkretes Bildwerkzeug benötigt aus Designs drei Navigationseingaben am Desktop.",
     "problem": "Image Studio öffnet das zuletzt benutzte Werkzeug. Ein anderes Ziel wird erst im zweiten Menü gewählt; neun Werkzeuge konkurrieren dort.",
-    "suggestion": "Erstellen direkt in Designs anbieten. Im Studio die häufigsten Werkzeuge sichtbar machen; die vollständige Toolbox bleibt erreichbar.",
+    "suggestion": "Erstellen direkt im Designhub anbieten. Im Studio die häufigsten Werkzeuge sichtbar machen; die vollständige Toolbox bleibt erreichbar.",
     "preserve": "Gemerkter Werkzeugzustand, vorhandene Routen und Queues.",
-    "acceptance": "Designs → Create mit einer Aktivierung; Wechsel zum häufigen Werkzeug mit höchstens zwei. Kompaktmodus mitprüfen.",
+    "acceptance": "Designhub → Create mit einer Aktivierung; Wechsel zum häufigen Werkzeug mit höchstens zwei. Kompaktmodus mitprüfen.",
     "evidence": [
       {
         "file": "Beobachtung und Quelle",
@@ -119,7 +119,7 @@ window.flowwaveFindings.push(...[
     "title": "Hub und Designs benennen denselben Ort",
     "summary": "Navigation und Übergabe verwenden unterschiedliche Produktbegriffe.",
     "problem": "Send to Hub und Sent to Designs wirken wie unterschiedliche Ziele. Das globale Add artwork bleibt auch im Upload sichtbar, führt aber zur Produktionsaufnahme.",
-    "suggestion": "Sichtbar durchgehend Designs verwenden. Aufnahme eindeutig als Zu Designs hinzufügen beschriften und am passenden Einstieg priorisieren.",
+    "suggestion": "Sichtbar durchgehend Designhub verwenden. Aufnahme eindeutig als Zum Designhub hinzufügen beschriften und am passenden Einstieg priorisieren.",
     "preserve": "Interne Routekeys, Historie und globale Aufnahmefähigkeit.",
     "acceptance": "Alle sichtbaren Übergaben benennen ihr tatsächliches Ziel konsistent.",
     "evidence": [

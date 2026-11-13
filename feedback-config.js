@@ -24,7 +24,7 @@
     R7: 'Originalexport ohne Suchen in einer anderen Ansicht',
     N3: 'Hub und Designs benennen denselben Ort'
   };
-  const screens = { designs: 'Designs', review: 'Review', listings: 'Listings', upload: 'Upload' };
+  const screens = { designs: 'Designhub', review: 'Review', listings: 'Listings', upload: 'Upload' };
   const topics = Object.create(null);
   Object.entries(findings).forEach(([id, title]) => {
     topics[`finding-${id}`] = Object.freeze({
