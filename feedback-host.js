@@ -12,6 +12,7 @@
   const container = document.getElementById('feedbackGiscus');
   const key = new URL(location.href).searchParams.get('topic');
   const topic = config && Object.prototype.hasOwnProperty.call(config.topics, key) ? config.topics[key] : null;
+  const returningFromSignIn = parent === window && new URL(location.href).searchParams.has('giscus');
   let phase = 'loading';
   let currentScript = null;
   let widgetFrame = null;
@@ -67,6 +68,18 @@
     recovery.hidden = false;
     fallback.textContent = 'Zum FlowWave Audit';
     fallback.href = config?.canonicalURL || 'https://smoremore.github.io/flowwave-ux-audit-2026-11-13/';
+    return;
+  }
+  function returnToAudit() {
+    const target = new URL(config.canonicalURL);
+    target.searchParams.set('feedback', topic.key);
+    target.hash = topic.anchor;
+    location.replace(target.href);
+  }
+  // Giscus signs in using target=_top. Its official client must first consume
+  // and remove the OAuth session parameter; never forward it to the report.
+  if (parent === window && !returningFromSignIn) {
+    returnToAudit();
     return;
   }
   document.title = `${topic.label} – FlowWave Kommentare`;
@@ -154,6 +167,11 @@
       if (widgetFrame) return;
       failedInitialLoad = true;
       publishStatus('error', 'Der Kommentardienst konnte nicht geladen werden. Erneut laden oder die Diskussion auf GitHub öffnen.');
+    });
+    script.addEventListener('load', () => {
+      if (!returningFromSignIn) return;
+      if (!new URL(location.href).searchParams.has('giscus')) returnToAudit();
+      else publishStatus('error', 'Die Anmeldung konnte nicht abgeschlossen werden. Bitte Browser-Speicher für diese Seite erlauben und erneut anmelden.');
     });
     initialTimer = setTimeout(() => {
       if (phase === 'loading') publishStatus('timeout', 'Der Kommentardienst antwortet noch nicht. Dieser Bereich bleibt geöffnet; auch eine verspätete Antwort wird übernommen.');
