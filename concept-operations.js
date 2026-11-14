@@ -15,12 +15,12 @@
   state.autopilot.mode = 'full';
   const current = record => core.recordState?.(record.id) || {status:record.status,artworkIP:null,listingIP:null,fields:record.fields};
   const containers = new Map(), bound = new WeakSet(), sequences = new Map(), series = new Map(), recipes = new Map();
-  const titles = { autopilot: 'Autopilot', checks: 'IP Checks', live: 'Live Designs', management: 'Designverwaltung', activity: 'Aktivität', uploadqueue: 'Uploadqueue' };
+  const titles = { autopilot: 'Autopilot', checks: 'IP Checks', live: 'Live Designs', management: 'Account Management', activity: 'Aktivität', uploadqueue: 'Uploadqueue' };
   const subtitles = {
     autopilot: 'Gespeicherte Wege bündeln. Startumfang und Endpunkt stehen vor dem Start fest.',
     checks: 'Offene Prüfaufgaben direkt am Motiv erledigen.',
     live: 'Bestand und Performance gemeinsam lesen. Alle Zahlen hier sind synthetische Demowerte.',
-    management: 'Designs, Märkte, Serien und Vorlagen über Listen und Seiten hinweg verwalten.',
+    management: 'Kontobestand, Märkte, Serien und Vorlagen verwalten. Lokale Dateien liegen im Archiv.',
     activity: 'Auftrag, Motiv und nächster Schritt bleiben verbunden. Ein gemeinsamer Fehler erscheint einmal.',
     uploadqueue: 'Bereite Motive bündeln, offene Schritte direkt lösen und abgeschlossene Übertragungen erhalten.'
   };
@@ -28,7 +28,7 @@
     autopilot: { all:'Alle', queued:'Wartet', running:'Läuft', blocked:'Blockiert', review:'In Review', done:'Verarbeitet' },
     checks: { all:'Alle', recovery:'Prüfung unterbrochen', correction:'Bildkorrektur', draft:'Text ungeprüft', review:'Prüfung offen', ready:'Aktuell' },
     live: { all:'Alle', products:'Produkte ergänzen', removed:'Ohne Verkäufe entfernt', timed:'Zeitfenster abgelaufen', expiring:'Läuft bald ab' },
-    management: { all:'Alle', amazon:'Amazon · Demo', local:'Lokal', archived:'Archiv' },
+    management: { all:'Alle', live:'Live · Demo', draft:'Entwurf · Demo', removed:'Entfernt · Demo' },
     activity: { all:'Alle', queued:'Wartet', running:'Läuft', held:'Wartet auf Zugang', failed:'Einzelfehler', done:'Abgeschlossen', uncertain:'Antwort unklar' },
     uploadqueue: {all:'Alle',queue:'Queue',needs:'Needs you',ready:'Bereit',running:'Läuft',done:'Done',production:'In Production',archived:'Archiviert'}
   };
@@ -41,7 +41,7 @@
   const activityStatus = record => record.index === 0 ? 'uncertain' : record.index === 1 ? 'running' : ['held','failed','queued','queued','done'][record.index % 5];
   const uploadStatus = record => { const phase=['queue','needs','ready','running','done','production','archived'][record.index % 7]; return ['running','done','production','archived'].includes(phase) ? phase : ['queue','ready'].includes(phase) && current(record).status!=='ready' ? 'needs' : phase; };
   const uploadLocked = record => uploadStatus(record) === 'running' && record.index % 2 === 1;
-  const status = (view, record) => view === 'autopilot' ? autoStatus(record) : view === 'checks' ? current(record).status : view === 'uploadqueue' ? uploadStatus(record) : view === 'live' ? ['products','removed','timed','expiring'][record.index % 4] : view === 'management' ? ['amazon','local','archived'][record.index % 3] : activityStatus(record);
+  const status = (view, record) => view === 'autopilot' ? autoStatus(record) : view === 'checks' ? current(record).status : view === 'uploadqueue' ? uploadStatus(record) : view === 'live' ? ['products','removed','timed','expiring'][record.index % 4] : view === 'management' ? ['live','draft','removed'][record.index % 3] : activityStatus(record);
   const label = (view, record) => filters[view][status(view, record)];
   const normalize = ids => [...new Set(ids)].filter(id => byId.has(id));
   function scopeRows(view) {
@@ -64,7 +64,7 @@
     const chips = Object.entries(filters[view]).map(([key, title]) => `<button type="button" class="fw-facet" data-ops-filter="${key}" aria-pressed="${s.filter === key}">${title} <b>${fmt(key === 'all' ? d.scoped.length : d.scoped.filter(record => status(view, record) === key).length)}</b></button>`).join('');
     let actions = '';
     if (selected.size) {
-      actions = view === 'autopilot' ? button('Start vorbereiten', 'prepare-start') : view === 'checks' ? button('Auswahl prüfen', 'check-selected') : view === 'management' ? button('Serie / Vorlage zuweisen', 'assign') + button('In Listings öffnen', 'listings-selected') : view === 'live' ? button('Produkte vorbereiten', 'prepare-products') + button('In Designverwaltung öffnen', 'manage-selected') : view === 'uploadqueue' ? button('Ausgewählten Lauf vorbereiten', 'prepare-upload') : button('Fortsetzung vorbereiten', 'prepare-resume');
+      actions = view === 'autopilot' ? button('Start vorbereiten', 'prepare-start') : view === 'checks' ? button('Auswahl prüfen', 'check-selected') : view === 'management' ? button('Serie / Vorlage zuweisen', 'assign') + button('Kontodetails ansehen', 'account-selected') : view === 'live' ? button('Produkte vorbereiten', 'prepare-products') + button('In Designverwaltung öffnen', 'manage-selected') : view === 'uploadqueue' ? button('Ausgewählten Lauf vorbereiten', 'prepare-upload') : button('Fortsetzung vorbereiten', 'prepare-resume');
     }
     return `${s.scope ? `<div class="fw-scope-note"><strong>Übergebene Auswahl: ${fmt(s.scope.size)} Motive</strong>${button('Gesamten Bestand anzeigen', 'clear-scope')}</div>` : ''}<div class="fw-ops-search"><label class="fw-field-label">${view === 'activity' ? 'Auftrag oder Motiv suchen' : view === 'management' ? 'Titel, Marke, ASIN oder ID suchen' : 'Motive suchen'}<input id="fw-ops-${view}-search" type="search" data-ops-query="${view}" value="${esc(s.query)}" placeholder="Suche im Bestand"></label></div><div class="fw-facets" aria-label="${titles[view]} filtern">${chips}</div><div class="fw-selection"><label class="fw-checkbox"><input type="checkbox" data-ops-page-select ${d.rows.length && visibleSelected === d.rows.length ? 'checked' : ''} ${d.rows.length ? '' : 'disabled'}>Diese Seite (${d.rows.length})</label><span class="fw-selected-count">${fmt(selected.size)} ausgewählt${selected.size ? ` · ${visibleSelected} auf dieser Seite` : ''}</span>${button(`Alle ${fmt(d.matches.length)} Treffer auswählen…`, 'select-all')}${selected.size ? button('Auswahl löschen', 'clear-selection') : ''}<span class="fw-selection-spacer"></span>${actions}</div>`;
   }
@@ -81,7 +81,7 @@
   function checksBody(d) { return table(['Design / Version', 'Stand', 'Jetzt erledigen', 'Details'], d.rows.map(record => `<tr>${rowLead('checks', record, ` · v${record.version}`)}<td data-label="Stand">${label('checks',record)}</td><td class="fw-row-action">${checksAction(record)}</td><td><details><summary>Details</summary><p>Artwork: ${artworkStatus(record)}<br>Listing: ${textStatus(record)}</p></details></td></tr>`).join('')); }
 
   function liveBody(d) { return `<div class="fw-ops-callout"><strong>Performance nur als Demowerte</strong><span>Keine Amazon-Kontodaten geladen. Änderungen und Produkt-Erweiterungen werden hier nur vorbereitet.</span></div>` + table(['Design', 'Status / Märkte', 'Demo Verkäufe', 'Aktion'], d.rows.map(record => `<tr>${rowLead('live', record, ` · ${asin(record)}`)}<td data-label="Status / Märkte">${label('live', record)}<br><span class="fw-secondary-text">${market(record)}</span></td><td data-label="Demo Verkäufe">${status('live',record)==='removed'?0:record.index % 17}</td><td class="fw-row-action">${button('Bestand öffnen', 'manage-one', record.id)}</td></tr>`).join('')); }
-  function managementBody(d) { return table(['Design / Marke', 'Bestand / Märkte', 'Serie / Vorlage', 'Aktion'], d.rows.map(record => `<tr>${rowLead('management', record, ` · ${asin(record)} · ${esc(current(record).fields.brand)}`)}<td data-label="Bestand / Märkte">${label('management', record)}<br><span class="fw-secondary-text">${market(record)}</span></td><td data-label="Serie / Vorlage">${esc(series.get(record.id) || 'Ohne Serie')}<br><span class="fw-secondary-text">${esc(recipes.get(record.id) || 'Auto')}</span></td><td class="fw-row-action">${button('Motiv öffnen', 'hub-one', record.id)}${button('Listing', 'listings-one', record.id)}</td></tr>`).join('')); }
+  function managementBody(d) { return table(['Design / Marke', 'Bestand / Märkte', 'Serie / Vorlage', 'Aktion'], d.rows.map(record => `<tr>${rowLead('management', record, ` · ${asin(record)} · ${esc(record.fields.brand)}`)}<td data-label="Bestand / Märkte">${label('management', record)}<br><span class="fw-secondary-text">${market(record)}</span></td><td data-label="Serie / Vorlage">${esc(series.get(record.id) || 'Ohne Serie')}<br><span class="fw-secondary-text">${esc(recipes.get(record.id) || 'Auto')}</span></td><td class="fw-row-action">${button('Kontodetails', 'account-record', record.id)}</td></tr>`).join('')); }
   function activityBody(d) { return `<div class="fw-ops-callout fw-ops-warning"><strong>Ein gemeinsamer Zugangsstopp · Beispielszenario</strong><span>Neue Aufträge warten. Gespeicherte Ergebnisse bleiben erhalten; unklare laufende Antworten werden zuerst beobachtet.</span>${button('Zugangseinstellungen öffnen', 'shared-blocker')}</div>` + table(['Auftrag / Motiv', 'Bereich', 'Zustand', 'Aktion'], d.rows.map(record => `<tr>${rowLead('activity', record, ` · ${jobId(record)}`)}<td data-label="Bereich">${activityOwner(record).title}</td><td data-label="Zustand">${label('activity', record)}</td><td class="fw-row-action">${button('Auftrag öffnen', 'job', record.id)}${button(`In ${activityOwner(record).title} öffnen`, 'job-owner', record.id)}</td></tr>`).join('')); }
   function uploadFix(record) {
     if (record.status === 'ready' && current(record).status !== 'ready') return button('Geänderten Text öffnen', 'listings-one', record.id);
@@ -143,6 +143,8 @@
     if (action === 'upload-receipt') core.modal('Gespeicherten Upload-Stand ansehen',`<p>${record.id} · ${jobId(record)}</p><p>${uploadStatus(record)==='done'?'Gespeicherter Amazon-Entwurf im Beispieldatensatz. Das ist keine Live-Veröffentlichung.':'Archivierter Beispieldatensatz. Er bleibt von neuen Läufen ausgenommen.'}</p><p>Originale und gespeicherter Beleg bleiben erhalten. Kein erneuter Upload gestartet.</p>`);
     if (action === 'sequence' && record) editSequence(record);
     if (action === 'assign') assignMetadata();
+    if (action === 'account-record' && record) core.modal('Kontodetails', `<p><strong>${esc(record.title)}</strong> · ${asin(record)} · ${market(record)}</p><p>${label('management',record)}</p><details><summary>Zuordnung</summary><p>Serie: ${esc(series.get(record.id)||'Ohne Serie')} · Vorlage: ${esc(recipes.get(record.id)||'Auto')}</p></details><p class="fw-secondary-text">Synthetische Kontodaten · keine Kontoänderung.</p>`);
+    if (action === 'account-selected') {const exact=selectedRecords(view);core.modal('Ausgewählte Kontodesigns',`<p>${fmt(exact.length)} explizit gewählte Kontodesigns</p><ul>${exact.slice(0,8).map(item=>`<li>${asin(item)} · ${market(item)} · ${label('management',item)}</li>`).join('')}</ul><p class="fw-secondary-text">Konzeptvorschau · keine Änderung.</p>`);}
     if (action === 'prepare-products') { const selected=selectedRecords('live'); core.modal('Produkterweiterung vorbereiten',`<p>${fmt(selected.length)} explizit ausgewählte Beispieldesigns.</p>${listOf(selected)}<p>Vor tatsächlichen Amazon-Schreibaktionen bleibt die gesonderte erste Testfreigabe erforderlich. Ein Read oder diese Auswahl ersetzt sie nicht.</p><p>Konzeptvorschau: Keine Produkte angelegt, keine Freigabe gesetzt und keine Accountdaten gelesen.</p>`); }
     if (action === 'check-task-one' && record) core.openTask(record.id, current(record).status==='recovery'?'recovery':/ungeprüft|text geändert/i.test(textStatus(record))?'text':'final');
     if (action === 'repair-one' && record) core.handoff('repairs',[record.id]);

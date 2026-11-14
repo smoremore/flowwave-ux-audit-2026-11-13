@@ -583,7 +583,111 @@ window.flowwaveFindings.push(...[
     ]
   }
 ]);
-const auditPriorityOrder = ["B5", "D1", "R2", "S2", "S1", "R1", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4", "B6"];
+window.flowwaveFindings.push(...[
+  {
+    "id": "L1",
+    "priority": "P1",
+    "category": "Produktionsabschluss",
+    "title": "Produktion, lokales Archiv und Konto klar trennen.",
+    "summary": "Ein lokales Upload-Archiv existiert bereits. Design management vermischt es mit Kontodesigns; der Hub orientiert seinen Abschluss am Export statt am bestätigten Upload.",
+    "problem": "Die Review-Übergabe kopiert PNG, SVG und Listing ins bestehende Upload-Archiv und behält die Produktionsoriginale. Upload führt Done und Archived. Der Active-Filter im Hub blendet bereits Exported/Archived aus; sein Exportstatus belegt jedoch ein Exportpaket und keinen bestätigten Amazon-Speichervorgang. Ein eindeutiger Abschlussweg vom bestätigten Upload in einen globalen lokalen Archivbereich fehlt. Design management kombiniert lokale Archiv- und Amazon-Kontoeinträge.",
+    "suggestion": "Designhub ausschließlich als Produktionsbereich führen. Nach einem dauerhaft bestätigten Upload-Abschluss die exakte Produktion aus dem aktiven Hub nehmen und im eigenen „Lokalen Archiv“ mit Dateien, Versionen und Upload-Beleg auffindbar halten. Den bestehenden Archiv-Owner weiterverwenden. Account Management zeigt separat den Kontobestand. Die Rückkehr zur Produktion legt eine bewusste Arbeitskopie an und startet nichts automatisch.",
+    "preserve": "Originale und Wiederherstellung; laufende oder unklare Uploads bleiben in der Upload-Queue. Fill only ist kein Abschluss. „Entwurf gespeichert“ und „An Amazon übermittelt“ bleiben getrennt; ein Submit allein beweist noch keinen Live-Status. Große Dateien können online-only sein.",
+    "acceptance": [
+      "Bestätigter Upload → eindeutiger Archiv-Eintrag; kein weiterer aktiver Produktionsrecord für dieselbe abgeschlossene Revision.",
+      "Nur betroffene erfolgreich abgeschlossene Designs verlassen den aktiven Hub. Offene Geschwister, weitere Märkte und ausstehende Veröffentlichung bleiben in ihren Aufgabenlisten.",
+      "Datei-/Hash- und Abschlussbeleg sind dauerhaft gespeichert, bevor die Produktion logisch abgeschlossen wird. Ein ZIP, Klick, Timer oder unklarer Save reicht nicht.",
+      "Account Management und lokales Archiv haben getrennte Navigation, Datenquellen und Aktionen.",
+      "Zurückholen erstellt nur einen Produktionsauftrag; kein Upload, keine Generierung und kein Verlust alter Dateien oder Belege."
+    ],
+    "basis": "Installierter Code und lokale Ordnerstruktur schreibgeschützt geprüft · 1.4.287",
+    "sourceVersion": "1.4.287",
+    "sourceCommit": "85e457e",
+    "evidence": [
+      {
+        "file": "src/flowwave-folder.js",
+        "line": 7,
+        "detail": "Hub/<Arbeitsbereich> und Upload sind bereits getrennte Speicherrollen."
+      },
+      {
+        "file": "src/upload-archive.js",
+        "line": 4,
+        "detail": "Katalog, Dateien, Locks und Sicherung sind bereits vorhanden; große Dateien können online-only vorliegen (bis Zeile 24)."
+      },
+      {
+        "file": "server.js",
+        "line": 32895,
+        "detail": "Review kopiert ins Upload-Archiv und erhält Produktionsoriginale; forceCopy und persistierter Handoff bis 33012."
+      },
+      {
+        "file": "src/merch-upload-service.js",
+        "line": 1321,
+        "detail": "Done und Archived existieren im Upload. Archivieren ändert den Recordstatus, nicht den Dateipfad (1090–1105,5239–5254)."
+      },
+      {
+        "file": "src/hub-projection.js",
+        "line": 593,
+        "detail": "Exportangaben bestimmen den Hub-Exportstatus; public/hub.js:825–843 blendet Exported im Active-Filter aus."
+      },
+      {
+        "file": "src/upload-run.js",
+        "line": 116,
+        "detail": "Save-Ausgang unterscheidet Entwurf, Übermittlung und unklare Speicherung (bis 145)."
+      },
+      {
+        "file": "public/index.html",
+        "line": 3335,
+        "detail": "Design management kombiniert lokale Archivdesigns und Kontobestand; Hilfetext auch Zeile 3513."
+      }
+    ]
+  },
+  {
+    "id": "L2",
+    "priority": "P2",
+    "category": "Dateiablage",
+    "title": "Dateien, Versionen und Exporte am Design finden.",
+    "summary": "Die lokale Grundstruktur ist vorhanden. Exporte landen jedoch neben Arbeitsbereichen; ungewählte Importversionen bleiben am externen Quellpfad. Eine gemeinsame Dateiansicht fehlt.",
+    "problem": "Die schreibgeschützte Ordnerprüfung bestätigt getrennte Produktions-, Archiv- und Systembereiche. Export-Owner legen ZIPs im Elternordner des aktuellen Hub-Bereichs ab. Ungewählte Importversionen speichern Pfad, Hash und Vorschau, aber keine vollständige eigene Kopie. Der Nutzer muss deshalb wissen, welche Datei übernommen wurde, welche extern verknüpft bleibt und wo das zugehörige Paket liegt. Mehrere technische Speicher und absichtliche Kopien allein beweisen weder Chaos noch unnötigen physischen Speicherverbrauch.",
+    "suggestion": "Pro Design eine kurze Dateiansicht anbieten: Original, Arbeitsversion, Upload-Dateien und Exportpakete mit tatsächlichem Ort und Verfügbarkeit. „Im Finder zeigen“ führt jeweils direkt zum richtigen Ziel. Neue Exportpakete in einem dedizierten, indexierten Exportbereich ordnen. Aktiven Arbeitsbereich benennen; ältere Bereiche gesammelt schreibgeschützt auffindbar halten. Bei Importversionen „kopiert“ und „extern verknüpft“ unterscheiden.",
+    "preserve": "Bestehende IDs, relative Referenzen, Quellordner-Abhängigkeiten, Receipts, Upload-Locks, Sicherung und Wiederherstellung. Keine blinde Ordnerzusammenführung oder manuelle Umbenennung. APFS-Klone können Blöcke teilen; logische Dateigröße ist kein Beweis für doppelten Platzverbrauch.",
+    "acceptance": [
+      "Die aktuelle Version und ihr Exportpaket sind vom Design aus mit einer Aktion auffindbar.",
+      "Nur die wirklich kopierte Importversion heißt übernommen; weitere verknüpfte Versionen zeigen ihren Quellort und dessen Erreichbarkeit.",
+      "Neue Exporte besitzen Pakettyp, Export-ID und einen eigenen auffindbaren Bereich. Bestehende Pakete bleiben referenzierbar.",
+      "Eine spätere Migration wird vorab mit Zuordnungsplan und Wiederherstellung geprüft; im Audit werden keine Nutzerdaten verschoben."
+    ],
+    "basis": "Lokale Verzeichnismetadaten und installierter Code schreibgeschützt geprüft · 1.4.287",
+    "sourceVersion": "1.4.287",
+    "sourceCommit": "85e457e",
+    "evidence": [
+      {
+        "file": "Lokale Ordnerprüfung · 14.11.2026",
+        "detail": "Bestätigt: Hub-Arbeitsbereich, Upload/eingang, katalog, dateien, sperren, sicherung, system und Left over. Nur Verzeichnismetadaten gelesen, keine Dateien verschoben oder Bildinhalte geladen."
+      },
+      {
+        "file": "server.js",
+        "line": 20936,
+        "detail": "Listing-ZIP verwendet den Elternordner des aktuellen Input-Ordners. Flying-Upload-ZIP ebenso bei 26379/26452."
+      },
+      {
+        "file": "src/folder-import-store.js",
+        "line": 1,
+        "detail": "Weitere Versionen werden über Quellpfad, Hash und Thumbnail behalten; sie sind keine vollständig kopierten Originale (bis Zeile 8)."
+      },
+      {
+        "file": "src/flowwave-folder.js",
+        "line": 317,
+        "detail": "Zusätzliche Arbeitsbereichsuffixe schützen getrennte Installationen; nicht als wegwerfbare Dubletten behandeln (bis 334)."
+      },
+      {
+        "file": "src/clone-copy.js",
+        "line": 1,
+        "detail": "APFS-Klonkopien und physische Speicherteilung (bis 28)."
+      }
+    ]
+  }
+]);
+const auditPriorityOrder = ["B5", "L1", "L2", "D1", "R2", "S2", "S1", "R1", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4", "B6"];
 window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPriorityOrder.indexOf(b.id));
 
 (function () {

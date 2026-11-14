@@ -28,3 +28,5 @@
 @media(max-width:1100px){.scope-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scope-positive{grid-template-columns:1fr 2fr}.scope-positive a{grid-column:2}}
 @media(max-width:650px){.scope-grid{grid-template-columns:1fr}.scope-group{padding:18px}.scope-positive{grid-template-columns:1fr;gap:12px}.scope-positive a{grid-column:auto}.app-scope-section{padding-bottom:38px}.scope-rules{gap:7px}.scope-rules span{font-size:11px}}
 @media print{.scope-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scope-group{break-inside:avoid}.scope-positive{display:block}.scope-positive p{margin-block:8px}.scope-method{font-size:8pt}.scope-evidence{display:none}.scope-rules{display:none}}
+
+@media(min-width:581px){.flow-track{grid-template-columns:repeat(6,minmax(0,1fr))}}
