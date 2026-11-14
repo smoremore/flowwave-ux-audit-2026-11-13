@@ -48,6 +48,10 @@
       term: `flowwave-audit-2026-11-13/screen/${id}`, anchor: `screen-${id}`
     });
   });
+  (window.FlowWaveTeamTasks?.tasks || []).forEach(task => {
+    const key = `task-${task.id}`;
+    topics[key] = Object.freeze({key, kind:'task', id:task.id, label:`Aufgabe ${task.id}`, title:task.title, term:`flowwave-audit-2026-11-13/task/${task.id}`, anchor:key});
+  });
   window.FlowWaveFeedbackConfig = Object.freeze({
     repo: 'smoremore/flowwave-ux-audit-2026-11-13',
     repoId: 'R_kgDOVsn2Ew',

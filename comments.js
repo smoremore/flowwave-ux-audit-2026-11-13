@@ -83,7 +83,7 @@
     if (trigger instanceof HTMLElement) returnFocus = trigger;
     activeTopic = topic;
     context.textContent = topic.label;
-    heading.textContent = topic.kind === 'finding' ? topic.title : `Feedback zum Screen ${topic.title}`;
+    heading.textContent = topic.kind === 'screen' ? `Feedback zum Screen ${topic.title}` : topic.title;
     githubLink.href = searchURL(topic);
     copyButton.disabled = false;
     copyFallback.hidden = true;
