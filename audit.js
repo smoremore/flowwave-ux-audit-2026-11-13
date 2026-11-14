@@ -682,12 +682,21 @@ window.flowwaveFindings.push(...[
     ]
   }
 ]);
-const auditPriorityOrder = ["B5", "L1", "L2", "D1", "R2", "S2", "S1", "R1", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4", "B6"];
+window.flowwaveFindings.push(...(window.FlowWaveManagementAudit?.findings || []));
+const managementL1=window.flowwaveFindings.find(finding=>finding.id==='L1');
+managementL1.basis='Native Bestandsprüfung, isolierter Originalrenderer und Quellabgleich · 1.4.287';
+managementL1.problem+=' Die native Vertiefung zeigt 6.521 Designs und die Herkunftswahl erst im allgemeinen Filtermenü. 6.519 Einträge sind Account only, zwei Linked und keiner Archive only. Der zusätzliche isolierte Originalrenderer mit 10.000 synthetischen Designs bestätigt 6.000 Account only, 3.000 Linked und 1.000 Archive only sowie zwei Archivstände an einer einzigen Identität. Datei-Bytes und echte Cloud-Bereitstellung wurden damit nicht geprüft.';
+managementL1.suggestion+=' Die drei Herkunftsgruppen direkt am Bestand anbieten. Nur lokale Einträge führen mit Datei- und Archivaktionen statt leeren Amazon-Bereichen; Produktmatrix und Historie öffnen bei Bedarf.';
+managementL1.evidence.push({file:'Native und isolierte Vertiefung · 14.11.2026',detail:'6.521 reale gespeicherte Designs; 60er-Seiten. Isolierter Originalrenderer/Service mit 10.000 synthetischen Einträgen und drei Herkunftsgruppen; keine echte Kontolesung oder Schreibaktion.'});
+const auditPriorityOrder = ["B5", "DM1", "AC3", "AC1", "AC2", "AC4", "L1", "L2", "DM2", "D1", "R2", "S2", "S1", "R1", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4", "B6", "AC5"];
 window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPriorityOrder.indexOf(b.id));
 
 (function () {
   'use strict';
   const findings = window.flowwaveFindings;
+  const areas = window.FlowWaveManagementAudit.areas;
+  const areaOf = new Map(areas.flatMap(area=>area.ids.map(id=>[id,area.id])));
+  const areaTitle = new Map(areas.map(area=>[area.id,area.title]));
   const grid = document.getElementById('findingsGrid');
   const category = document.getElementById('categoryFilter');
   const result = document.getElementById('filterResult');
@@ -699,14 +708,14 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
   const paragraph = value => Array.isArray(value) ? `<ul>${value.map(item => `<li>${escape(item)}</li>`).join('')}</ul>` : `<p>${escape(value)}</p>`;
   const renderPart = (title, value, className = '') => value ? `<div class="detail-part ${className}"><h4>${title}</h4>${paragraph(value)}</div>` : '';
 
-  grid.innerHTML = findings.map(finding => `<article class="finding-card" id="${escape(finding.id)}" data-priority-value="${escape(finding.priority)}" data-category="${escape(finding.category)}">
+  grid.innerHTML = findings.map(finding => `<article class="finding-card" id="${escape(finding.id)}" data-priority-value="${escape(finding.priority)}" data-category="${escape(finding.category)}" data-audit-area="${escape(areaOf.get(finding.id))}">
     <div class="finding-card-top"><div class="finding-meta"><a class="finding-id" href="#${escape(finding.id)}" aria-label="Direktlink zu Finding ${escape(finding.id)}">${escape(finding.id)}</a><span class="finding-priority"><i class="priority-dot ${finding.priority === 'P1' ? 'p1' : 'p2'}" aria-hidden="true"></i>${escape(finding.priority)}</span><span class="finding-category">${escape(finding.category)}</span></div><h3>${escape(finding.title)}</h3><p class="finding-summary">${escape(finding.summary)}</p></div>
     <details class="finding-details"><summary>Beleg und Verbesserung<span class="sr-only"></span></summary><div class="finding-detail-body">${renderPart('Evidenzart', finding.basis || (['R1','R2','R3','R4','R6'].includes(finding.id) ? 'Native UI und Code' : 'Codebefund'))}${renderPart('Das Problem',finding.problem)}${renderPart('Der Vorschlag',finding.suggestion)}${renderPart('Das bleibt erhalten',finding.preserve)}${renderPart('Abnahmekriterium',finding.acceptance,'acceptance')}
       <div class="detail-part"><h4>Quelle</h4><ul class="evidence-list">${(finding.evidence || []).map(evidence => `<li><code>${escape(evidence.file)}${evidence.line == null ? '' : `:${escape(evidence.line)}`}</code>${evidence.detail ? `<span>${escape(evidence.detail)}</span>` : ''}</li>`).join('')}</ul><p class="source-version">Installierte FlowWave ${escape(finding.sourceVersion || '1.4.286')} · Quellstand ${escape(finding.sourceCommit || '9c4f181')}</p></div>
     </div></details><div class="finding-feedback af-topic-action"><button class="af-feedback-button" type="button" data-feedback-topic="finding-${escape(finding.id)}" aria-label="Feedback zu Finding ${escape(finding.id)}: ${escape(finding.title)}">Kommentieren <span aria-hidden="true">↗</span></button></div></article>`).join('');
 
-  const categories = [...new Set(findings.map(finding => finding.category))].sort((a,b) => a.localeCompare(b,'de'));
-  categories.forEach(value => { const option = document.createElement('option'); option.value = value; option.textContent = value; category.append(option); });
+  areas.forEach(area => { const option=document.createElement('option');option.value=area.id;option.textContent=area.title;category.append(option); });
+  document.getElementById('auditAreaIndex').innerHTML=areas.map(area=>`<a href="#area-${escape(area.id)}">${escape(area.title)} <span>${area.ids.length}</span></a>`).join('');
   document.getElementById('findingTotal').textContent = findings.length;
   document.getElementById('allCount').textContent = findings.length;
 
@@ -714,13 +723,13 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
     let matching = 0;
     let visible = 0;
     [...grid.children].forEach(card => {
-      const matches = (selectedPriority === 'all' || card.dataset.priorityValue === selectedPriority) && (category.value === 'all' || card.dataset.category === category.value);
+      const matches = (selectedPriority === 'all' || card.dataset.priorityValue === selectedPriority) && (category.value === 'all' || card.dataset.auditArea === category.value);
       if (matches) matching++;
       card.hidden = !matches || (!showAllMatching && matching > 6);
       if (!card.hidden) visible++;
     });
     priorityButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.priority === selectedPriority)));
-    result.textContent = `${visible} von ${matching} passenden Findings${selectedPriority !== 'all' ? ` · ${selectedPriority}` : ''}${category.value !== 'all' ? ` · ${category.value}` : ''}`;
+    result.textContent = `${visible} von ${matching} passenden Findings${selectedPriority !== 'all' ? ` · ${selectedPriority}` : ''}${category.value !== 'all' ? ` · ${areaTitle.get(category.value)}` : ''}`;
     document.getElementById('noResults').hidden = visible > 0;
     showAll.parentElement.hidden = matching <= 6;
     showAll.textContent = showAllMatching ? 'Wieder kompakt anzeigen' : `Alle ${matching} Findings anzeigen`;
@@ -742,7 +751,15 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
     const details = card.querySelector('details'); details.open = true;
     requestAnimationFrame(() => card.scrollIntoView({block:'start',behavior:'instant'}));
   }
+  function showLinkedArea() {
+    const id=location.hash.replace(/^#area-/,'');
+    if(!areaTitle.has(id))return;
+    selectedPriority='all';category.value=id;showAllMatching=true;applyFilters();
+    requestAnimationFrame(()=>grid.scrollIntoView({block:'start',behavior:'instant'}));
+  }
+  window.addEventListener('hashchange', showLinkedArea);
   window.addEventListener('hashchange', showLinkedFinding);
   applyFilters();
+  showLinkedArea();
   showLinkedFinding();
 }());

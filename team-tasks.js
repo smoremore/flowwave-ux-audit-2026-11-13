@@ -32,11 +32,11 @@
     matching.sort((a,b) => Number(a.kind==='Auditpaket')-Number(b.kind==='Auditpaket') || (order.value==='area' ? areaOrder(a,b) || rank[a.priority]-rank[b.priority] : rank[a.priority]-rank[b.priority] || areaOrder(a,b)) || a.id.localeCompare(b.id));
     const groups = new Map();
     matching.forEach(task => {
-      const key = task.kind==='Auditpaket'?'Danach · Geplanter Management-Audit':order.value==='area'?task.area:`${task.priority} · ${data.priorityMeaning[task.priority]}`;
+      const key = task.kind==='Auditpaket'?'Management-Audits · dokumentierter Umfang':order.value==='area'?task.area:`${task.priority} · ${data.priorityMeaning[task.priority]}`;
       if(!groups.has(key))groups.set(key,[]); groups.get(key).push(task);
     });
     host.innerHTML = [...groups].map(([title,tasks])=>`<section class="team-task-group"><h3>${esc(title)} <span>${tasks.length}</span></h3>${tasks.map(card).join('')}</section>`).join('');
-    result.textContent = `${matching.length} von ${data.tasks.length} Aufgaben · ${matching.filter(t=>t.kind!=='Auditpaket').length} Umsetzung · ${matching.filter(t=>t.kind==='Auditpaket').length} geplante Audits`;
+    result.textContent = `${matching.length} von ${data.tasks.length} Aufgaben · ${matching.filter(t=>t.kind!=='Auditpaket').length} Umsetzung · ${matching.filter(t=>t.kind==='Auditpaket').length} ${matching.filter(t=>t.kind==='Auditpaket').length===1?'Auditpaket':'Auditpakete'}`;
     empty.hidden=matching.length>0;
   }
   host.addEventListener('toggle', event => { const node=event.target; if(node.classList?.contains('team-task')) {const id=node.id.slice(5);node.open?open.add(id):open.delete(id);} },true);
@@ -45,7 +45,7 @@
   reset.addEventListener('click',()=>{priorities.value=area.value=phase.value='all';order.value='priority';query.value='';render();query.focus();});
   function revealLinkedTask() {
     const anchor = location.hash.slice(1);
-    if (['team-tasks','upload-findings','plan'].includes(anchor)) {
+    if (['team-tasks','upload-findings','management-audit','plan'].includes(anchor)) {
       const target = anchor==='plan'?'team-tasks':anchor;
       requestAnimationFrame(()=>document.getElementById(target)?.scrollIntoView({block:'start',behavior:'instant'}));
       return;

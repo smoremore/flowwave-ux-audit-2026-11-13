@@ -1,0 +1,325 @@
+{
+  "date": "2026-11-14",
+  "version": "1.4.287",
+  "commit": "85e457e",
+  "findings": [
+    {
+      "id": "DM1",
+      "priority": "P1",
+      "category": "Design Management",
+      "title": "Eine späte Stapelauswahl gehört zu ihrem ursprünglichen Filter.",
+      "summary": "Während „alle Treffer auswählen“ lädt, kann ein Filterwechsel die neue Teilmenge fälschlich als vollständig ausgewählt markieren.",
+      "problem": "Im isolierten Originalrenderer mit 10.000 Designs wurde die Auswahl von 3.000 verknüpften Designs angefragt und vor der Antwort auf 1.000 reine Archiveinträge gewechselt. Danach standen 3.000 ausgewählt und 0 auf dieser Seite; „Select all 1,000“ war trotzdem verborgen. Die Übernahme setzt selectAllFor auf den inzwischen aktuellen Query statt auf den angefragten. Die alte Auswahl über Filterwechsel zu erhalten ist sinnvoll; die neue Teilmenge als vollständig gewählt zu behandeln ist der Fehler. Eine zweite Funktionsprobe zeigt außerdem: Leeren während des Requests wird durch die späte Antwort wieder aufgehoben.",
+      "suggestion": "Auswahlantwort an den eingefrorenen Query und ihre Request-Generation binden. Kontextwechsel oder explizites Leeren dürfen keinen aktuellen Vollständigkeitsmarker aus einer alten Antwort erhalten. Verbleibende nicht sichtbare Auswahl kurz und korrekt benennen.",
+      "preserve": "Exakte IDs und bewusst erhaltene Auswahl über Seiten und Filter. Keine unnötige Bestätigungsrunde und kein Verlust vorhandener Aufträge.",
+      "acceptance": [
+        "Linked → Select all → vor Antwort Archive zeigt die neue Treffermenge und ihren tatsächlichen Auswahlstand korrekt; die Aktion für noch nicht gewählte aktuelle Treffer bleibt erreichbar.",
+        "Clear während eines laufenden Auswahlrequests bleibt leer, wenn dessen alte Antwort eintrifft.",
+        "Normale Seiten-/Filterwechsel behalten bewusst gewählte IDs; ein verspäteter Request erweitert keine neue Auswahl still."
+      ],
+      "basis": "Isolierter Browser mit Originalrenderer + Originalservice, kontrolliert verzögerte Auswahlantwort; zusätzliche VM-Probe",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "Isolierter Browserlauf · 14.11.2026",
+          "detail": "10.000 synthetische Designs; Keys-Antwort bewusst um 3 Sekunden verzögert, kein gemessener Produkt-Latenzbeleg. 3.000 ausgewählt, 0 aktuelle Zeilen gewählt, neue Select-all-Aktion verborgen."
+        },
+        {
+          "file": "public/design-management.js",
+          "line": 1265,
+          "detail": "Asynchroner Keys-Request; nach Antwort setzt Zeile 1273 selectAllFor aus dem aktuellen queryWord statt aus dem Requestscope."
+        },
+        {
+          "file": "public/design-management.js",
+          "line": 1107,
+          "detail": "Der aktuelle Querymarker und selected.size können everyMatch behaupten, obwohl keine aktuelle Zeile gewählt ist."
+        }
+      ]
+    },
+    {
+      "id": "DM2",
+      "priority": "P1",
+      "category": "Design Management",
+      "title": "Ein Archivstand muss genau seinen Upload öffnen.",
+      "summary": "„Open Upload for …“ kennt den Archivstand, öffnet aber nur den allgemeinen Uploadbereich.",
+      "problem": "In der nativen App führte der Link aus einem verknüpften gespeicherten Entwurf in die leere Queue; zwei abgeschlossene Einträge lagen in Done. Der Renderer nennt die Archiv-ID im Label, übergibt im Event aber nur workspace: upload. Damit muss derselbe Stand im Ziel erneut gesucht werden.",
+      "suggestion": "Archiv-ID, Revision, passende Zielliste und Rückkehrkontext mitgeben. Der bestehende Upload-Owner fokussiert den exakten Stand unabhängig von seinem aktuellen Queue-/Done-/Archivzustand.",
+      "preserve": "Bestehende Uploadguards, Historie und Identität. Öffnen führt keinen neuen Upload aus.",
+      "acceptance": [
+        "Ein Archivlink öffnet genau seine ID in der zum gespeicherten Zustand passenden Liste oder Detailansicht.",
+        "Ein bestätigter Entwurf wird auch aus einer leeren Queue ohne erneute Suche erreicht.",
+        "Zurück erhält Designbestand, Filter, Seite und Auswahl; Navigation löst weder Upload noch Wiederholung aus."
+      ],
+      "basis": "Native UI und installierter Code",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "Native UI · 1.4.287",
+          "detail": "Exakter Archivlink führte zu „No designs are waiting“ in Queue statt zum gespeicherten Entwurf; Done enthielt zwei Einträge."
+        },
+        {
+          "file": "public/design-management.js",
+          "line": 1976,
+          "detail": "archiveSection kennt entry.id; der Clickhandler bei 1990 dispatcht ausschließlich workspace: upload."
+        }
+      ]
+    },
+    {
+      "id": "AC1",
+      "priority": "P1",
+      "category": "Account Management",
+      "title": "Die Kontoliste darf nicht nach 300 Designs enden.",
+      "summary": "Die Aufgabenansicht zählt 3.835 passende Designs, lädt aber nur die ersten 300. Der Rest ist dort nicht erreichbar.",
+      "problem": "Die native gespeicherte Add-products-Ansicht zeigt 3.835 Treffer. Show more erweitert nur den geladenen Ausschnitt; nach fünf Erweiterungen verschwindet die Aktion. Die Quelle zählt den vollständigen Bestand, schneidet die übergebenen Designs aber auf 300 ab. A–Z und Newest sortieren nur diese Teilmenge; eine Suche fehlt. Das vollständige Designmanagement ist bereits als alternative Bestandsansicht vorhanden; die Daten sind nicht verloren.",
+      "suggestion": "Kontenaufgaben mit Suche und serverseitiger Sortierung über alle Treffer sowie begrenzten Seiten darstellen. Gesamtmenge, Treffer, Seite und Auswahl unterscheiden. Pro Zeile Aufgabe und Aktion vor wiederholte Produktgruppen setzen.",
+      "preserve": "Gespeicherte Kontodaten, Produkt-/Marktzuordnungen, vorhandener Gesamtbestand und exakte Queues.",
+      "acceptance": [
+        "Der letzte von mehr als 3.835 passenden Einträgen ist über ID oder Titel direkt auffindbar.",
+        "A–Z und Newest sortieren den vollständigen gefilterten Bestand, nicht nur die ersten 300.",
+        "Begrenzte Seiten erhalten Auswahl und genaue Zähler. Produktgruppen und vollständige Statusverteilung sind optional statt je Zeile dominant."
+      ],
+      "basis": "Native große Kontoliste und installierter Code",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "Native UI · 1.4.287",
+          "detail": "3.835 Add-products-Treffer; Show-more-Restmengen 250 → 200 → 150 → 100 → 50, anschließend keine Erweiterungsaktion."
+        },
+        {
+          "file": "src/merch-fetch-service.js",
+          "line": 294,
+          "detail": "Vollständige totals, danach slice(0,300) je Aufgabengruppe in Zeile 295."
+        },
+        {
+          "file": "public/upload-live.js",
+          "line": 313,
+          "detail": "Sortierung und Show more arbeiten nur mit dem geladenen Ausschnitt; Restmengenlabel bei 344–345."
+        },
+        {
+          "file": "public/upload-live-view.js",
+          "line": 76,
+          "detail": "Hinweis auf Teilmenge erscheint nur bei abweichender Sortierung."
+        }
+      ]
+    },
+    {
+      "id": "AC2",
+      "priority": "P1",
+      "category": "Account Management",
+      "title": "Ein Ladefehler darf den letzten Kontostand nicht ersetzen.",
+      "summary": "Eine gültige JSON-Fehlerantwort kann als neuer Kontostand übernommen werden; Retry wird dabei verborgen.",
+      "problem": "Der State-Endpunkt liefert bei einem Fehler HTTP 500 mit ok:false. Der Client prüft weder HTTP-Erfolg noch ok und übernimmt das Objekt in refresh als state. In einer isolierten Probe mit den installierten Funktionen verschwanden die bisherigen State-Daten und der Retry blieb versteckt. Ein Transportfehler wird dagegen korrekt behandelt. Dies ist ein Anzeige-/Recovery-Defekt, kein Beleg für gelöschte Kontodaten.",
+      "suggestion": "HTTP- und Anwendungsantwort vor der Übernahme validieren. Letzten gültigen Bestand samt Auswahl sichtbar halten; eine kurze Fehlermeldung mit Erneut laden ergänzt den Stand.",
+      "preserve": "Gespeicherte Daten, vorhandene Auswahl und offene Originalaufträge. Kein automatischer neuer Account-Read oder Upload wegen eines Anzeigefehlers.",
+      "acceptance": [
+        "HTTP 500 mit JSON ok:false und ein Transportfehler erhalten beide den letzten gültigen Bestand und die Auswahl.",
+        "Ein sichtbarer Fehler bietet Erneut laden; er erscheint weder als leerer noch als frisch aktualisierter Kontostand.",
+        "Ein späterer gültiger Zustand ersetzt den alten genau einmal; kein Read oder Upload wird automatisch wiederholt."
+      ],
+      "basis": "Isolierte Funktionsprobe mit Originalcode; keine echte Kontolesung",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "src/merch-fetch-routes.js",
+          "line": 13,
+          "detail": "State-Route liefert bei Fehler HTTP 500 mit ok:false und reason."
+        },
+        {
+          "file": "public/upload-live.js",
+          "line": 89,
+          "detail": "call validiert HTTP-/ok-Ergebnis nicht; refresh bei 599–609 ersetzt state und versteckt Retry."
+        },
+        {
+          "file": "Kontrollierte VM-Probe · 14.11.2026",
+          "detail": "JSON-Fehler ersetzte alten state und ließ Retry hidden; Transportfehler-Gegenprobe erhielt state und zeigte Retry. Browserdarstellung dieses Fehlerfalls wurde nicht separat ausgelöst."
+        }
+      ]
+    },
+    {
+      "id": "AC3",
+      "priority": "P1",
+      "category": "Account Management",
+      "title": "Eine bestehende Produktwahl darf nicht still breiter werden.",
+      "summary": "Add products aus Designmanagement kann eine bereits begrenzte Queuewahl durch alle Produkte und Märkte ersetzen.",
+      "problem": "Der direkte Designmanagement-Handler übergibt alle unterstützten Produkte und markets:null. Der Service ersetzt bei derselben Design-/Recipe-Kombination einen bestehenden Queueeintrag. Eine vorher bewusst begrenzte US-/Produktauswahl oder Templatevorgabe kann dadurch überschrieben werden, ohne dass der Auslöser diesen Umfang benennt. Das queued einen Auftrag; ein sofortiger Amazon-Schreibvorgang wurde damit nicht nachgewiesen.",
+      "suggestion": "Vorhandenen Auftrag mit seiner aktuellen Wahl öffnen. Bei neuen Aufträgen Produkt-, Markt- und Templateumfang knapp am Design zeigen und direkt ändern lassen. Ein eindeutig benannter Umfang braucht keine zusätzliche Bestätigungsrunde.",
+      "preserve": "Bestehende Scope- und Evidenzbindung, aktuelle Schreibguards und Originalaufträge. Ein Bereichswechsel ändert keine Queue.",
+      "acceptance": [
+        "Ein vorhandener US-only-Auftrag für ein Produkt bleibt beim Öffnen aus Designmanagement exakt so begrenzt.",
+        "Eine Erweiterung benennt vor dem Queuen konkrete Produkte und Märkte; Templatevorgaben werden berücksichtigt.",
+        "Erneutes Öffnen ändert weder Scope noch Evidenz und startet keinen neuen Auftrag. Ein neuer Scope ersetzt nur nach einer ausdrücklichen Änderung."
+      ],
+      "basis": "Gezielter Quellbeleg; kein echter Queue-/Amazon-Schreibversuch",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "public/design-management.js",
+          "line": 1339,
+          "detail": "queueDesigns übergibt alle unterstützten Produkte und markets:null (bis 1346); Aufruf bei 2029."
+        },
+        {
+          "file": "src/merch-fetch-service.js",
+          "line": 1760,
+          "detail": "Vorhandener Queueeintrag derselben Design-/Recipe-Kombination wird mit der neuen Wahl ersetzt (bis 1771)."
+        }
+      ]
+    },
+    {
+      "id": "AC4",
+      "priority": "P1",
+      "category": "Account Management",
+      "title": "Ein abgeschlossener Sync muss den sichtbaren Bestand aktualisieren.",
+      "summary": "Der Busy-Hinweis kann nach einer Kontolesung verschwinden, während Liste, Treffer und geöffnetes Detail alt bleiben.",
+      "problem": "Bleibt Designmanagement während einer Kontolesung offen, zeichnet noteFetchState beim Busywechsel nur vorhandene Daten neu. Ein normaler Syncabschluss invalidiert die Leseprojektion und das geöffnete Detail dort nicht. In der kontrollierten running→finished-Probe blieben load und loadDetail bei null; erst eine neue Suche, Filterung oder ein erneuter Bereichseintritt lädt später nach.",
+      "suggestion": "Nach bestätigter neuer Kontorevision die betroffene Projektion und das geöffnete Detail einmal aktualisieren. Suche, Auswahl, Seite und Fokus behalten; ein Fehler zeigt den letzten gültigen Stand mit einer konkreten Aktion.",
+      "preserve": "Unabhängige lokale Bildproduktion, vorhandene Ergebnisse und manuelle Entwürfe. Keine Polling-Vollabfrage je Design und kein erneuter Account-Read.",
+      "acceptance": [
+        "Bei normalem Syncabschluss aktualisieren sich Zähler, betroffene Zeilen, Lesestand und geöffnetes Detail ohne Bedienaktion.",
+        "Suche, Seite, exakte Auswahl und manuelle Eingaben bleiben erhalten; eine alte Antwort überschreibt keine neuere Filterabfrage.",
+        "Fehlgeschlagener oder pausierter Sync bleibt vom letzten gültigen Lesestand unterscheidbar und bietet eine passende direkte Aktion."
+      ],
+      "basis": "Isolierte Funktionsprobe und installierter Code",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "public/design-management.js",
+          "line": 1308,
+          "detail": "noteFetchState: Busywechsel zeichnet vorhandene Notice/Rail/Panel; load wird nur für einen Rewritewechsel in der Rewriteansicht ausgelöst (bis 1321)."
+        },
+        {
+          "file": "Kontrollierte VM-Probe · 14.11.2026",
+          "detail": "running → finished bei gleicher Rewriteversion: load=0, loadDetail=0, alte data unverändert. Keine echte Kontolesung ausgelöst."
+        }
+      ]
+    },
+    {
+      "id": "AC5",
+      "priority": "P2",
+      "category": "Account Management",
+      "title": "Unbekannte Verkäufe sind kein bestätigter Nullwert.",
+      "summary": "Ein unvollständiger Verkaufsabruf kann in Live designs als „no sales in a year“ erscheinen.",
+      "problem": "Die Erstlesung speichert Designs vor dem Verkaufsteil. Fehlt die Verkaufszuordnung, arbeitet snapshot mit einer leeren Map; daraus wird null Verkäufe, und die Live-Zeile schreibt bedingungslos no sales in a year. Bei einem unterbrochenen Verkaufsteil wirkt fehlendes Wissen wie bestätigte schwache Leistung. Dieser Fall wurde am Code geprüft, nicht durch eine echte Erstlesung ausgelöst.",
+      "suggestion": "Vollständigkeit und Zeitraum der Verkaufskenntnis mitführen. Bis zur ausreichenden Zuordnung Verkäufe noch nicht vollständig zugeordnet zeigen. Keine Verkäufe erst als bestätigten Wert verwenden.",
+      "preserve": "Gespeicherte Verkaufsdaten, betrachteter Zeitraum und bereits vorhandene Unklarheiten. Keine vorschnelle Entfernung oder Neuproduktion aus fehlender Kenntnis ableiten.",
+      "acceptance": [
+        "Ein Design ohne vollständige Verkaufszuordnung erscheint als unbekannt statt als bestätigter Nullverkauf.",
+        "Null und positive Werte sind an den tatsächlich bekannten Zeitraum gebunden.",
+        "Unbekannte Werte erhalten in Priorisierungen und Filtern eine eigene nachvollziehbare Behandlung."
+      ],
+      "basis": "Quellbeleg eines unvollständigen Erstlesepfads",
+      "sourceVersion": "1.4.287",
+      "sourceCommit": "85e457e",
+      "evidence": [
+        {
+          "file": "src/merch-fetch-service.js",
+          "line": 425,
+          "detail": "Designs werden vor dem Verkaufsteil gespeichert (bis 429); snapshot verwendet bei fehlender Zuordnung eine leere Map bei 276."
+        },
+        {
+          "file": "src/fetch-live-designs.js",
+          "line": 188,
+          "detail": "Leere Zuordnung wird als null Verkäufe abgebildet."
+        },
+        {
+          "file": "public/upload-live.js",
+          "line": 143,
+          "detail": "Die Zeile schreibt ohne Kenntnisflag no sales in a year (bis 144)."
+        }
+      ]
+    }
+  ],
+  "areas": [
+    {
+      "id": "intake",
+      "title": "Import & Sets",
+      "ids": [
+        "B3",
+        "B4",
+        "B6",
+        "S1"
+      ]
+    },
+    {
+      "id": "production",
+      "title": "Bildproduktion",
+      "ids": [
+        "C1",
+        "F1",
+        "F2",
+        "M1",
+        "S2",
+        "V1"
+      ]
+    },
+    {
+      "id": "automation",
+      "title": "Autopilot",
+      "ids": [
+        "B1",
+        "B2",
+        "D1",
+        "N4"
+      ]
+    },
+    {
+      "id": "listing",
+      "title": "Listings & Review",
+      "ids": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "I1"
+      ]
+    },
+    {
+      "id": "upload",
+      "title": "Upload",
+      "ids": [
+        "U1",
+        "U2",
+        "U3",
+        "R7"
+      ]
+    },
+    {
+      "id": "management",
+      "title": "Design Management",
+      "ids": [
+        "L1",
+        "L2",
+        "DM1",
+        "DM2"
+      ]
+    },
+    {
+      "id": "account",
+      "title": "Account Management",
+      "ids": [
+        "AC1",
+        "AC2",
+        "AC3",
+        "AC4",
+        "AC5"
+      ]
+    },
+    {
+      "id": "app",
+      "title": "Appübergreifend",
+      "ids": [
+        "B5",
+        "N1",
+        "N2",
+        "N3"
+      ]
+    }
+  ]
+}

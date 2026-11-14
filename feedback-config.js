@@ -34,6 +34,7 @@
     B5: "Ein großer Bestand darf den Arbeitsbereich nicht blockieren",
     B6: "96 Kontaktblätter brauchen eine gezielte Blattwahl"
   };
+  (window.FlowWaveManagementAudit?.findings || []).forEach(finding=>{findings[finding.id]=finding.title;});
   const screens = {"designs": "Designhub", "review": "Review", "listings": "Listings", "upload": "Upload vorbereiten", "uploadqueue": "Upload", "create": "Create Artworks", "sets": "Create Sets", "import": "Import", "remaster": "Remaster", "collections": "Imported Sets", "vectorize": "Vectorize", "upscale": "Upscale", "halftone": "Halftone", "effects": "Effects", "repairs": "Repairs", "autopilot": "Autopilot", "checks": "IP Checks", "live": "Kontodaten", "management": "Designbestand", "archive": "Archiv", "activity": "Aktivität", "settings": "Einstellungen"};
   const topics = Object.create(null);
   Object.entries(findings).forEach(([id, title]) => {
