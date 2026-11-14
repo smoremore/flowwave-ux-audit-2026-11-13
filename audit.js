@@ -587,57 +587,52 @@ window.flowwaveFindings.push(...[
   {
     "id": "L1",
     "priority": "P1",
-    "category": "Produktionsabschluss",
-    "title": "Produktion, lokales Archiv und Konto klar trennen.",
-    "summary": "Ein lokales Upload-Archiv existiert bereits. Design management vermischt es mit Kontodesigns; der Hub orientiert seinen Abschluss am Export statt am bestätigten Upload.",
-    "problem": "Die Review-Übergabe kopiert PNG, SVG und Listing ins bestehende Upload-Archiv und behält die Produktionsoriginale. Upload führt Done und Archived. Der Active-Filter im Hub blendet bereits Exported/Archived aus; sein Exportstatus belegt jedoch ein Exportpaket und keinen bestätigten Amazon-Speichervorgang. Ein eindeutiger Abschlussweg vom bestätigten Upload in einen globalen lokalen Archivbereich fehlt. Design management kombiniert lokale Archiv- und Amazon-Kontoeinträge.",
-    "suggestion": "Designhub ausschließlich als Produktionsbereich führen. Nach einem dauerhaft bestätigten Upload-Abschluss die exakte Produktion aus dem aktiven Hub nehmen und im eigenen „Lokalen Archiv“ mit Dateien, Versionen und Upload-Beleg auffindbar halten. Den bestehenden Archiv-Owner weiterverwenden. Account Management zeigt separat den Kontobestand. Die Rückkehr zur Produktion legt eine bewusste Arbeitskopie an und startet nichts automatisch.",
-    "preserve": "Originale und Wiederherstellung; laufende oder unklare Uploads bleiben in der Upload-Queue. Fill only ist kein Abschluss. „Entwurf gespeichert“ und „An Amazon übermittelt“ bleiben getrennt; ein Submit allein beweist noch keinen Live-Status. Große Dateien können online-only sein.",
+    "category": "Bestandsverwaltung",
+    "title": "Ein Designbestand unter Account Management.",
+    "summary": "FlowWave verknüpft lokale Archiv- und Kontoeinträge bereits. Das Konzept soll diese gemeinsame Ansicht klar zeigen: Lokal + Online, Nur lokal oder Nur online.",
+    "problem": "Design management ist im installierten Stand bereits ein eigener Bereich neben Produktion und Upload. Es nutzt gemeinsame Karten-/Zeilenrenderer und die Herkunftsgruppen Account only, Linked und Archive only. Die sichtbare Hierarchie Account Management → Designbestand soll diese vorhandene Zuordnung verständlich abbilden: passende Informationen und Aktionen am selben Eintrag. Zusätzlich bleibt der Produktionsabschluss zu präzisieren: Der Hub-Exportstatus ist kein bestätigter Amazon-Speichervorgang.",
+    "suggestion": "Account Management als sichtbaren Hauptbereich führen. Darunter Designbestand mit derselben Zeilen- und Detailstruktur für alle drei Ablagefälle. Bei Lokal + Online erscheinen Datei- und Kontoaktionen am selben Design; nur lokale oder nur Online-Daten erhalten jeweils die passenden Felder. Bestehende Identitäten und Verknüpfungen weiterverwenden. Archiviert bleibt ein Abschlussmerkmal; Dateien und historische Stände sind von diesem Bestand aus erreichbar.",
+    "preserve": "Vorhandene Account-/Archiv-IDs und Produktzuordnungen. Ein lokaler Katalogeintrag beweist keine verfügbaren Mediabytes auf diesem Mac. Herkunft, Entwurf, Übermittlung und Live-Status bleiben unabhängige Merkmale. Unklare Uploads bleiben offen; kein Abschluss allein durch ZIP, Klick oder Fill only.",
     "acceptance": [
-      "Bestätigter Upload → eindeutiger Archiv-Eintrag; kein weiterer aktiver Produktionsrecord für dieselbe abgeschlossene Revision.",
-      "Nur betroffene erfolgreich abgeschlossene Designs verlassen den aktiven Hub. Offene Geschwister, weitere Märkte und ausstehende Veröffentlichung bleiben in ihren Aufgabenlisten.",
-      "Datei-/Hash- und Abschlussbeleg sind dauerhaft gespeichert, bevor die Produktion logisch abgeschlossen wird. Ein ZIP, Klick, Timer oder unklarer Save reicht nicht.",
-      "Account Management und lokales Archiv haben getrennte Navigation, Datenquellen und Aktionen.",
-      "Zurückholen erstellt nur einen Produktionsauftrag; kein Upload, keine Generierung und kein Verlust alter Dateien oder Belege."
+      "Design management ist sichtbar unter Account Management und nicht in der Produktion eingeordnet.",
+      "Lokal + Online, Nur lokal und Nur online verwenden denselben Renderer; Filter verändern weder Identität noch Auswahl.",
+      "Ein verknüpftes Design erscheint einmal mit lokalen Dateien und seinen Kontoprodukten. Kein automatisches Zusammenführen über Titel oder Dateiname.",
+      "Nur vorhandene Informationen und passende Aktionen erscheinen; fehlende lokale Dateien oder ein fehlender Kontoeintrag erzeugen keine leeren Formularbereiche.",
+      "Bestätigte Uploadabschlüsse sind mit dem exakten Produktionsstand verbunden. Offene Geschwister und weitere Marktaufgaben bleiben bearbeitbar."
     ],
-    "basis": "Installierter Code und lokale Ordnerstruktur schreibgeschützt geprüft · 1.4.287",
+    "basis": "Gezielter Quellabgleich des bestehenden Design management · 1.4.287",
     "sourceVersion": "1.4.287",
     "sourceCommit": "85e457e",
     "evidence": [
       {
-        "file": "src/flowwave-folder.js",
-        "line": 7,
-        "detail": "Hub/<Arbeitsbereich> und Upload sind bereits getrennte Speicherrollen."
+        "file": "public/production-navigation.js",
+        "line": 37,
+        "detail": "Design management besitzt bereits einen eigenen Bereich außerhalb Produktion (bis 43). public/index.html:197–198 bietet den eigenen Einstieg."
       },
       {
-        "file": "src/upload-archive.js",
-        "line": 4,
-        "detail": "Katalog, Dateien, Locks und Sicherung sind bereits vorhanden; große Dateien können online-only vorliegen (bis Zeile 24)."
+        "file": "public/design-management.js",
+        "line": 18,
+        "detail": "Vorhandene Herkunftsfilter All, Account only, Linked und Archive only."
       },
       {
-        "file": "server.js",
-        "line": 32895,
-        "detail": "Review kopiert ins Upload-Archiv und erhält Produktionsoriginale; forceCopy und persistierter Handoff bis 33012."
+        "file": "public/design-management.js",
+        "line": 888,
+        "detail": "Gemeinsamer Kartenrenderer tile; gemeinsamer Zeilenrenderer row bei 1019."
       },
       {
-        "file": "src/merch-upload-service.js",
-        "line": 1321,
-        "detail": "Done und Archived existieren im Upload. Archivieren ändert den Recordstatus, nicht den Dateipfad (1090–1105,5239–5254)."
-      },
-      {
-        "file": "src/hub-projection.js",
-        "line": 593,
-        "detail": "Exportangaben bestimmen den Hub-Exportstatus; public/hub.js:825–843 blendet Exported im Active-Filter aus."
+        "file": "src/design-portfolio.js",
+        "line": 154,
+        "detail": "Bestehende Filter für Account only, Linked und Archive only. Verknüpfung über gespeicherte Amazon-Design-IDs bei 436–456; eindeutige Linkschlüssel bei 99–100."
       },
       {
         "file": "src/upload-run.js",
         "line": 116,
-        "detail": "Save-Ausgang unterscheidet Entwurf, Übermittlung und unklare Speicherung (bis 145)."
+        "detail": "Uploadabschluss bleibt an den tatsächlichen Save-Ausgang gebunden (bis 145)."
       },
       {
-        "file": "public/index.html",
-        "line": 3335,
-        "detail": "Design management kombiniert lokale Archivdesigns und Kontobestand; Hilfetext auch Zeile 3513."
+        "file": "src/hub-projection.js",
+        "line": 593,
+        "detail": "Hub-Exportangaben belegen nicht die erfolgreiche Upload-Speicherung; public/hub.js:825–843 blendet Exported/Archived im Active-Filter bereits aus."
       }
     ]
   },

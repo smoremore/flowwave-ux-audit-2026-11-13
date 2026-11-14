@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const findings = {
-    L1: 'Produktion, lokales Archiv und Konto klar trennen',
+    L1: 'Ein Designbestand unter Account Management',
     L2: 'Dateien, Versionen und Exporte am Design finden',
     D1: 'Rohfehler verdrängen die nächste Handlung',
     S1: 'Der Leerzustand führt nicht zuverlässig ins Import-Setup',
@@ -34,7 +34,7 @@
     B5: "Ein großer Bestand darf den Arbeitsbereich nicht blockieren",
     B6: "96 Kontaktblätter brauchen eine gezielte Blattwahl"
   };
-  const screens = {"designs": "Designhub", "review": "Review", "listings": "Listings", "upload": "Upload vorbereiten", "uploadqueue": "Upload-Queue", "create": "Create Artworks", "sets": "Create Sets", "import": "Import", "remaster": "Remaster", "collections": "Imported Sets", "vectorize": "Vectorize", "upscale": "Upscale", "halftone": "Halftone", "effects": "Effects", "repairs": "Repairs", "autopilot": "Autopilot", "checks": "IP Checks", "live": "Live Designs", "management": "Account Management", "archive": "Lokales Archiv", "activity": "Aktivität", "settings": "Einstellungen"};
+  const screens = {"designs": "Designhub", "review": "Review", "listings": "Listings", "upload": "Upload vorbereiten", "uploadqueue": "Upload-Queue", "create": "Create Artworks", "sets": "Create Sets", "import": "Import", "remaster": "Remaster", "collections": "Imported Sets", "vectorize": "Vectorize", "upscale": "Upscale", "halftone": "Halftone", "effects": "Effects", "repairs": "Repairs", "autopilot": "Autopilot", "checks": "IP Checks", "live": "Kontodaten", "management": "Designbestand", "archive": "Archiv", "activity": "Aktivität", "settings": "Einstellungen"};
   const topics = Object.create(null);
   Object.entries(findings).forEach(([id, title]) => {
     topics[`finding-${id}`] = Object.freeze({

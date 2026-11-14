@@ -20,3 +20,21 @@
 #flowwave-bento-concept .fw-ops-fixed-value{display:grid;grid-template-columns:minmax(100px,.7fr) minmax(0,1fr);gap:8px 16px;margin:0 0 12px;padding:8px 0;align-items:baseline}#flowwave-bento-concept .fw-ops-fixed-value dt{font-size:12px;color:var(--fw-muted)}#flowwave-bento-concept .fw-ops-fixed-value dd{margin:0;font-size:13px;overflow-wrap:anywhere}@media(max-width:550px){#flowwave-bento-concept .fw-ops-fixed-value{grid-template-columns:1fr;gap:4px}}
 
 #flowwave-bento-concept .fw-ops-access-context{margin:0 0 18px;font-size:12px;color:var(--fw-muted)}#flowwave-bento-concept .fw-ops-access-context p{margin:0 0 8px}#flowwave-bento-concept .fw-ops-access-context strong{font-weight:500;color:var(--fw-ink)}#flowwave-bento-concept .fw-ops-access-context details{margin:4px 0 8px}#flowwave-bento-concept .fw-ops-access-context summary{cursor:pointer;min-height:44px;align-content:center;width:fit-content}#flowwave-bento-concept .fw-ops-access-context ul{padding-left:18px;line-height:1.7}#flowwave-bento-concept [data-ops-access-heading]:focus-visible{outline:2px solid var(--fw-accent);outline-offset:5px;border-radius:2px}
+
+/* One Designbestand row anatomy for all origin combinations. */
+#flowwave-bento-concept .fw-management-presence{display:grid;gap:5px;font-size:12px}
+#flowwave-bento-concept .fw-management-presence strong{display:block;font-weight:500}#flowwave-bento-concept .fw-management-account-state{display:block}
+#flowwave-bento-concept .fw-management-actions{display:flex;flex-wrap:wrap;align-items:flex-start;gap:4px}
+#flowwave-bento-concept .fw-management-details{margin:0;padding:0;border:0}#flowwave-bento-concept .fw-management-details summary{min-height:28px}#flowwave-bento-concept .fw-management-table .fw-row-action{width:190px}
+#flowwave-bento-concept .fw-management-details dl{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:7px;margin:7px 0;font-size:12px}
+#flowwave-bento-concept .fw-management-details dt{color:var(--fw-muted)}
+#flowwave-bento-concept .fw-management-details dd{margin:0;overflow-wrap:anywhere}
+#flowwave-bento-concept .fw-management-details p{font-size:12px}
+#flowwave-bento-concept .fw-management-table th:nth-child(3){width:40%}#flowwave-bento-concept .fw-management-table th:nth-child(4){width:24%}
+#flowwave-bento-concept .fw-management-table th:nth-child(5){width:26%}
+@media(max-width:760px){#flowwave-bento-concept .fw-management-table .fw-row-action{grid-column:3;width:auto}#flowwave-bento-concept .fw-management-table th:nth-child(4),#flowwave-bento-concept .fw-management-table th:nth-child(5){width:auto}}
+@media(max-width:550px){#flowwave-bento-concept .fw-management-details dl{grid-template-columns:1fr;gap:3px}#flowwave-bento-concept .fw-management-details dd{margin-bottom:6px}}
+
+@media(pointer:coarse){#flowwave-bento-concept .fw-management-details summary{min-height:44px}}
+
+#flowwave-bento-concept .fw-management-series{display:block;font-size:12px;color:var(--fw-muted);margin-top:4px}
