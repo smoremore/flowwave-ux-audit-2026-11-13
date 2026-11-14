@@ -130,16 +130,49 @@
   }
   function renderedRows(view) {const container=root.querySelector(`[data-view="${view}"]`);return [...container.querySelectorAll('input[data-select-id]')].map(input=>byId.get(input.dataset.selectId)).filter(Boolean);}
   function updateSelection(view) {const container=root.querySelector(`[data-view="${view}"]`),data={...pageData(view),rows:renderedRows(view)},slot=container.querySelector('[data-selection-slot]');if(slot)slot.innerHTML=selection(view,data);const box=container.querySelector('[data-select-page]');if(box){const number=data.rows.filter(record=>state[view].selected.has(record.id)).length;box.indeterminate=number>0&&number<data.rows.length;}container.querySelectorAll('[data-select-id]').forEach(input=>input.checked=state[view].selected.has(input.dataset.selectId));if(view==='review'){const line=container.querySelector('.fw-transfer-line');if(line)line.outerHTML=transferLine(view);}}
-  function accountNavigation(view) {
-    if(!['management','archive','live'].includes(view))return '';
-    return '<nav class="fw-account-nav" aria-label="Account Management">'+[['management','Designbestand'],['archive','Archiv'],['live','Kontodaten']].map(([id,title])=>'<button class="fw-button fw-quiet" type="button" data-screen="'+id+'" '+(view===id?'aria-current="page"':'')+'>'+title+'</button>').join('')+'</nav>';
+  const lastAreaView={production:'designs',account:'management'};
+  const accountViews=new Set(['management','archive','live']);
+  const utilityViews=new Set(['activity','settings']);
+  const toolGroups=[
+    ['Aufnehmen',[['create','Create Artworks'],['sets','Create Sets'],['import','Import'],['collections','Imported Sets']]],
+    ['Bearbeiten',[['remaster','Remaster'],['vectorize','Vectorize'],['upscale','Upscale'],['halftone','Halftone'],['effects','Effects'],['repairs','Repairs']]],
+    ['Steuern',[['autopilot','Autopilot'],['checks','IP Checks']]]
+  ];
+  const toolIds=new Set(toolGroups.flatMap(group=>group[1].map(item=>item[0])));
+  const areaFor=view=>utilityViews.has(view)?null:accountViews.has(view)?'account':'production';
+  /* The persistent shell owns both navigation levels. Compatibility for older screen renderers. */
+  function accountNavigation(){return '';}
+  function syncNavigation(view){
+    const area=areaFor(view),context=root.querySelector('.fw-context-nav');
+    const active=document.activeElement,restore=context.contains(active)?active.hasAttribute('data-route-picker')?'tool':active.dataset.screen:null;
+    root.querySelectorAll('[data-area]').forEach(button=>{if(button.dataset.area===area)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
+    root.querySelectorAll('.fw-shell-utilities [data-screen]').forEach(button=>{if(button.dataset.screen===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
+    context.hidden=!area;
+    context.setAttribute('aria-label',area==='account'?'Account Management':'Produktion');
+    const route=(id,title)=>'<button type="button" data-screen="'+id+'" '+(view===id?'aria-current="page"':'')+'>'+title+'</button>';
+    if(area==='account')context.innerHTML=[['management','Designbestand'],['archive','Archiv'],['live','Kontodaten']].map(item=>route(...item)).join('');
+    else if(area==='production'){
+      const options=toolGroups.map(([title,items])=>'<optgroup label="'+title+'">'+items.map(([id,label])=>'<option value="'+id+'" '+(view===id?'selected':'')+'>'+label+'</option>').join('')+'</optgroup>').join('');
+      context.innerHTML=route('designs','Designhub')+'<select class="fw-tool-picker" data-route-picker aria-label="Werkzeug wählen" '+(toolIds.has(view)?'data-current-tool="true"':'')+'><option value="" disabled '+(!toolIds.has(view)?'selected':'')+'>Werkzeuge</option>'+options+'</select>'+[['listings','Listings'],['review','Review'],['uploadqueue','Upload']].map(([id,label])=>route(id,label)).join('');
+      if(view==='upload')context.querySelector('[data-screen="uploadqueue"]').setAttribute('aria-current','page');
+    }else context.innerHTML='';
+    if(restore){const next=restore==='tool'?context.querySelector('[data-route-picker]'):context.querySelector('[data-screen="'+restore+'"]');next?.focus({preventScroll:true});}
   }
-  function screen(view) {if(!['designs','review','listings','upload'].includes(view)&&!extensions.has(view))return;state.screen=view;root.querySelector('.fw-announcement').hidden=true;root.querySelectorAll('.fw-screen').forEach(section=>section.hidden=section.dataset.view!==view);root.querySelectorAll('nav [data-screen]').forEach(button=>{if(button.dataset.screen===view||(button.hasAttribute('data-account-parent')&&['management','archive','live'].includes(view)))button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});root.querySelectorAll('[data-route-picker]').forEach(picker=>{picker.value=[...picker.options].some(option=>option.value===view)?view:'';});render(view);root.scrollIntoView({block:'start',behavior:'instant'});document.dispatchEvent(new CustomEvent('flowwave:screenchange',{detail:{screen:view}}));}
+  function screen(view){
+    if(!['designs','review','listings','upload'].includes(view)&&!extensions.has(view))return;
+    const returning=view!==state.screen,anchor=state.listings.editingId;
+    if(returning&&view==='listings'&&anchor&&drafts.has(anchor)){const index=matching('listings').findIndex(record=>record.id===anchor);if(index>=0)state.listings.page=Math.floor(index/pageSize('listings'))+1;}
+    state.screen=view;const area=areaFor(view);if(area)lastAreaView[area]=view;
+    root.querySelector('.fw-announcement').hidden=true;
+    root.querySelectorAll('.fw-screen').forEach(section=>section.hidden=section.dataset.view!==view);
+    render(view);syncNavigation(view);root.scrollIntoView({block:'start',behavior:'instant'});
+    document.dispatchEvent(new CustomEvent('flowwave:screenchange',{detail:{screen:view}}));
+  }
   const dialog=root.querySelector('dialog'),confirm=root.querySelector('[data-modal-confirm]');
   let confirmAction=null;
   function modal(title,body,confirmLabel='',callback=null) {root.querySelector('#fw-modal-title').textContent=title;root.querySelector('[data-modal-body]').innerHTML=body;confirm.hidden=!confirmLabel;confirm.textContent=confirmLabel;confirmAction=callback;if(!dialog.open)dialog.showModal();}
   function announce(message){const node=root.querySelector('.fw-announcement');node.hidden=false;node.textContent=message;}
-  function handoff(view,ids) {ids=[...new Set(ids)].filter(id=>byId.has(id));if(extensions.has(view)){extensions.get(view).receive?.(ids);screen(view);return;}if(!state[view]?.selected)return;state[view].scope=new Set(ids);state[view].selected=new Set(ids);state[view].query='';state[view].status='all';state[view].page=1;if(view==='listings'&&ids[0])openListings.add(ids[0]);screen(view);}
+  function handoff(view,ids) {ids=[...new Set(ids)].filter(id=>byId.has(id));if(extensions.has(view)){extensions.get(view).receive?.(ids);screen(view);return;}if(!state[view]?.selected)return;state[view].editingId=null;state[view].scope=new Set(ids);state[view].selected=new Set(ids);state[view].query='';state[view].status='all';state[view].page=1;if(view==='listings'&&ids[0])openListings.add(ids[0]);screen(view);}
   function openRecord(view,id) {handoff(view,[id]);}
   function evidence(record){modal(`${record.title} · Prüfstand`,`<p>${record.id} · Version ${record.version}</p><p>Artwork IP: ${artworkState(record)}<br>Listing IP: ${listingState(record)}</p><p>${reason(record)}</p><p>Lokale Vorschau. Es wird keine Recherche wiederholt und keine Freigabe erteilt.</p>`);}
   function openTask(id,kind='final') {
@@ -168,9 +201,9 @@
     const data=pageData('listings'),info=container.querySelector('.fw-pagination>span');if(info)info.textContent=`${data.matches.length?fmt(data.offset+1)+'–'+fmt(data.offset+data.rows.length):'0'} von ${fmt(data.matches.length)} Treffern · 12 pro Seite`;
     updateSelection('listings');
   }
-  root.addEventListener('input',event=>{const target=event.target;if(target.dataset.keywordEntry){const request=keywordRequest(byId.get(target.dataset.keywordEntry));request[target.dataset.keywordKind==='adds'?'entryAdds':'entryRemovals']=target.value;}if(target.dataset.keywordNote){const record=byId.get(target.dataset.keywordNote);keywordRequest(record).note=target.value;projectKeywordScope(record);}if(target.dataset.query){const view=target.dataset.query;state[view].query=target.value;state[view].page=1;render(view,true);}if(target.dataset.editId){const record=byId.get(target.dataset.editId),fields={...fieldsFor(record),[target.dataset.field]:target.value};drafts.set(record.id,fields);refreshEditingProjection(record);}});
+  root.addEventListener('input',event=>{const target=event.target;if(target.dataset.keywordEntry){const request=keywordRequest(byId.get(target.dataset.keywordEntry));request[target.dataset.keywordKind==='adds'?'entryAdds':'entryRemovals']=target.value;}if(target.dataset.keywordNote){const record=byId.get(target.dataset.keywordNote);keywordRequest(record).note=target.value;projectKeywordScope(record);}if(target.dataset.query){const view=target.dataset.query;state[view].editingId=null;state[view].query=target.value;state[view].page=1;render(view,true);}if(target.dataset.editId){state.listings.editingId=target.dataset.editId;const record=byId.get(target.dataset.editId),fields={...fieldsFor(record),[target.dataset.field]:target.value};drafts.set(record.id,fields);refreshEditingProjection(record);}});
   root.addEventListener('keydown',event=>{const target=event.target;if(event.key==='Enter'&&target.dataset.keywordEntry){event.preventDefault();const record=byId.get(target.dataset.keywordEntry),kind=target.dataset.keywordKind;addKeyword(record,kind,target.value);refreshKeywords(record,`keyword-${record.id}-${kind}`);}});
-  root.addEventListener('change',event=>{const target=event.target;if(target.dataset.keywordRemember){const record=byId.get(target.dataset.keywordRemember);keywordRequest(record).remember=target.checked;projectKeywordScope(record);}if(target.dataset.keywordRedraft){const record=byId.get(target.dataset.keywordRedraft);keywordRequest(record).redraft=target.checked;projectKeywordScope(record);}if(target.hasAttribute?.('data-handoff-picker')&&target.value){const owner=target.dataset.viewOwner,ids=[...state[owner].selected];if(ids.length)handoff(target.value,ids);return;}if(target.hasAttribute?.('data-route-picker')&&target.value){screen(target.value);return;}if(target.dataset.status){state[target.dataset.status].status=target.value;state[target.dataset.status].page=1;render(target.dataset.status);}if(target.dataset.sort){state[target.dataset.sort].sort=target.value;state[target.dataset.sort].page=1;render(target.dataset.sort);}if(target.dataset.selectId){const selected=state[target.dataset.selectView].selected;target.checked?selected.add(target.dataset.selectId):selected.delete(target.dataset.selectId);updateSelection(target.dataset.selectView);}if(target.dataset.selectPage){const view=target.dataset.selectPage;renderedRows(view).forEach(record=>target.checked?state[view].selected.add(record.id):state[view].selected.delete(record.id));updateSelection(view);}});
+  root.addEventListener('change',event=>{const target=event.target;if(target.dataset.keywordRemember){const record=byId.get(target.dataset.keywordRemember);keywordRequest(record).remember=target.checked;projectKeywordScope(record);}if(target.dataset.keywordRedraft){const record=byId.get(target.dataset.keywordRedraft);keywordRequest(record).redraft=target.checked;projectKeywordScope(record);}if(target.hasAttribute?.('data-handoff-picker')&&target.value){const owner=target.dataset.viewOwner,ids=[...state[owner].selected];if(ids.length)handoff(target.value,ids);return;}if(target.hasAttribute?.('data-route-picker')&&target.value){screen(target.value);return;}if(target.dataset.status){state[target.dataset.status].status=target.value;state[target.dataset.status].page=1;render(target.dataset.status);}if(target.dataset.sort){state[target.dataset.sort].editingId=null;state[target.dataset.sort].sort=target.value;state[target.dataset.sort].page=1;render(target.dataset.sort);}if(target.dataset.selectId){const selected=state[target.dataset.selectView].selected;target.checked?selected.add(target.dataset.selectId):selected.delete(target.dataset.selectId);updateSelection(target.dataset.selectView);}if(target.dataset.selectPage){const view=target.dataset.selectPage;renderedRows(view).forEach(record=>target.checked?state[view].selected.add(record.id):state[view].selected.delete(record.id));updateSelection(view);}});
   root.addEventListener('click',event=>{
     const button=event.target.closest('button');if(!button||!root.contains(button))return;
     if(button.dataset.keywordAdd){const record=byId.get(button.dataset.keywordAdd),kind=button.dataset.keywordKind,r=keywordRequest(record);addKeyword(record,kind,r[kind==='adds'?'entryAdds':'entryRemovals']);refreshKeywords(record,`keyword-${record.id}-${kind}`);}
@@ -179,10 +212,11 @@
     if(button.dataset.keywordClear){const record=byId.get(button.dataset.keywordClear),r=keywordRequest(record);r.adds=[];r.removals=[];if(!reusableRequest(r))r.remember=false;refreshKeywords(record);}
     if(button.dataset.keywordPrepare)prepareKeywordRequests([button.dataset.keywordPrepare]);
     if(button.dataset.keywordDiscard){const record=byId.get(button.dataset.keywordDiscard);keywordQueued.delete(record.id);refreshKeywords(record);announce(`${record.id}: Demoauftrag zurückgenommen. Text, Anweisung und Keywords bleiben erhalten.`);}
+    if(button.dataset.area&&lastAreaView[button.dataset.area])screen(lastAreaView[button.dataset.area]);
     if(button.dataset.screen)screen(button.dataset.screen);
     if(button.dataset.handoff)handoff(button.dataset.handoff,[...state[button.dataset.viewOwner].selected]);
-    if(button.dataset.filter){const view=button.dataset.filterView;state[view].status=button.dataset.filter;state[view].page=1;render(view);}
-    if(button.dataset.page){const view=button.dataset.pageView;state[view].page+=button.dataset.page==='next'?1:-1;render(view);}
+    if(button.dataset.filter){const view=button.dataset.filterView;state[view].editingId=null;state[view].status=button.dataset.filter;state[view].page=1;render(view);}
+    if(button.dataset.page){const view=button.dataset.pageView;state[view].editingId=null;state[view].page+=button.dataset.page==='next'?1:-1;render(view);}
     if(button.dataset.uploadPage){state.uploadPage+=button.dataset.uploadPage==='next'?1:-1;renderUpload();}
     if(button.dataset.nextId)next(byId.get(button.dataset.nextId));
     if(button.dataset.reviewId)openRecord('review',button.dataset.reviewId);
@@ -217,7 +251,7 @@
       return container;
     }
   });
-  render('designs');
+  render('designs');syncNavigation('designs');
   root.querySelectorAll('.fw-screen').forEach(section=>{if(section.dataset.view!=='designs')section.hidden=true;});
   /* Read-only inspection hooks for deterministic offline acceptance. */
   window.FlowWaveConceptDemo=Object.freeze({snapshot:()=>({total:records.length,counts:counts(),screen:state.screen,rendered:root.querySelectorAll('.fw-screen:not([hidden]) .fw-asset-card,.fw-screen:not([hidden]) .fw-listing-card,.fw-screen:not([hidden]) tbody>tr:not(.fw-row-detail)').length,selected:state.screen==='upload'?state.uploadIds.length:(state[state.screen]?.selected?.size||0)}),recordIds:()=>records.map(record=>record.id)});

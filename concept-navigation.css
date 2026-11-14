@@ -1,12 +1,28 @@
-#flowwave-bento-concept .fw-shell{gap:18px;flex-wrap:wrap}
-#flowwave-bento-concept .fw-shell nav{flex:1;display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
-#flowwave-bento-concept .fw-route-picker{width:auto;max-width:200px;min-width:124px;min-height:44px;padding:10px 26px 10px 12px;border:1px solid var(--fw-line);border-radius:9px;background:var(--fw-panel);font-size:13px}
-#flowwave-bento-concept .fw-route-picker:focus-visible{outline:2px solid var(--fw-accent);outline-offset:3px}
-#flowwave-bento-concept .fw-route-utility{margin-left:auto}
-@media(max-width:820px){#flowwave-bento-concept .fw-shell nav{flex-basis:100%}#flowwave-bento-concept .fw-route-utility{margin-left:0}}
-@media(max-width:580px){#flowwave-bento-concept .fw-shell{padding:12px;gap:12px}#flowwave-bento-concept .fw-shell nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:100%}#flowwave-bento-concept .fw-shell nav button,#flowwave-bento-concept .fw-route-picker{width:100%;max-width:none;min-width:0;font-size:12px;text-align:left}#flowwave-bento-concept .fw-route-picker{padding-left:10px}}
-
-#flowwave-bento-concept .fw-account-nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--fw-line);padding:0 0 12px;margin-bottom:20px}
-#flowwave-bento-concept .fw-account-nav .fw-button[aria-current=page]{background:var(--fw-raised);color:var(--fw-ink)}
-@media(max-width:580px){#flowwave-bento-concept .fw-shell nav [data-account-parent]{grid-column:1/-1}#flowwave-bento-concept .fw-account-nav .fw-button{font-size:12px;padding-inline:9px}}
-@media(max-width:580px){#flowwave-bento-concept .fw-shell nav .fw-route-utility{grid-column:2;grid-row:3}#flowwave-bento-concept .fw-shell nav [data-account-parent]{grid-row:4}}
+/* One shell owns area navigation, contextual navigation and global utilities. */
+#flowwave-bento-concept .fw-shell{display:block;padding:0}
+#flowwave-bento-concept .fw-shell-top{display:flex;align-items:center;gap:28px;padding:14px 20px}
+#flowwave-bento-concept .fw-shell .fw-area-nav{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+#flowwave-bento-concept .fw-shell .fw-area-nav button{min-height:40px;padding:9px 15px;white-space:nowrap;font-size:13px;color:var(--fw-muted);border:1px solid transparent;border-radius:8px;background:transparent}
+#flowwave-bento-concept .fw-shell .fw-area-nav button[aria-current=page]{background:var(--fw-raised);color:var(--fw-ink)}
+#flowwave-bento-concept .fw-shell-utilities{display:flex;align-items:center;gap:5px;margin-left:auto;flex-shrink:0}
+#flowwave-bento-concept .fw-utility-button{display:grid;place-items:center;width:40px;height:40px;padding:8px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--fw-muted)}
+#flowwave-bento-concept .fw-utility-button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+#flowwave-bento-concept .fw-utility-button svg circle{fill:var(--fw-bg)}
+#flowwave-bento-concept .fw-utility-button[aria-current=page]{border-color:var(--fw-line);background:var(--fw-raised);color:var(--fw-ink)}
+#flowwave-bento-concept .fw-shell .fw-context-nav{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 20px 12px;border-top:1px solid var(--fw-line);min-width:0}
+#flowwave-bento-concept .fw-shell .fw-context-nav button{flex:0 0 auto;min-width:0;min-height:38px;padding:8px 12px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--fw-muted);font-size:13px;white-space:nowrap}
+#flowwave-bento-concept .fw-shell .fw-context-nav button[aria-current=page]{border-color:var(--fw-line);background:var(--fw-panel);color:var(--fw-ink)}
+#flowwave-bento-concept .fw-shell .fw-tool-picker{width:auto;max-width:215px;min-width:140px;min-height:38px;margin:0;padding:8px 28px 8px 12px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--fw-muted);font-size:13px}
+#flowwave-bento-concept .fw-shell .fw-tool-picker[data-current-tool]{border-color:var(--fw-line);background:var(--fw-panel);color:var(--fw-ink)}
+#flowwave-bento-concept .fw-shell button:focus-visible,#flowwave-bento-concept .fw-tool-picker:focus-visible{outline:2px solid var(--fw-accent);outline-offset:3px}
+@media(hover:hover){#flowwave-bento-concept .fw-shell button:hover,#flowwave-bento-concept .fw-tool-picker:hover{background:var(--fw-panel);color:var(--fw-ink)}}
+@media(max-width:650px){
+ #flowwave-bento-concept .fw-shell-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:12px}
+ #flowwave-bento-concept .fw-shell .fw-area-nav{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:4px}
+ #flowwave-bento-concept .fw-shell .fw-area-nav button{min-height:44px;padding:10px 8px;font-size:12px;text-align:center}
+ #flowwave-bento-concept .fw-shell-utilities{grid-column:2;grid-row:1}
+ #flowwave-bento-concept .fw-shell .fw-context-nav{flex-wrap:wrap;padding:7px 10px 10px;gap:3px}
+ #flowwave-bento-concept .fw-shell .fw-context-nav button{min-height:40px;padding:8px 6px;font-size:12px}
+ #flowwave-bento-concept .fw-shell .fw-tool-picker{width:130px;min-width:115px;max-width:130px;min-height:40px;padding:8px 24px 8px 9px;font-size:12px}
+}
+@media(prefers-reduced-motion:no-preference){#flowwave-bento-concept .fw-shell button,#flowwave-bento-concept .fw-tool-picker{transition:background-color 120ms,color 120ms,border-color 120ms}}
