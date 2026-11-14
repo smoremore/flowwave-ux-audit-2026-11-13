@@ -44,6 +44,12 @@
   query.addEventListener('input',render);
   reset.addEventListener('click',()=>{priorities.value=area.value=phase.value='all';order.value='priority';query.value='';render();query.focus();});
   function revealLinkedTask() {
+    const anchor = location.hash.slice(1);
+    if (['team-tasks','upload-findings','plan'].includes(anchor)) {
+      const target = anchor==='plan'?'team-tasks':anchor;
+      requestAnimationFrame(()=>document.getElementById(target)?.scrollIntoView({block:'start',behavior:'instant'}));
+      return;
+    }
     const id = location.hash.replace(/^#task-/,'');
     if (!data.tasks.some(task=>task.id===id)) return;
     priorities.value=area.value=phase.value='all';query.value='';open.add(id);render();
