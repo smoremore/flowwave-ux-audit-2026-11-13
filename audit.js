@@ -291,9 +291,9 @@ window.flowwaveFindings.push(...[
     "title": "Draft und Publish brauchen sichtbare Konsequenzen",
     "summary": "Die präzise Erklärung der Upload-Modi ist nur für Screenreader vorhanden.",
     "problem": "Draft, Publish und Fill only liegen gleichrangig unten in der Seitenleiste. Der spätere Startbutton benennt die Aktion korrekt; die Moduswahl selbst bleibt für Sehende knapp.",
-    "suggestion": "Eine sichtbare Zeile am Modus: Als Entwurf auf Amazon speichern, Live veröffentlichen oder Nur ausfüllen. Keine zusätzliche Bestätigungsrunde.",
+    "suggestion": "Eine sichtbare Zeile am Modus: Als Entwurf auf Amazon speichern, zur Veröffentlichung übermitteln oder nur ausfüllen. Übermittlung und bestätigter Live-Status bleiben getrennt. Keine zusätzliche Bestätigungsrunde.",
     "preserve": "Draft als Standard, exakter Startscope und echte Ergebnisbelege. Gespeicherter Draft bleibt von einer Veröffentlichung unterscheidbar.",
-    "acceptance": "Die Konsequenz ist vor jedem Start sichtbar; Done benennt zusätzlich Draft oder tatsächlich veröffentlicht.",
+    "acceptance": "Die Konsequenz ist vor jedem Start sichtbar; der Abschluss benennt Entwurf oder Übermittlung. Live erscheint erst nach einem separaten Kontobeleg.",
     "evidence": [
       {
         "file": "Beobachtung und Quelle",

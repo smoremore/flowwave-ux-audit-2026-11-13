@@ -30,3 +30,13 @@
 @media print{.scope-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scope-group{break-inside:avoid}.scope-positive{display:block}.scope-positive p{margin-block:8px}.scope-method{font-size:8pt}.scope-evidence{display:none}.scope-rules{display:none}}
 
 @media(min-width:581px){.flow-track{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+/* Compact cross-area review; finding evidence and discussion keep their identities. */
+.consistency-overview{scroll-margin-top:100px;border:1px solid var(--line);border-radius:16px;padding:24px;margin:0 0 26px;background:var(--white)}
+.consistency-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}
+.consistency-heading h3{font-size:23px;letter-spacing:-.6px;margin:6px 0 0}.consistency-heading .eyebrow{margin:0}.consistency-heading>span{font-size:11px;color:var(--muted)}
+.consistency-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 26px}.consistency-grid article{border-top:1px solid var(--line);padding-top:14px;min-width:0}
+.consistency-grid article>span{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}.consistency-grid h4{font-size:15px;margin:8px 0;letter-spacing:-.2px}.consistency-grid p{font-size:12px;line-height:1.65;color:var(--muted);margin:0 0 10px}.consistency-grid a{display:inline-block;font-size:11px;font-weight:600;text-decoration:underline;text-underline-offset:3px;margin-right:10px}
+@media(max-width:850px){.consistency-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.consistency-heading{display:block}.consistency-heading>span{display:block;margin-top:12px}}
+@media(max-width:520px){.consistency-overview{padding:18px}.consistency-grid{grid-template-columns:1fr;gap:18px}.consistency-heading h3{font-size:21px}}
+@media print{.consistency-overview{break-inside:avoid}.consistency-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
