@@ -17,7 +17,7 @@ window.flowwaveFindings = [
     title: 'Eine Ursache sollte eine Hauptaufgabe ergeben.',
     summary: 'Ein Text-IP-Problem kann sowohl im Listing-IP-Gate als auch als technische Aufgabe erscheinen. Mehrere „Open in IP Checks“-Links erschweren die Wahl der nächsten Aktion.',
     problem: 'Der Renderer führt Text-Wrapper-Gründe zusätzlich durch die technische Gate-Projektion. Nur ein bestimmter Live-Mark-Fall wird dort ausdrücklich dedupliziert. Das kann dieselbe Ursache in mehreren Zeilen und im offenen Gate-Zähler sichtbar machen.',
-    suggestion: 'Eine gemeinsame Ursache als eine führende Aufgabe zeigen, zum Beispiel „Listing-Recherche fortsetzen“. Zugehörige technische Einzelheiten lokal aufklappen. Unabhängige Fehler bleiben eigenständige Aufgaben.',
+    suggestion: 'Appweit eine Ursache als eine direkt ausführbare Aufgabe zeigen. Kein Rundlauf über Hinweis → Nachweis → IP Checks → Review: das passende Feld oder die vorhandene Aufgabe am Eintrag öffnen. Technische Einzelheiten in genau einem optionalen Details-Bereich. Gemeinsame Voraussetzungen einmal für den Stapel zeigen; unabhängige Motive laufen weiter.',
     preserve: 'Exakte Records und Claims, vorhandene Ergebnisse, unterschiedliche Forschungslücken und Recovery bleiben unverändert. Eine zusammengeführte Anzeige darf keine Nachweise als vollständig ausgeben.',
     acceptance: ['Ein betroffener Text-IP-Grund hat genau einen führenden Lösungsweg.', 'Der Aufgaben-Zähler erklärt unabhängige offene Aufgaben statt mehrfacher Darstellungen.'],
     evidence: [{file:'public/app.js',line:18036,detail:'Text-Wrapper wird für die Listing-IP-Zeile aufgelöst.'},{file:'public/app.js',line:18054,detail:'Deduplication ist auf einen bestimmten Live-Mark-Fall begrenzt.'},{file:'public/app.js',line:18070,detail:'Technische Zeile kann einen weiteren IP-Checks-Link erhalten.'},{file:'public/app.js',line:18072,detail:'Nicht fertige Gate-Zeilen bestimmen den offenen Zähler.'}]
@@ -37,7 +37,7 @@ window.flowwaveFindings = [
     title: 'Die geschlossene Zeile sollte schon zur Lösung führen.',
     summary: '„n to resolve“ beschreibt den Umfang. Welche Aufgabe jetzt ansteht, wird erst nach dem Aufklappen und Lesen der Gate-Liste klar.',
     problem: 'Die Summary zeigt Titel, optionale Produktionsmetadaten, Legacy und Status. Ausführbare Gate-Aktionen liegen im offenen Body. Zum Wechsel in die richtige Prüfung ist damit ein zusätzlicher Orientierungsschritt nötig.',
-    suggestion: 'Die erste ausführbare offene Aufgabe in der Zeile benennen, etwa „Listing prüfen“. Eine separate sibling Aktion öffnet den bestehenden exakten Handoff; das Accordion bleibt für vollständige Details erhalten.',
+    suggestion: 'Die konkrete Aufgabe direkt in der Zeile ausführen, etwa Text korrigieren oder eine gespeicherte Prüfung fortsetzen. Das passende Feld oder die bestehende Aufgabe öffnet am Eintrag. Ein Ortswechsel bleibt nur für ein tatsächlich anderes Werkzeug nötig; genaues Motiv und Rückkehrpunkt werden mitgegeben.',
     preserve: 'Native Summary-Semantik, Tastaturbedienung, mehrere offene Records und exakte Subject-/Record-Bindung samt Rückkehrfokus. Keine verschachtelten Buttons in der Summary.',
     acceptance: ['Die relevante offene Aufgabe ist im geschlossenen Record erkennbar.', 'Ihre Aktion erreicht denselben exakten Zielrecord wie der bisherige Gate-Weg.'],
     evidence: [{file:'public/app.js',line:18152,detail:'Summary-Status setzt einen aggregierten to-resolve-Zähler zusammen.'},{file:'public/app.js',line:18315,detail:'Geschlossene Summary enthält Metadaten und Status, Gate-Aktionen folgen im Body.'}]
@@ -470,7 +470,7 @@ window.flowwaveFindings.push(
   {
     id: 'S1', priority: 'P1', category: 'Imported Sets',
     title: 'Der Leerzustand führt nicht zuverlässig ins Import-Setup.',
-    summary: '„Go to Import setup“ ließ im beobachteten Versuch den Leerzustand stehen und fokussierte den Canvas. „Import a new set“ öffnete dasselbe Setup anschließend korrekt.',
+    summary: 'Ein nativer Versuch ließ den Leerzustand stehen. Im späteren isolierten Browser-Test öffnete derselbe Einstieg das Setup korrekt. Der native Einzelfall bleibt gezielt nachzuprüfen.',
     problem: 'Native Nachbegehung in 1.4.287: Im leeren Imported-Sets-Bereich wurde „Go to Import setup“ einmal aktiviert. Das Setup erschien dabei nicht. Die Gegenprobe über „Import a new set“ öffnete Dateien-/Ordnerauswahl mit 50-MB-Limit und dem Hinweis auf null Generierungen. Beide Auslöser rufen laut Code openCollectionSetup(\'\') auf; die Ursache der unterschiedlichen beobachteten Wirkung ist damit nicht erklärt.',
     suggestion: 'Beide Einstiege als denselben zuverlässigen Ein-Klick-Weg prüfen und integrieren. Das geöffnete Setup und der Fokus auf dem ersten bedienbaren Feld müssen die erfolgreiche Navigation erkennbar machen.',
     preserve: 'Dateien- und Ordneraufnahme, Größenlimit, bestehende Importziele und gestagte Dateien. Das Öffnen des Setups startet weder Import noch Generierung.',
@@ -479,7 +479,7 @@ window.flowwaveFindings.push(
       'Nach dem Öffnen liegt der Tastaturfokus auf dem ersten bedienbaren Feld; beim Schließen kehrt er zum Auslöser zurück.',
       'Die Prüfung startet keinen Import und keine Generierung.'
     ],
-    basis: 'Native UI und Code · 1.4.287',
+    basis: 'Native UI und Code; Browser-Gegenprobe am 14.11. · 1.4.287',
     sourceVersion: '1.4.287', sourceCommit: '85e457e',
     evidence: [
       {file: 'Native UI · 1.4.287', detail: 'Einmaliger Leerzustand-Klick ohne sichtbares Setup; anschließende Gegenprobe über „Import a new set“ erfolgreich. Kein Import und keine Generierung ausgeführt.'},
@@ -510,7 +510,80 @@ window.flowwaveFindings.push(
     ]
   }
 );
-const auditPriorityOrder = ["D1", "S1", "S2", "R1", "R2", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4"];
+window.flowwaveFindings.push(...[
+  {
+    "id": "B5",
+    "priority": "P1",
+    "category": "Stapelverarbeitung",
+    "title": "Ein großer Bestand darf den Arbeitsbereich nicht blockieren.",
+    "summary": "Nach 1.000 importierten Designs und 576 gequeueten Ausschnitten blieb die Oberfläche bei „Loading artwork“ und „Run status unavailable“. Lokale Statusabfragen liefen in Timeouts.",
+    "problem": "Im isolierten Test mit dem installierten Code 1.4.287 waren die Dateien vollständig gespeichert. Beim anschließenden Öffnen des Bestands reagierte der Server nicht mehr innerhalb der Status-Timeouts; sein Prozess belegte ungefähr einen CPU-Kern. Ein kurzes CPU-Sample zeigte verschachtelte Verarbeitung mit synchronen JSON-Dateilesungen. Der Hub prüft je Design drei Routen und ermittelt dabei wiederholt den gemeinsamen Studio-Status, der sämtliche Jobs liest. Dieser Codepfad erklärt den Engpass plausibel; eine exakte Zuordnung benannter JavaScript-Frames oder allgemeine Kapazitätsgrenze wurde nicht gemessen.",
+    "suggestion": "Gemeinsamen Laufstatus einmal je konsistenter Antwort ermitteln. Bestände und Jobstatus über begrenzte, aktualisierbare Leseprojektionen laden; Details erst für den geöffneten Eintrag. Bei einem Ladefehler eine Meldung mit „Laden erneut versuchen“ zeigen. Auswahl und fertige Dateien bleiben erhalten; unabhängige vorhandene Ergebnisse bleiben nutzbar.",
+    "preserve": "Aktuelle Start-/Mutationsprüfungen, exakte IDs und dauerhafte Ergebnisse. Ein Cache darf keine veraltete Zulässigkeit zum Starten oder Freigeben verwenden.",
+    "acceptance": [
+      "1.000 Designs plus 96 Blätter und 576 wartende Kinder lassen sich öffnen, durchsuchen und bearbeiten, während weitere Bereiche reagieren.",
+      "Der gemeinsame Studio-Status wird pro Bestandsantwort begrenzt gelesen; die Anzahl der Dateilesungen wächst nicht je Design × Route × sämtliche Jobs.",
+      "Ein fehlgeschlagener Ladevorgang bietet genau einen Wiederherstellungsweg ohne erneuten Import oder doppelte Aufträge."
+    ],
+    "basis": "Lokaler Mengenlauf, UI-Beobachtung, CPU-Sample und installierter Code · 1.4.287",
+    "sourceVersion": "1.4.287",
+    "sourceCommit": "85e457e",
+    "evidence": [
+      {
+        "file": "Isolierter Mengenlauf · 14.11.2026",
+        "detail": "1.000 Original-/Zielhashes, 96 Kontaktblätter und 576 pixelgenaue Crops gespeichert. Nach Neustart erneut schreibgeschützt bestätigt. Keine Generierung."
+      },
+      {
+        "file": "UI-Beobachtung · 1.4.287",
+        "detail": "Loading artwork, Run status unavailable, Queue-/Recovery-Timeouts. Eine lokale Statusabfrage antwortete innerhalb von 10 Sekunden nicht; Testprozess ungefähr 100 % CPU."
+      },
+      {
+        "file": "server.js",
+        "line": 5580,
+        "detail": "Alle Designs werden verarbeitet; drei Routen je Design rufen in Zeile 5622–5624 hubIntakeBusyReason auf."
+      },
+      {
+        "file": "server.js",
+        "line": 5510,
+        "detail": "Gemeinsamer Zustand über studioIsBusy (2588–2601) und service.status."
+      },
+      {
+        "file": "src/image-studio-service.js",
+        "line": 1018,
+        "detail": "status liest sämtliche Jobs über listJobs; src/image-studio-store.js:2577–2604 liest deren JSON-Dateien synchron."
+      }
+    ]
+  },
+  {
+    "id": "B6",
+    "priority": "P2",
+    "category": "Imported Sets",
+    "title": "96 Kontaktblätter brauchen eine gezielte Blattwahl.",
+    "summary": "Die Blattwahl besteht aus einer langen horizontalen Reihe. Bei 96 Blättern sind nur wenige sichtbar; Dateinamen und wiederholte Statusangaben werden abgeschnitten.",
+    "problem": "Die Suche links findet Sets, aber kein bestimmtes Blatt innerhalb eines Sets. Im Testbestand mit 96 Blättern und je sechs gespeicherten Ausschnitten fehlte ein kurzer Weg zum gesuchten Dateinamen oder zu noch offenen Motiven. Die seitlich scrollende Reihe wiederholt dieselben Zahlen und beansprucht viel Fläche.",
+    "suggestion": "Eine kompakte Blattliste mit Suche, Filter und Seiten anbieten. Jede Zeile nennt Dateiname, offenen Umfang und eine konkrete Aktion. Das gewählte Blatt bearbeitet man direkt darunter oder daneben. Bereits übergebene Ausschnitte führen zu ihrem bestehenden Remaster-Auftrag.",
+    "preserve": "Feste Blatt- und Annotations-IDs, aktuelle Ausschnittrevisionen, Originale und vorhandene Kinder. Filtern darf Blätter nicht neu gruppieren oder eine schon übergebene Auswahl erneut queuen.",
+    "acceptance": [
+      "Blatt 96 ist per Dateiname auffindbar, ohne 95 Tabs zu durchlaufen.",
+      "Seiten- und Filterwechsel erhalten die genaue Auswahl sowie gespeicherte Ausschnitte.",
+      "Import, Rahmen speichern und lokal queuen benötigen weder IP-Prüfung noch erneute Review-Navigation."
+    ],
+    "basis": "UI mit 96 Kontaktblättern und installierter Code · 1.4.287",
+    "sourceVersion": "1.4.287",
+    "sourceCommit": "85e457e",
+    "evidence": [
+      {
+        "file": "UI-Beobachtung · 14.11.2026",
+        "detail": "Ein Set mit 96 Blatt-Tabs, sechs Ausschnitten je Blatt und 576 vorhandenen Queue-Kindern geöffnet. Die globale Worklist-Suche findet Sets; die Blattreihe hat keine eigene Suche."
+      },
+      {
+        "file": "public/app.js",
+        "detail": "Imported-Sets-Renderer: Choose one imported sheet to edit; ein Tab pro conceptSheet mit wiederholtem saved/to queue/queued-Text."
+      }
+    ]
+  }
+]);
+const auditPriorityOrder = ["B5", "D1", "R2", "S2", "S1", "R1", "B3", "B1", "B2", "N1", "C1", "I1", "N4", "U1", "N2", "R5", "R4", "R3", "R6", "F1", "F2", "M1", "V1", "U2", "U3", "R7", "N3", "B4", "B6"];
 window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPriorityOrder.indexOf(b.id));
 
 (function () {

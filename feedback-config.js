@@ -28,7 +28,9 @@
     B1: "Große Workflow-Stapel brauchen eine scanbare Queue",
     B2: "Aus einer Meldung direkt zum genauen Auftrag",
     B3: "Import mit automatischem Start klar benennen",
-    B4: "Große Importprüfungen gezielt eingrenzen"
+    B4: "Große Importprüfungen gezielt eingrenzen",
+    B5: "Ein großer Bestand darf den Arbeitsbereich nicht blockieren",
+    B6: "96 Kontaktblätter brauchen eine gezielte Blattwahl"
   };
   const screens = {"designs": "Designhub", "review": "Review", "listings": "Listings", "upload": "Upload vorbereiten", "uploadqueue": "Upload-Queue", "create": "Create Artworks", "sets": "Create Sets", "import": "Import", "remaster": "Remaster", "collections": "Imported Sets", "vectorize": "Vectorize", "upscale": "Upscale", "halftone": "Halftone", "effects": "Effects", "repairs": "Repairs", "autopilot": "Autopilot", "checks": "IP Checks", "live": "Live Designs", "management": "Design management", "activity": "Aktivität", "settings": "Einstellungen"};
   const topics = Object.create(null);

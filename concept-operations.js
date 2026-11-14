@@ -18,7 +18,7 @@
   const titles = { autopilot: 'Autopilot', checks: 'IP Checks', live: 'Live Designs', management: 'Designverwaltung', activity: 'Aktivität', uploadqueue: 'Uploadqueue' };
   const subtitles = {
     autopilot: 'Gespeicherte Wege bündeln. Startumfang und Endpunkt stehen vor dem Start fest.',
-    checks: 'Artwork und Listing getrennt sehen. Offene Nachweise gezielt am zuständigen Motiv bearbeiten.',
+    checks: 'Offene Prüfaufgaben direkt am Motiv erledigen.',
     live: 'Bestand und Performance gemeinsam lesen. Alle Zahlen hier sind synthetische Demowerte.',
     management: 'Designs, Märkte, Serien und Vorlagen über Listen und Seiten hinweg verwalten.',
     activity: 'Auftrag, Motiv und nächster Schritt bleiben verbunden. Ein gemeinsamer Fehler erscheint einmal.',
@@ -26,7 +26,7 @@
   };
   const filters = {
     autopilot: { all:'Alle', queued:'Wartet', running:'Läuft', blocked:'Blockiert', review:'In Review', done:'Verarbeitet' },
-    checks: { all:'Alle', recovery:'Prüfung unterbrochen', correction:'Bildkorrektur', draft:'Text ungeprüft', review:'Prüfung offen', ready:'Nachweise aktuell' },
+    checks: { all:'Alle', recovery:'Prüfung unterbrochen', correction:'Bildkorrektur', draft:'Text ungeprüft', review:'Prüfung offen', ready:'Aktuell' },
     live: { all:'Alle', products:'Produkte ergänzen', removed:'Ohne Verkäufe entfernt', timed:'Zeitfenster abgelaufen', expiring:'Läuft bald ab' },
     management: { all:'Alle', amazon:'Amazon · Demo', local:'Lokal', archived:'Archiv' },
     activity: { all:'Alle', queued:'Wartet', running:'Läuft', held:'Wartet auf Zugang', failed:'Einzelfehler', done:'Abgeschlossen', uncertain:'Antwort unklar' },
@@ -64,7 +64,7 @@
     const chips = Object.entries(filters[view]).map(([key, title]) => `<button type="button" class="fw-facet" data-ops-filter="${key}" aria-pressed="${s.filter === key}">${title} <b>${fmt(key === 'all' ? d.scoped.length : d.scoped.filter(record => status(view, record) === key).length)}</b></button>`).join('');
     let actions = '';
     if (selected.size) {
-      actions = view === 'autopilot' ? button('Start vorbereiten', 'prepare-start') : view === 'checks' ? button('Artwork in Review öffnen', 'review-selected') + button('Listing-Text öffnen', 'listings-selected') : view === 'management' ? button('Serie / Vorlage zuweisen', 'assign') + button('In Listings öffnen', 'listings-selected') : view === 'live' ? button('Produkte vorbereiten', 'prepare-products') + button('In Designverwaltung öffnen', 'manage-selected') : view === 'uploadqueue' ? button('Ausgewählten Lauf vorbereiten', 'prepare-upload') : button('Fortsetzung vorbereiten', 'prepare-resume');
+      actions = view === 'autopilot' ? button('Start vorbereiten', 'prepare-start') : view === 'checks' ? button('Auswahl prüfen', 'check-selected') : view === 'management' ? button('Serie / Vorlage zuweisen', 'assign') + button('In Listings öffnen', 'listings-selected') : view === 'live' ? button('Produkte vorbereiten', 'prepare-products') + button('In Designverwaltung öffnen', 'manage-selected') : view === 'uploadqueue' ? button('Ausgewählten Lauf vorbereiten', 'prepare-upload') : button('Fortsetzung vorbereiten', 'prepare-resume');
     }
     return `${s.scope ? `<div class="fw-scope-note"><strong>Übergebene Auswahl: ${fmt(s.scope.size)} Motive</strong>${button('Gesamten Bestand anzeigen', 'clear-scope')}</div>` : ''}<div class="fw-ops-search"><label class="fw-field-label">${view === 'activity' ? 'Auftrag oder Motiv suchen' : view === 'management' ? 'Titel, Marke, ASIN oder ID suchen' : 'Motive suchen'}<input id="fw-ops-${view}-search" type="search" data-ops-query="${view}" value="${esc(s.query)}" placeholder="Suche im Bestand"></label></div><div class="fw-facets" aria-label="${titles[view]} filtern">${chips}</div><div class="fw-selection"><label class="fw-checkbox"><input type="checkbox" data-ops-page-select ${d.rows.length && visibleSelected === d.rows.length ? 'checked' : ''} ${d.rows.length ? '' : 'disabled'}>Diese Seite (${d.rows.length})</label><span class="fw-selected-count">${fmt(selected.size)} ausgewählt${selected.size ? ` · ${visibleSelected} auf dieser Seite` : ''}</span>${button(`Alle ${fmt(d.matches.length)} Treffer auswählen…`, 'select-all')}${selected.size ? button('Auswahl löschen', 'clear-selection') : ''}<span class="fw-selection-spacer"></span>${actions}</div>`;
   }
@@ -77,10 +77,12 @@
   }
   const artworkStatus = record => current(record).artworkIP || ({ recovery:'Aktuell · Beispiel', correction:'Korrektur offen', draft:'Prüfung offen', review:'Prüfung offen', ready:'Aktuell · Beispiel' }[record.status]);
   const textStatus = record => current(record).listingIP || ({ recovery:'Gespeicherter Teilstand', correction:'Aktuell · Beispiel', draft:'Ungeprüfter Text', review:'Prüfung offen', ready:'Aktuell · Beispiel' }[record.status]);
-  function checksBody(d) { return `<div class="fw-ops-callout"><strong>Zwei getrennte Prüfumfänge</strong><span>Neue Artwork-Prüfungen gehören zum finalen Review. Listing-Text bleibt separat bearbeitbar.</span></div>` + table(['Design / Version', 'Artwork IP', 'Listing IP', 'Nächste Aktion'], d.rows.map(record => `<tr>${rowLead('checks', record, ` · Version ${record.version}`)}<td data-label="Artwork IP">${artworkStatus(record)}</td><td data-label="Listing IP">${textStatus(record)}</td><td class="fw-row-action">${button(current(record).status === 'recovery' ? 'Gespeicherten Stand öffnen' : 'Im Review öffnen', current(record).status === 'recovery' ? 'listings-one' : 'review-one', record.id)}</td></tr>`).join('')); }
+  function checksAction(record) { if(current(record).status==='ready')return button('Ergebnis öffnen','hub-one',record.id);if(current(record).status==='correction')return button('Kante korrigieren','repair-one',record.id);const needsText = ['recovery','draft'].includes(current(record).status) || /ungeprüft|text geändert|gespeicherter teilstand/i.test(textStatus(record)); return button(current(record).status==='recovery' ? 'Status abgleichen' : needsText ? 'Textprüfung vorbereiten' : 'Finale Prüfung vorbereiten', 'check-task-one', record.id); }
+  function checksBody(d) { return table(['Design / Version', 'Stand', 'Jetzt erledigen', 'Details'], d.rows.map(record => `<tr>${rowLead('checks', record, ` · v${record.version}`)}<td data-label="Stand">${label('checks',record)}</td><td class="fw-row-action">${checksAction(record)}</td><td><details><summary>Details</summary><p>Artwork: ${artworkStatus(record)}<br>Listing: ${textStatus(record)}</p></details></td></tr>`).join('')); }
+
   function liveBody(d) { return `<div class="fw-ops-callout"><strong>Performance nur als Demowerte</strong><span>Keine Amazon-Kontodaten geladen. Änderungen und Produkt-Erweiterungen werden hier nur vorbereitet.</span></div>` + table(['Design', 'Status / Märkte', 'Demo Verkäufe', 'Aktion'], d.rows.map(record => `<tr>${rowLead('live', record, ` · ${asin(record)}`)}<td data-label="Status / Märkte">${label('live', record)}<br><span class="fw-secondary-text">${market(record)}</span></td><td data-label="Demo Verkäufe">${status('live',record)==='removed'?0:record.index % 17}</td><td class="fw-row-action">${button('Bestand öffnen', 'manage-one', record.id)}</td></tr>`).join('')); }
   function managementBody(d) { return table(['Design / Marke', 'Bestand / Märkte', 'Serie / Vorlage', 'Aktion'], d.rows.map(record => `<tr>${rowLead('management', record, ` · ${asin(record)} · ${esc(current(record).fields.brand)}`)}<td data-label="Bestand / Märkte">${label('management', record)}<br><span class="fw-secondary-text">${market(record)}</span></td><td data-label="Serie / Vorlage">${esc(series.get(record.id) || 'Ohne Serie')}<br><span class="fw-secondary-text">${esc(recipes.get(record.id) || 'Auto')}</span></td><td class="fw-row-action">${button('Motiv öffnen', 'hub-one', record.id)}${button('Listing', 'listings-one', record.id)}</td></tr>`).join('')); }
-  function activityBody(d) { return `<div class="fw-ops-callout fw-ops-warning"><strong>Ein gemeinsamer Zugangsstopp · Beispielszenario</strong><span>Neue Aufträge warten. Gespeicherte Ergebnisse bleiben erhalten; unklare laufende Antworten werden zuerst beobachtet.</span>${button('Gemeinsamen Grund öffnen', 'shared-blocker')}</div>` + table(['Auftrag / Motiv', 'Bereich', 'Zustand', 'Aktion'], d.rows.map(record => `<tr>${rowLead('activity', record, ` · ${jobId(record)}`)}<td data-label="Bereich">${activityOwner(record).title}</td><td data-label="Zustand">${label('activity', record)}</td><td class="fw-row-action">${button('Auftrag öffnen', 'job', record.id)}${button(`In ${activityOwner(record).title} öffnen`, 'job-owner', record.id)}</td></tr>`).join('')); }
+  function activityBody(d) { return `<div class="fw-ops-callout fw-ops-warning"><strong>Ein gemeinsamer Zugangsstopp · Beispielszenario</strong><span>Neue Aufträge warten. Gespeicherte Ergebnisse bleiben erhalten; unklare laufende Antworten werden zuerst beobachtet.</span>${button('Zugangseinstellungen öffnen', 'shared-blocker')}</div>` + table(['Auftrag / Motiv', 'Bereich', 'Zustand', 'Aktion'], d.rows.map(record => `<tr>${rowLead('activity', record, ` · ${jobId(record)}`)}<td data-label="Bereich">${activityOwner(record).title}</td><td data-label="Zustand">${label('activity', record)}</td><td class="fw-row-action">${button('Auftrag öffnen', 'job', record.id)}${button(`In ${activityOwner(record).title} öffnen`, 'job-owner', record.id)}</td></tr>`).join('')); }
   function uploadFix(record) {
     if (record.status === 'ready' && current(record).status !== 'ready') return button('Geänderten Text öffnen', 'listings-one', record.id);
     const phase = uploadStatus(record);
@@ -136,12 +138,15 @@
       const selected=selectedRecords('uploadqueue'), eligible=selected.filter(item=>current(item).status==='ready' && ['queue','ready'].includes(uploadStatus(item)) && !uploadLocked(item)), omitted=selected.length-eligible.length, mode={draft:'Als Entwurf speichern; nichts live.',publish:'Live auf Amazon veröffentlichen.',fill:'Nur ausfüllen; nichts speichern.'}[state.uploadqueue.mode];
       core.modal('Upload-Lauf vorbereiten',`<p><strong>${fmt(eligible.length)} ausgewählte Queue-/Ready-Motive</strong> · ${fmt(omitted)} laufende, offene oder abgeschlossene Motive ausgenommen.</p>${listOf(eligible)}<p><strong>${mode}</strong></p><p>Einzelschritte prüfen vor dem Senden weiterhin die aktuelle Zulässigkeit. Fertige Belege werden nicht wiederholt; andere Macs behalten ihre Locks.</p><p>Konzeptvorschau: Keine Daten an Amazon gesendet und kein Ergebnisstatus verändert.</p>`);
     }
-    if (action === 'upload-access') core.modal('Gemeinsamen Upload-Zugang prüfen',`<p>${record.id} · ${jobId(record)}</p><p>Ein gemeinsamer Anmelde- oder Zugangsgrund wird einmal behoben. Neue Übertragungen warten; fertige Entwürfe bleiben erhalten.</p><p>Konzeptvorschau: Keine Anmeldung geöffnet oder Verbindung verändert.</p>`);
+    if (action === 'upload-access' && record) openAccessContext({view:'uploadqueue',ids:[record.id]});
     if (action === 'upload-observe') core.modal('Originalen Upload-Auftrag ansehen',`<p>${record.id} · ${jobId(record)}</p><p>${uploadLocked(record)?'Dieser Auftrag gehört aktuell einem anderen Mac.':'Der gespeicherte Originalaufruf muss zuerst beobachtet werden.'} Eine unklare Antwort ist kein bestätigter Fehlschlag und erlaubt keinen neuen Upload.</p><p>Konzeptvorschau: Keine Anfrage gesendet.</p>`);
     if (action === 'upload-receipt') core.modal('Gespeicherten Upload-Stand ansehen',`<p>${record.id} · ${jobId(record)}</p><p>${uploadStatus(record)==='done'?'Gespeicherter Amazon-Entwurf im Beispieldatensatz. Das ist keine Live-Veröffentlichung.':'Archivierter Beispieldatensatz. Er bleibt von neuen Läufen ausgenommen.'}</p><p>Originale und gespeicherter Beleg bleiben erhalten. Kein erneuter Upload gestartet.</p>`);
     if (action === 'sequence' && record) editSequence(record);
     if (action === 'assign') assignMetadata();
     if (action === 'prepare-products') { const selected=selectedRecords('live'); core.modal('Produkterweiterung vorbereiten',`<p>${fmt(selected.length)} explizit ausgewählte Beispieldesigns.</p>${listOf(selected)}<p>Vor tatsächlichen Amazon-Schreibaktionen bleibt die gesonderte erste Testfreigabe erforderlich. Ein Read oder diese Auswahl ersetzt sie nicht.</p><p>Konzeptvorschau: Keine Produkte angelegt, keine Freigabe gesetzt und keine Accountdaten gelesen.</p>`); }
+    if (action === 'check-task-one' && record) core.openTask(record.id, current(record).status==='recovery'?'recovery':/ungeprüft|text geändert/i.test(textStatus(record))?'text':'final');
+    if (action === 'repair-one' && record) core.handoff('repairs',[record.id]);
+    if (action === 'check-selected') { const exact=selectedRecords(view);core.modal('Auswahl prüfen',`<p><strong>${fmt(exact.length)} ausgewählte Motive</strong></p>${listOf(exact)}<p>Nur offene Prüfschritte. Unklare Originalaufträge zuerst abgleichen; aktuelle Ergebnisse erhalten.</p><p>Lokale Vorschau · kein Start und keine Freigabe.</p>`,'Prüfauftrag vormerken (Demo)',()=>core.announce(`${fmt(exact.length)} ausgewählte Motive im Konzept vorgemerkt. Status unverändert.`)); }
     if (action === 'review-selected') core.handoff('review', [...state[view].selected]);
     if (action === 'listings-selected') core.handoff('listings', [...state[view].selected]);
     if (action === 'manage-selected') core.handoff('management', [...state[view].selected]);
@@ -152,7 +157,7 @@
     if (action === 'manage-one' && record) core.handoff('management', [record.id]);
     if (action === 'stop-scope' && record) core.modal('Stoppumfang', `<p>${jobId(record)} · ${record.id}</p><p>Keine neuen Aufträge senden. Ein laufender Remote-Auftrag kann noch antworten und muss zuerst abgeglichen werden.</p><p>Konzeptvorschau: Kein laufender Auftrag wurde abgebrochen.</p>`);
     if (action === 'job' && record) core.modal(`Auftrag ${jobId(record)}`, `<p>Motiv: <strong>${esc(record.title)}</strong> · ${record.id}</p><p>Bereich: ${activityOwner(record).title} · Zustand: ${label('activity', record)}</p><p>${activityStatus(record) === 'uncertain' ? 'Antwort unklar: denselben Originalaufruf beobachten, nicht erneut senden.' : activityStatus(record) === 'done' ? 'Gespeichertes Ergebnis bleibt erhalten und wird nicht erneut erzeugt.' : 'Nur die noch offene Stufe kann nach aktuellem Zustandsabgleich fortgesetzt werden.'}</p><p>Konzeptvorschau: Keine Beobachtung oder Wiederholung gestartet.</p>`, 'Im zuständigen Bereich öffnen', () => openActivityOwner(record));
-    if (action === 'shared-blocker') core.modal('Gemeinsamer Zugangsstopp', '<p>Ein Beispielszenario für einen geteilten Zugangsausfall. Neue Aufträge bleiben ungesendet; vorhandene Ergebnisse und Originalaufrufe bleiben erhalten.</p><p>Ein Zugangsproblem wird einmal behoben, nicht pro Motiv wiederholt. Danach wird nur die offene Arbeit erneut zugelassen.</p><p>Konzeptvorschau: Keine Verbindung geprüft oder verändert.</p>');
+    if (action === 'shared-blocker') openAccessContext({view:'activity',ids:scopeRows('activity').filter(item=>activityStatus(item)==='held').map(item=>item.id)});
     if (action === 'prepare-resume') { const selected = selectedRecords(view), eligible = selected.filter(item => ['queued','held','failed'].includes(activityStatus(item))), retained = selected.length - eligible.length; core.modal('Offene Arbeit fortsetzen', `<p>${fmt(eligible.length)} noch offene Beispielaufträge · ${fmt(retained)} laufende, unklare oder fertige Aufträge ausgenommen.</p>${listOf(eligible)}<p>Zuerst Originalzustand und gemeinsamen Zugang abgleichen. Keine automatischen Retries; fertige Ergebnisse bleiben geschlossen.</p><p>Konzeptvorschau: Keine Aufträge gestartet oder wiederholt.</p>`); }
   }
   function bind(view, container) {
@@ -171,7 +176,19 @@
   ];
   const settingSaved = new Map(settingSpecs.map(spec => [spec.id, {...spec.defaults}]));
   const settingPrevious = new Map(), settingNotes = new Map();
-  let settingsContainer = null;
+  let settingsContainer = null, accessContext = null;
+  const accessSources = { create:'Create Artworks', sets:'Create Sets', import:'Import', remaster:'Remaster', collections:'Imported Sets', vectorize:'Vectorize', upscale:'Upscale', halftone:'Halftone', effects:'Effects', repairs:'Repairs', activity:'Aktivität', uploadqueue:'Uploadqueue' };
+  function openAccessContext({view,ids=[]}) {
+    if (!accessSources[view]) return;
+    accessContext = {view,ids:normalize(ids)};
+    core.handoff('settings',accessContext.ids);
+    core.announce(`${accessSources[view]} · ${fmt(accessContext.ids.length)} betroffene Motive. Zugang nicht geprüft; gespeicherte Aufträge und Ergebnisse bleiben erhalten.`);
+  }
+  function accessContextMarkup() {
+    if (!accessContext) return '';
+    const context=accessContext;
+    return `<div class="fw-ops-access-context"><p><strong>Zugangsgrund aus ${accessSources[context.view]} · ${fmt(context.ids.length)} Motive</strong><br>Zugang nicht geprüft. Im Produkt wird hier die vorhandene Anmeldung geprüft; diese Vorschau verbindet kein Konto und hebt keine Sperre auf.</p><details><summary>Betroffene Aufträge</summary><ul>${context.ids.slice(0,8).map(id=>`<li>${id} · ${jobId(byId.get(id))}</li>`).join('')}</ul>${context.ids.length>8?`<p>… und ${fmt(context.ids.length-8)} weitere exakte IDs. Die betroffenen IDs bleiben im Ausgangsbereich erhalten.</p>`:''}</details><button class="fw-button fw-quiet" type="button" data-ops-access-return>Zurück zu ${accessSources[context.view]}</button></div>`;
+  }
   function updateSettingsGroup(group, restoreInputs = false) {
     const panel = settingsContainer?.querySelector(`[data-ops-setting-panel="${group}"]`);
     if (!panel) return;
@@ -181,10 +198,11 @@
   }
   function renderSettings() {
     if (!settingsContainer) return;
-    settingsContainer.innerHTML = `<div class="fw-heading"><div><h2>Einstellungen</h2><p>Änderungen werden automatisch übernommen – nur in dieser Vorschau.</p></div><span class="fw-ops-demo">Lokale Vorschau</span></div><div class="fw-ops-settings-grid">${settingSpecs.map(spec => { const values = settingSaved.get(spec.id); return `<section class="fw-ops-setting" data-ops-setting-panel="${spec.id}"><h3>${spec.title}</h3><p>${spec.note}</p>${spec.fields.map(([key, title, options]) => options.length === 1 ? `<dl class="fw-ops-fixed-value"><dt>${esc(title)}</dt><dd>${esc(values[key])}</dd></dl>` : `<label class="fw-field-label">${title}<select data-ops-setting-group="${spec.id}" data-ops-setting-key="${key}">${options.map(option => `<option ${values[key] === option ? 'selected' : ''}>${option}</option>`).join('')}</select></label>`).join('')}<div class="fw-ops-setting-actions"><button class="fw-button fw-quiet" type="button" data-ops-undo-group="${spec.id}" ${settingPrevious.has(spec.id) ? '' : 'hidden'}>Letzte Änderung zurücksetzen</button><span class="fw-secondary-text" data-ops-setting-note role="status" aria-live="polite">${settingNotes.get(spec.id) || 'Lokaler Beispielstand'}</span></div></section>`; }).join('')}</div>`;
+    settingsContainer.innerHTML = `<div class="fw-heading"><div><h2>Einstellungen</h2><p>Änderungen werden automatisch übernommen – nur in dieser Vorschau.</p></div><span class="fw-ops-demo">Lokale Vorschau</span></div><div class="fw-ops-settings-grid">${settingSpecs.map(spec => { const values = settingSaved.get(spec.id); return `<section class="fw-ops-setting" data-ops-setting-panel="${spec.id}"><h3 ${spec.id==='accounts'?'data-ops-access-heading tabindex="-1"':''}>${spec.title}</h3><p>${spec.note}</p>${spec.id==='accounts'?accessContextMarkup():''}${spec.fields.map(([key, title, options]) => options.length === 1 ? `<dl class="fw-ops-fixed-value"><dt>${esc(title)}</dt><dd>${esc(values[key])}</dd></dl>` : `<label class="fw-field-label">${title}<select data-ops-setting-group="${spec.id}" data-ops-setting-key="${key}">${options.map(option => `<option ${values[key] === option ? 'selected' : ''}>${option}</option>`).join('')}</select></label>`).join('')}<div class="fw-ops-setting-actions"><button class="fw-button fw-quiet" type="button" data-ops-undo-group="${spec.id}" ${settingPrevious.has(spec.id) ? '' : 'hidden'}>Letzte Änderung zurücksetzen</button><span class="fw-secondary-text" data-ops-setting-note role="status" aria-live="polite">${settingNotes.get(spec.id) || 'Lokaler Beispielstand'}</span></div></section>`; }).join('')}</div>`;
   }
   core.register('settings', {
     title:'Einstellungen',
+    receive(ids) { if (accessContext) accessContext.ids=normalize(ids); },
     render(container) {
       settingsContainer = container;
       if (!bound.has(container)) {
@@ -203,6 +221,7 @@
         });
         container.addEventListener('click', event => {
           const button = event.target.closest('button');
+          if (button?.hasAttribute('data-ops-access-return') && accessContext) { const context=accessContext; core.show(context.view); core.announce(`${accessSources[context.view]} · Filter, Auswahl und ${fmt(context.ids.length)} betroffene IDs bleiben erhalten. Zugang weiterhin nicht geprüft; nichts neu gestartet.`); return; }
           const group = button?.dataset.opsUndoGroup;
           if (!group || !settingPrevious.has(group)) return;
           settingSaved.set(group, {...settingPrevious.get(group)});
@@ -213,7 +232,8 @@
         });
       }
       renderSettings();
+      if (accessContext) settingsContainer.querySelector('[data-ops-access-heading]')?.focus();
     }
   });
-  window.FlowWaveOperationsDemo = Object.freeze({ snapshot: () => ({ total: records.length, views: views.map(view => ({ view, selected:state[view].selected.size, scoped:state[view].scope?.size ?? records.length, matching:data(view).matches.length, rendered:containers.get(view)?.querySelectorAll('tbody > tr').length || 0 })) }) });
+  window.FlowWaveOperationsDemo = Object.freeze({ openAccessContext, snapshot: () => ({ total: records.length, views: views.map(view => ({ view, selected:state[view].selected.size, scoped:state[view].scope?.size ?? records.length, matching:data(view).matches.length, rendered:containers.get(view)?.querySelectorAll('tbody > tr').length || 0 })) }) });
 })();
