@@ -15,6 +15,7 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const rank = {P0:0,P1:1,P2:2};
   const open = new Set();
+  let printing=false,printState=null;
   const areas=['Bestände','Import & Sets','Autopilot','Übergaben','Review','Upload','Abnahme','Listings','Navigation','Dateien & Export','Create & Remaster','Hinweise & Zustände','Effects','Vectorize & Ergebnisse','Design Management','Account Management'];
   const areaOrder=(a,b)=>areas.indexOf(a.area)-areas.indexOf(b.area)||a.area.localeCompare(b.area,'de');
   [...new Set(data.tasks.map(t => t.area))].sort((a,b) => a.localeCompare(b,'de')).forEach(value => {
@@ -39,22 +40,34 @@
     result.textContent = `${matching.length} von ${data.tasks.length} Aufgaben · ${matching.filter(t=>t.kind!=='Auditpaket').length} Umsetzung · ${matching.filter(t=>t.kind==='Auditpaket').length} ${matching.filter(t=>t.kind==='Auditpaket').length===1?'Auditpaket':'Auditpakete'}`;
     empty.hidden=matching.length>0;
   }
-  host.addEventListener('toggle', event => { const node=event.target; if(node.classList?.contains('team-task')) {const id=node.id.slice(5);node.open?open.add(id):open.delete(id);} },true);
+  host.addEventListener('toggle', event => { const node=event.target; if(!printing&&node.classList?.contains('team-task')) {const id=node.id.slice(5);node.open?open.add(id):open.delete(id);} },true);
   [priorities,area,order,phase].forEach(input=>input.addEventListener('change',render));
   query.addEventListener('input',render);
   reset.addEventListener('click',()=>{priorities.value=area.value=phase.value='all';order.value='priority';query.value='';render();query.focus();});
-  function revealLinkedTask() {
+  function revealLinkedTask(requestedId) {
     const anchor = location.hash.slice(1);
-    if (['team-tasks','upload-findings','management-audit','plan'].includes(anchor)) {
+    if (typeof requestedId!=='string'&&['team-tasks','upload-findings','management-audit','plan'].includes(anchor)) {
       const target = anchor==='plan'?'team-tasks':anchor;
+      window.FlowWaveAuditTabs?.revealFor(document.getElementById(target));
       requestAnimationFrame(()=>document.getElementById(target)?.scrollIntoView({block:'start',behavior:'instant'}));
       return;
     }
-    const id = location.hash.replace(/^#task-/,'');
+    const id = typeof requestedId==='string'?requestedId:location.hash.replace(/^#task-/,'');
     if (!data.tasks.some(task=>task.id===id)) return;
+    window.FlowWaveAuditTabs?.revealFor(host);
     priorities.value=area.value=phase.value='all';query.value='';open.add(id);render();
     requestAnimationFrame(()=>document.getElementById(`task-${id}`)?.scrollIntoView({block:'start',behavior:'instant'}));
   }
+  window.FlowWaveTeamTaskView=Object.freeze({reveal:id=>revealLinkedTask(id)});
+  window.addEventListener('beforeprint',()=>{
+    printing=true;printState={priority:priorities.value,area:area.value,phase:phase.value,order:order.value,query:query.value,open:[...open]};
+    priorities.value=area.value=phase.value='all';query.value='';data.tasks.forEach(task=>open.add(task.id));render();
+  });
+  window.addEventListener('afterprint',()=>{
+    if(!printState)return;
+    priorities.value=printState.priority;area.value=printState.area;phase.value=printState.phase;order.value=printState.order;query.value=printState.query;
+    open.clear();printState.open.forEach(id=>open.add(id));render();printState=null;printing=false;
+  });
   window.addEventListener('hashchange',revealLinkedTask);
   render();revealLinkedTask();
 })();

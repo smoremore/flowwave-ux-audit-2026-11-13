@@ -280,5 +280,7 @@
       if (accessContext) settingsContainer.querySelector('[data-ops-access-heading]')?.focus();
     }
   });
-  window.FlowWaveOperationsDemo = Object.freeze({ openAccessContext, snapshot: () => ({ total: records.length, views: views.map(view => ({ view, selected:state[view].selected.size, scoped:state[view].scope?.size ?? records.length, matching:data(view).matches.length, rendered:containers.get(view)?.querySelectorAll('tbody > tr').length || 0 })) }) });
+  window.FlowWaveOperationsDemo = Object.freeze({ openAccessContext,
+    managementRecord(id) { const record = byId.get(id); return record ? { ...localOnline(record), fields: { ...current(record).fields }, uploadPhase: uploadStatus(record), series: series.get(id) || '', template: recipes.get(id) || 'Auto' } : null; },
+    snapshot: () => ({ total: records.length, views: views.map(view => ({ view, selected:state[view].selected.size, scoped:state[view].scope?.size ?? records.length, matching:data(view).matches.length, rendered:containers.get(view)?.querySelectorAll('tbody > tr').length || 0 })) }) });
 })();

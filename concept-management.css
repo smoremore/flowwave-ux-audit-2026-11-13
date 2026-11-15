@@ -1,0 +1,71 @@
+/* Management composes the existing concept buttons, fields, artwork and selection rail. */
+#flowwave-bento-concept .fm-demo{font-size:11px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-toolbar{display:grid;grid-template-columns:minmax(220px,1fr) minmax(160px,210px) auto;align-items:end;gap:12px;margin:18px 0 12px}
+#flowwave-bento-concept .fm-layout{display:flex;gap:4px;padding-bottom:1px}
+#flowwave-bento-concept .fm-layout button[aria-pressed=true]{background:var(--fw-raised);color:var(--fw-ink);box-shadow:inset 0 0 0 1px var(--fw-line)}
+#flowwave-bento-concept .fm-filterbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+#flowwave-bento-concept .fm-filterbar .fw-facets{flex:1;margin:0}
+#flowwave-bento-concept .fm-filterbar label{min-width:138px;margin:0}
+#flowwave-bento-concept .fm-filterbar select{font-size:12px;min-height:36px}
+#flowwave-bento-concept .fm-selection{align-items:center;margin-bottom:16px;gap:8px 12px}
+#flowwave-bento-concept .fm-selection>span{font-size:12px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-selection .fw-button{font-size:12px;padding:7px 9px}
+#flowwave-bento-concept .fm-bulk{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+#flowwave-bento-concept .fm-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#flowwave-bento-concept .fm-scroll{max-height:min(62vh,680px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px 5px 2px 2px;outline-offset:2px;border-radius:6px}
+#flowwave-bento-concept .fm-scroll:focus-visible{outline:2px solid var(--fw-accent)}
+#flowwave-bento-concept .fm-scroll :is(button,input,summary):focus-visible{outline:2px solid var(--fw-accent);outline-offset:1px}
+#flowwave-bento-concept .fm-card{padding:13px;border:1px solid var(--fw-line);border-radius:15px;background:var(--fw-panel);min-width:0;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 4px #0000000d}
+#flowwave-bento-concept .fm-card[data-selected=true]{box-shadow:inset 0 0 0 1px var(--fw-accent);border-color:var(--fw-accent)}
+#flowwave-bento-concept .fm-card-head{display:grid;grid-template-columns:45px minmax(0,1fr) 24px;gap:9px;align-items:start}
+#flowwave-bento-concept .fm-card-head .fw-art-mini{width:45px;height:55px;border-radius:6px}
+#flowwave-bento-concept .fm-card-head h3{font-family:inherit;font-size:12px;font-weight:600;line-height:1.4;margin:0 0 5px;overflow-wrap:anywhere}
+#flowwave-bento-concept .fm-card-head small{display:block;font-size:10px;line-height:1.5;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-check{justify-content:center;align-self:start;min-height:24px;width:24px}
+#flowwave-bento-concept .fm-card-facts{display:flex;align-items:center;gap:5px 9px;flex-wrap:wrap;min-height:31px;font-size:10px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-origin{font-size:10px;color:var(--fw-ink);padding:3px 5px;border-radius:4px;background:var(--fw-raised);white-space:nowrap}
+#flowwave-bento-concept .fm-demo-sync{color:var(--fw-green)}
+#flowwave-bento-concept .fm-task{font-size:11px;line-height:1.5;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-task[data-attention=true]{color:var(--fw-warning)}
+#flowwave-bento-concept .fm-actions{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto}
+#flowwave-bento-concept .fm-actions .fw-button{font-size:11px;min-height:30px;padding:6px 8px;white-space:normal;text-align:left}
+#flowwave-bento-concept .fm-details{margin:0;border:0;padding:0;font-size:11px}
+#flowwave-bento-concept .fm-details summary{font-size:10px;min-height:26px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-details dl{display:grid;gap:8px;margin:9px 0;font-size:11px}
+#flowwave-bento-concept .fm-details dl>div{display:grid;gap:2px}
+#flowwave-bento-concept .fm-details dt{color:var(--fw-muted)}
+#flowwave-bento-concept .fm-details dd{margin:0;overflow-wrap:anywhere}
+#flowwave-bento-concept .fm-details .fw-button{font-size:11px;padding:6px 7px;min-height:28px}
+#flowwave-bento-concept .fm-table .fw-row-title{width:25%}
+#flowwave-bento-concept .fm-table .fw-row-title strong{font-size:12px}
+#flowwave-bento-concept .fm-table .fw-row-title small{font-size:10px}
+#flowwave-bento-concept .fm-table .fw-row-action{width:200px}
+#flowwave-bento-concept .fm-table .fm-actions{margin:0}
+#flowwave-bento-concept .fm-record-row[aria-selected=true]{background:var(--fw-raised);box-shadow:inset 3px 0 var(--fw-accent)}
+#flowwave-bento-concept .fm-row-facts{display:flex;flex-direction:column;align-items:flex-start;gap:5px;font-size:11px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-sync{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid var(--fw-line);border-radius:12px;padding:12px 14px;background:var(--fw-panel);font-size:12px}
+#flowwave-bento-concept .fm-sync>div{display:grid;gap:5px;flex:1;min-width:200px}
+#flowwave-bento-concept .fm-sync strong{font-weight:500}
+#flowwave-bento-concept .fm-sync span,#flowwave-bento-concept .fm-sync details{font-size:11px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-sync details{border:0;margin:0;padding:0;max-width:250px}
+#flowwave-bento-concept .fm-sync summary{min-height:32px}
+#flowwave-bento-concept .fm-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:10px 0 17px}
+#flowwave-bento-concept .fm-overview button{display:grid;gap:7px;text-align:left;padding:12px 14px;background:var(--fw-panel);border:1px solid var(--fw-line);border-radius:12px;font-size:11px;color:var(--fw-muted)}
+#flowwave-bento-concept .fm-overview strong{font-size:22px;font-weight:500;letter-spacing:-.03em;color:var(--fw-ink)}
+#flowwave-bento-concept .fm-overview button[aria-pressed=true]{border-color:var(--fw-accent)}
+#flowwave-bento-concept .fm-warning{padding:10px 12px;font-size:12px;line-height:1.5;color:var(--fw-warning);border-left:2px solid currentColor;margin:8px 0 14px}
+#flowwave-bento-concept .fm-exact-list{display:grid;gap:5px;margin:14px 0;font-size:12px;color:var(--fw-muted);max-height:130px;overflow:auto}
+#flowwave-bento-concept .fm-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+#flowwave-bento-concept .fm-modal-note{font-size:12px;color:var(--fw-muted);line-height:1.6;margin:14px 0 0}
+#flowwave-bento-concept .fm-file-package{display:grid;gap:7px;padding:14px;border:1px solid var(--fw-line);border-radius:10px;font-size:12px;overflow-wrap:anywhere}
+#flowwave-bento-concept .fm-file-package small{color:var(--fw-muted)}
+#flowwave-bento-concept .fm-stand{display:grid;grid-template-columns:130px minmax(0,1fr);gap:20px;margin:15px 0}
+#flowwave-bento-concept .fm-stand>.fw-art{max-height:175px}
+#flowwave-bento-concept .fm-stand h3{font-family:inherit;font-size:17px;font-weight:600;line-height:1.4;margin:0 0 8px}
+#flowwave-bento-concept .fm-stand p{font-size:12px;line-height:1.6;margin:8px 0}
+#flowwave-bento-concept .fm-sr-only{position:absolute;width:1px;height:1px;margin:-1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+@media(max-width:1180px){#flowwave-bento-concept .fm-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#flowwave-bento-concept .fm-toolbar{grid-template-columns:minmax(180px,1fr) 180px auto}}
+@media(max-width:850px){#flowwave-bento-concept .fm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#flowwave-bento-concept .fm-toolbar{grid-template-columns:minmax(0,1fr) 180px}#flowwave-bento-concept .fm-layout{grid-column:1/-1}#flowwave-bento-concept .fm-bulk{margin-left:0;width:100%}#flowwave-bento-concept .fm-table .fw-row-title,#flowwave-bento-concept .fm-table .fw-row-action{width:auto}}
+@media(max-width:550px){#flowwave-bento-concept .fm-grid{grid-template-columns:1fr}#flowwave-bento-concept .fm-toolbar{grid-template-columns:1fr}#flowwave-bento-concept .fm-overview{grid-template-columns:1fr 1fr}#flowwave-bento-concept .fm-modal-grid{grid-template-columns:1fr}#flowwave-bento-concept .fm-stand{grid-template-columns:90px minmax(0,1fr);gap:12px}#flowwave-bento-concept .fm-filterbar label{flex:1;min-width:120px}}
+@media(pointer:coarse){#flowwave-bento-concept .fm-check{width:44px;min-height:44px}#flowwave-bento-concept .fm-card-head{grid-template-columns:45px minmax(0,1fr) 44px}#flowwave-bento-concept .fm-actions .fw-button,#flowwave-bento-concept .fm-details .fw-button,#flowwave-bento-concept .fm-details summary{min-height:44px}#flowwave-bento-concept .fm-card-head h3{font-size:13px}#flowwave-bento-concept .fm-card-head small,#flowwave-bento-concept .fm-card-facts{font-size:11px}}
+@media(prefers-reduced-motion:reduce){#flowwave-bento-concept .fm-card{transition:none}}

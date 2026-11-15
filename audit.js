@@ -741,22 +741,25 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
   document.getElementById('resetFilters').addEventListener('click', () => { selectedPriority = 'all'; category.value = 'all'; showAllMatching = false; applyFilters(); priorityButtons[0].focus(); });
   document.getElementById('printAudit').addEventListener('click', () => window.print());
 
-  function showLinkedFinding() {
+  function showLinkedFinding(requestedId) {
     let id;
-    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    try { id = typeof requestedId==='string'?requestedId:decodeURIComponent(location.hash.slice(1)); } catch { return; }
     const finding = findings.find(value => value.id === id);
     if (!finding) return;
     selectedPriority = 'all'; category.value = 'all'; showAllMatching = true; applyFilters();
     const card = document.getElementById(finding.id);
+    window.FlowWaveAuditTabs?.revealFor(card);
     const details = card.querySelector('details'); details.open = true;
     requestAnimationFrame(() => card.scrollIntoView({block:'start',behavior:'instant'}));
   }
   function showLinkedArea() {
     const id=location.hash.replace(/^#area-/,'');
     if(!areaTitle.has(id))return;
+    window.FlowWaveAuditTabs?.revealFor(grid);
     selectedPriority='all';category.value=id;showAllMatching=true;applyFilters();
     requestAnimationFrame(()=>grid.scrollIntoView({block:'start',behavior:'instant'}));
   }
+  window.FlowWaveAuditFindings=Object.freeze({reveal:id=>showLinkedFinding(id)});
   window.addEventListener('hashchange', showLinkedArea);
   window.addEventListener('hashchange', showLinkedFinding);
   applyFilters();

@@ -162,6 +162,7 @@
     if(!['designs','review','listings','upload'].includes(view)&&!extensions.has(view))return;
     const returning=view!==state.screen,anchor=state.listings.editingId;
     if(returning&&view==='listings'&&anchor&&drafts.has(anchor)){const index=matching('listings').findIndex(record=>record.id===anchor);if(index>=0)state.listings.page=Math.floor(index/pageSize('listings'))+1;}
+    window.FlowWaveAuditTabs?.revealFor(root);
     state.screen=view;const area=areaFor(view);if(area)lastAreaView[area]=view;
     root.querySelector('.fw-announcement').hidden=true;
     root.querySelectorAll('.fw-screen').forEach(section=>section.hidden=section.dataset.view!==view);
@@ -172,7 +173,7 @@
   let confirmAction=null;
   function modal(title,body,confirmLabel='',callback=null) {root.querySelector('#fw-modal-title').textContent=title;root.querySelector('[data-modal-body]').innerHTML=body;confirm.hidden=!confirmLabel;confirm.textContent=confirmLabel;confirmAction=callback;if(!dialog.open)dialog.showModal();}
   function announce(message){const node=root.querySelector('.fw-announcement');node.hidden=false;node.textContent=message;}
-  function handoff(view,ids) {ids=[...new Set(ids)].filter(id=>byId.has(id));if(extensions.has(view)){extensions.get(view).receive?.(ids);screen(view);return;}if(!state[view]?.selected)return;state[view].editingId=null;state[view].scope=new Set(ids);state[view].selected=new Set(ids);state[view].query='';state[view].status='all';state[view].page=1;if(view==='listings'&&ids[0])openListings.add(ids[0]);screen(view);}
+  function handoff(view,ids) {ids=[...new Set(ids)].filter(id=>typeof id==='string');if(extensions.has(view)){extensions.get(view).receive?.(ids);screen(view);return;}ids=ids.filter(id=>byId.has(id));if(!state[view]?.selected)return;state[view].editingId=null;state[view].scope=new Set(ids);state[view].selected=new Set(ids);state[view].query='';state[view].status='all';state[view].page=1;if(view==='listings'&&ids[0])openListings.add(ids[0]);screen(view);}
   function openRecord(view,id) {handoff(view,[id]);}
   function evidence(record){modal(`${record.title} · Prüfstand`,`<p>${record.id} · Version ${record.version}</p><p>Artwork IP: ${artworkState(record)}<br>Listing IP: ${listingState(record)}</p><p>${reason(record)}</p><p>Lokale Vorschau. Es wird keine Recherche wiederholt und keine Freigabe erteilt.</p>`);}
   function openTask(id,kind='final') {

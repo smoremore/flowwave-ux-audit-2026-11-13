@@ -121,7 +121,7 @@
       url.searchParams.delete('feedback');
       history.replaceState(history.state, '', url.href);
     }
-    const fallback = document.querySelector('[data-feedback-screen]') || document.getElementById('categoryFilter');
+    const fallback = document.querySelector('[data-audit-tab][aria-selected="true"]') || document.querySelector('[data-feedback-screen]') || document.getElementById('categoryFilter');
     const target = returnFocus && returnFocus.isConnected && returnFocus.getClientRects().length ? returnFocus : fallback;
     if (target instanceof HTMLElement) target.focus({ preventScroll: true });
   });
@@ -177,8 +177,12 @@
       if (topic.kind === 'screen') {
         const button = document.querySelector(`#flowwave-bento-concept button[data-screen="${topic.id}"]`);
         if (button) button.click();
-      }
-      openFeedback(requested, document.querySelector(`[data-feedback-topic="${requested}"]`) || document.querySelector('[data-feedback-screen]'));
+        updateScreenButtons();
+      } else if(topic.kind==='finding') window.FlowWaveAuditFindings?.reveal(topic.id);
+      else if(topic.kind==='task') window.FlowWaveTeamTaskView?.reveal(topic.id);
+      const trigger=topic.kind==='screen'?document.querySelector('[data-feedback-screen]'):document.querySelector(`[data-feedback-topic="${requested}"]`);
+      window.FlowWaveAuditTabs?.revealFor(trigger);
+      openFeedback(requested, trigger || document.querySelector('[data-audit-tab][aria-selected="true"]'));
     } else showInvalidLink();
   }
 })();
