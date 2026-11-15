@@ -1,10 +1,10 @@
 {
-  "version": "2026-11-14",
+  "version": "2026-11-15",
   "status": "Planung mit dokumentiertem Management-Audit – keine Produktionsumsetzung",
   "priorityMeaning": {
     "P0": "Zuerst: großer Stapel und durchgängiger Weg bis Upload",
     "P1": "Danach: Bedienbarkeit und Bestandsmanagement",
-    "P2": "Anschließend: visueller Feinschliff"
+    "P2": "Anschließend: Klarheit und weitere Verbesserungen"
   },
   "tasks": [
     {
@@ -26,6 +26,14 @@
         "Der gemeinsame Jobbestand wird pro Bestandsantwort höchstens einmal gelesen; keine erneute Vollabfrage pro Design und Route.",
         "Auf dem dokumentierten Referenz-Mac liegen warme Suche und Seitenwechsel in 20 Messungen bei p95 ≤ 300 ms. Dies ist ein neuer Zielwert, noch kein Messergebnis.",
         "Ein erzwungener Lesefehler zeigt eine Wiederherstellungsaktion, erhält Auswahl und Daten und löst weder Import noch Providerarbeit erneut aus."
+      ],
+      "screens": [
+        "designs",
+        "create",
+        "sets",
+        "import",
+        "collections",
+        "activity"
       ]
     },
     {
@@ -53,6 +61,20 @@
         "„Diese Seite“ und „Alle Treffer“ nennen ihre genaue Menge. Nicht sichtbare Auswahl bleibt beim Suchen, Filtern, Blättern und Bereichswechsel erhalten.",
         "Repairs durchläuft All → Needs attention → All und zeigt danach wieder dieselben ursprünglichen Records mit korrektem aria-pressed.",
         "Tastaturfokus bleibt nach Filter-, Auswahl- und Seitenaktionen im bedienbaren Kontext; Entwürfe und gespeicherte Entscheidungen bleiben unverändert."
+      ],
+      "screens": [
+        "designs",
+        "import",
+        "collections",
+        "autopilot",
+        "remaster",
+        "vectorize",
+        "upscale",
+        "halftone",
+        "effects",
+        "repairs",
+        "listings",
+        "review"
       ]
     },
     {
@@ -80,6 +102,11 @@
         "Blatt 96 wird über Dateiname oder feste Blatt-ID gefunden. Rahmen, Teilselektion und schon gequeuete Kinder bleiben über Seiten und Filter erhalten.",
         "Ein wiederholter Request für 100 bereits übergebene Ausschnitte erzeugt null neue Kinder; nach Neustart bleiben die 576 vorhandenen Ausschnitt- und Job-IDs erhalten.",
         "Leerzustand und normaler Imported-Sets-Einstieg öffnen das Setup mit einer Aktivierung und korrektem Fokus. Import und Bildproduktion verlangen keine Artwork-IP-Prüfung."
+      ],
+      "screens": [
+        "import",
+        "collections",
+        "sets"
       ]
     },
     {
@@ -109,6 +136,9 @@
         "Neustart oder Verbindungsabbruch setzt denselben Gesamtauftrag fort. Fertige Ergebnisse werden nicht wiederholt; unklare Originalaufrufe werden vor einer neuen Sendung abgeglichen.",
         "Bildinhalt wird erst im finalen Review geprüft. Manuelle und Semi-Modi bleiben nutzbar; Stop beendet neue Sendungen und erhält eingehende Antworten.",
         "Vor jedem neuen Providerturn, auch innerhalb eines 25er-Fensters, gelten die aktuellen Zugangs-, Budget- und Originalzustandsprüfungen. Bei gemeinsamem Ausfall oder null/unverifiziertem Guthaben bleibt die Queue gespeichert; keine kostenpflichtige Ausweichroute und kein stiller Modellwechsel."
+      ],
+      "screens": [
+        "autopilot"
       ]
     },
     {
@@ -135,6 +165,12 @@
         "„Status abgleichen“ öffnet dieselbe Job-ID und Revision. Eine unklare Antwort startet weder einen neuen Job noch eine automatische Ersetzung.",
         "Nach bestätigter Wiederherstellung läuft ausschließlich die noch offene zugelassene Teilmenge weiter; fertige Geschwister und bereits vollständige Prüfungen bleiben geschlossen.",
         "Rohdiagnosen liegen unter Details. Die führende Aktion erreicht ihren exakten Auftrag mit einer Aktivierung; Rückkehr erhält Suche, Filter, Seite und Auswahl."
+      ],
+      "screens": [
+        "autopilot",
+        "activity",
+        "designs",
+        "review"
       ]
     },
     {
@@ -160,6 +196,22 @@
         "Ein unterbrochener Auftrag wird als Originaljob geöffnet; ein Motivwechsel darf keinen neuen Create-Brief als Recovery ausgeben.",
         "Der Rückweg aus Upload führt zum tatsächlichen Einstieg mit erhaltener Seite und Auswahl. Ungespeicherter Listing-Text bleibt bei Rückkehr sichtbar.",
         "Navigation und Handoff starten keine neue Bildgenerierung, Prüfung, Dateiübertragung oder Wiederholung."
+      ],
+      "screens": [
+        "create",
+        "sets",
+        "import",
+        "collections",
+        "designs",
+        "remaster",
+        "vectorize",
+        "upscale",
+        "halftone",
+        "effects",
+        "repairs",
+        "listings",
+        "review",
+        "uploadqueue"
       ]
     },
     {
@@ -190,6 +242,10 @@
         "Finales Artwork und aktueller Listing-Text haben getrennte Evidenz. Gespeicherter Text, Owner-Ausnahme und vollständige Freigabe werden nicht gleich benannt.",
         "Eine erforderliche finale Sichtprüfung oder Owner-Entscheidung kann für die zulässige Auswahl gebündelt erfolgen; keine automatische erfundene Freigabe und keine Wiederholung aktueller Checks.",
         "Bereite Motive gehen weiter, während echte offene Fälle bearbeitbar bleiben. Nach der nötigen Entscheidung wird die gespeicherte Weitergabe fortgesetzt, ohne erneut auszuwählen."
+      ],
+      "screens": [
+        "review",
+        "checks"
       ]
     },
     {
@@ -219,6 +275,12 @@
         "Nach aktuellen Prüfungen und erforderlicher finaler Freigabe erfolgt die konfigurierte Übergabe ohne erneute Auswahl, Dateisuche, Import oder zusätzliche Bestätigungsrunde.",
         "Ein gemischter Stapel übergibt nur die tatsächlich bereite Teilmenge. Offene Geschwister bleiben bearbeitbar und der Auftrag zeigt bereit, offen und abgeschlossen mit exakten Mengen.",
         "Ein Wiederanlauf oder mehrfacher Übergabe-Event erzeugt null doppelte Uploads. Upload vorbereiten endet mit dauerhaftem Handoff-Beleg; Nur ausfüllen mit dem bestätigten Ausfüllergebnis ohne Save-Status; Entwurf oder Übermittlung erst mit entsprechendem Save-Beleg. Ein Klick oder Queue-Eintrag ist kein gespeicherter Abschluss."
+      ],
+      "screens": [
+        "autopilot",
+        "review",
+        "upload",
+        "uploadqueue"
       ]
     },
     {
@@ -246,6 +308,13 @@
         "Fremde Mac-Locks, gemeinsamer Zugang und ein einzelner Dateifehler sind unterscheidbar. Pro Ursache gibt es eine führende passende Aktion; fertige Uploads bleiben ausgenommen.",
         "Bestätigter Save verbindet Produktionsrevision, Uploadbeleg und vorhandene Archiv-/Kontozuordnung. Abgeschlossene Produktionsaufgaben verschwinden aus dem aktiven Hub; offene Märkte oder Geschwister bleiben dort erreichbar.",
         "Ein verknüpftes Design erscheint einmal im bestehenden Designbestand. Herkunft, Archivierung, Entwurf und Live sind unabhängig; weder ZIP-Export noch Archiviert allein beweist einen Amazon-Save."
+      ],
+      "screens": [
+        "designs",
+        "uploadqueue",
+        "management",
+        "archive",
+        "live"
       ]
     },
     {
@@ -282,6 +351,16 @@
         "Für eine ausdrücklich zugelassene repräsentative Teilmenge liegen tatsächliche erzeugte Dateien, finale gebundene Ergebnisse, dauerhafter Upload-Handoff und bestätigter Save-Beleg vor. Fixtures und bloß gerenderte grüne Zustände gelten nicht als Produktionsnachweis.",
         "Einzelfehler, gemeinsamer Ausfall, unklare Antwort, fremder Lock und Neustart erhalten exakte IDs und erzeugen keine doppelten Provider- oder Upload-Aufträge.",
         "Klickprotokoll, Referenz-Mac, Revision, Laufzeiten, bereit/offen/abgeschlossen und alle Beleg-IDs werden in einer Abnahmeliste festgehalten. Nachfolgend werden nur geänderte oder fehlgeschlagene Fälle wiederholt."
+      ],
+      "screens": [
+        "import",
+        "collections",
+        "autopilot",
+        "review",
+        "upload",
+        "uploadqueue",
+        "management",
+        "archive"
       ]
     },
     {
@@ -306,6 +385,9 @@
         "Ein bestätigter Leerstand bietet Aus Review öffnen und Intake importieren mit jeweils einer Aktivierung; beide öffnen den vorhandenen zuständigen Owner.",
         "Ein Ladefehler bietet Erneut laden im selben Bereich und erhält den letzten gültigen Bestand und seine Auswahl.",
         "Nach einer erfolgreichen Aufnahme fokussiert Upload die exakt übergebenen IDs. Eine leere Ansicht erzeugt weder neue Aufnahme noch Wiederholung."
+      ],
+      "screens": [
+        "uploadqueue"
       ]
     },
     {
@@ -333,6 +415,10 @@
         "Keyword Adds, Removals und Anweisung bilden einen exakten Überarbeitungsauftrag. Das Ändern des Auftrags verändert weder Listingtext noch IP-Status, bevor die Überarbeitung tatsächlich erfolgt.",
         "Eine Stapelüberarbeitung übernimmt nur ausgewählte, nicht leere Requests. Ein Wunsch für künftige Listings ist ausdrücklich wählbar und wird nicht still global veröffentlicht.",
         "Eine Textänderung entwertet nur die betroffene aktuelle Textevidenz; reine Keyword-Auftragsänderung oder Navigation setzt keine Artwork-Prüfung zurück."
+      ],
+      "screens": [
+        "listings",
+        "review"
       ]
     },
     {
@@ -358,6 +444,13 @@
         "Create ist aus dem Designhub mit einer Aktivierung erreichbar; ein anderes häufiges Werkzeug mit höchstens zwei. Alle übrigen Werkzeuge bleiben erreichbar.",
         "Alle sichtbaren Aufnahme- und Rückkehraktionen benennen Designhub konsistent. Designbestand liegt unter Account Management und nutzt die bereits vorhandenen Identitäten und Renderer.",
         "Letzter Unterbereich, Suche, Auswahl, Draft und Tastaturfokus bleiben bei einem Bereichswechsel erhalten; auch in schmaler Ansicht sind alle Ziele nutzbar."
+      ],
+      "screens": [
+        "designs",
+        "management",
+        "live",
+        "activity",
+        "settings"
       ]
     },
     {
@@ -383,6 +476,12 @@
         "Original, Arbeitsversion, Upload-Dateien und Exportpaket zeigen tatsächlichen Ort und Verfügbarkeit; Finder beziehungsweise Bereitstellung führt direkt zum passenden Ziel.",
         "Neue Pakete haben Pakettyp und Export-ID in einem indexierten Zielbereich. Extern verknüpfte Importversionen heißen nicht kopiert; Cloud-only ist kein Kontostatus.",
         "Eine spätere Datenmigration erhält Zuordnungsplan, Referenzen und Wiederherstellung. Im Rahmen dieses UI-Tickets werden keine bestehenden Ordner blind zusammengeführt."
+      ],
+      "screens": [
+        "review",
+        "listings",
+        "management",
+        "archive"
       ]
     },
     {
@@ -408,6 +507,10 @@
         "1.000 gespeicherte Jobs lassen sich nach Motiv, Zustand und Batch gezielt finden; gleich beginnende Titel bleiben unterscheidbar.",
         "Gewählte Referenzen haben sichtbaren Toggle, exakte IDs und direktes Entfernen. Referenzliste, Quellmarkierung und Ausgabemenge sind getrennt.",
         "Ein bestehender unterbrochener Job öffnet seine Original-Recovery; ein neuer Brief kann ihn weder ersetzen noch still erneut starten."
+      ],
+      "screens": [
+        "create",
+        "remaster"
       ]
     },
     {
@@ -435,6 +538,12 @@
         "Ein handlungsfähiger Hinweis führt mit einer Aktivierung zum passenden Feld, Vergleich oder Originalauftrag; keine verteilten Nachweis- und Review-Schleifen.",
         "Lange Owner-Begründungen und Rohdiagnosen bleiben unverändert unter Details. Fehlende Evidenz und tatsächliche Einschränkungen bleiben kurz sichtbar.",
         "Eine gespeicherte Owner-Ausnahme wird nicht als saubere Prüfung bezeichnet; Anzeigen und Animationen behaupten keinen abgeschlossenen Job."
+      ],
+      "screens": [
+        "designs",
+        "review",
+        "checks",
+        "activity"
       ]
     },
     {
@@ -458,6 +567,10 @@
         "Ohne Auswahl stehen Einstieg, Suche und Ansicht im Vordergrund; Stop erscheint nur bei laufender Arbeit, Discard nur bei einem Entwurf.",
         "Ein Look ist sofort wählbar; jede Effektgruppe ist mit einer weiteren Aktivierung erreichbar und aktive Änderungen bleiben sichtbar.",
         "Originalvergleich, alle Parameter und Seeds, Versionen und Undo bleiben verfügbar; Speichern gilt erst mit dem tatsächlichen Ergebnisbeleg."
+      ],
+      "screens": [
+        "effects",
+        "halftone"
       ]
     },
     {
@@ -480,6 +593,9 @@
         "Bei leerer aktueller Session, aber vorhandenen Dateien erreicht eine Aktivierung genau die gespeicherten Ergebnisse des Arbeitsordners.",
         "Session, gesamter Ordner und aktuelle Suche haben getrennte korrekte Zähler.",
         "Ergebnisanzeigen und Navigation erzeugen keine neue Vektorisierung, keine neue Prüfung und keine Dateiversion."
+      ],
+      "screens": [
+        "vectorize"
       ]
     },
     {
@@ -501,6 +617,10 @@
         "Große Bestände und die drei Herkunftsfälle sind mit Beleg und Verfahrensgrenze dokumentiert: 6.521 native Designs sowie 10.000 synthetische Einträge im Originalrenderer.",
         "Ein verknüpftes Design mit zwei Archivständen ist als ein Eintrag bestätigt; Seitenwahl und der reproduzierte späte Auswahlrequest sind getrennt dokumentiert.",
         "Neue Findings DM1/DM2 sowie konkrete Umsetzungsaufgaben und UI-Vorschläge sind veröffentlicht. Dateibereitstellung und echte Rückführung wurden nicht als ausgeführt behauptet."
+      ],
+      "screens": [
+        "management",
+        "archive"
       ]
     },
     {
@@ -522,6 +642,9 @@
         "Die große gespeicherte Kontoliste und ihre 300er-Grenze sind nativ und am Quellstand belegt.",
         "Kontrollierte Originalcode-Proben dokumentieren JSON-Ladefehler und fehlende Invalidierung beim Syncabschluss; Produktwahl und fehlende Verkaufskenntnis sind als Quellbefunde gekennzeichnet.",
         "Die neuen Findings AC1–AC5 sind Aufgaben zugeordnet. Kein realer Kontowechsel, neuer Abruf oder Amazon-Schreibpfad wird als abgenommen behauptet."
+      ],
+      "screens": [
+        "live"
       ]
     },
     {
@@ -545,6 +668,9 @@
         "Clear während des Requests bleibt auch nach dessen Antwort leer. Eine neuere bewusste Auswahl wird nicht überschrieben.",
         "Vorhandene IDs bleiben über normale Filter-/Seitenwechsel erhalten; keine Auswahl geht verloren und keine aktuelle Bulkaktion bekommt zusätzliche IDs.",
         "Die Regression läuft am tatsächlichen Renderer mit 3.000 Linked- und 1.000 Archive-Treffern und prüft Beschriftung, Auswahl und erreichbare Select-all-Aktion."
+      ],
+      "screens": [
+        "management"
       ]
     },
     {
@@ -568,6 +694,11 @@
         "Jeder Archivlink öffnet genau seine ID und Revision in der passenden Queue-/Done-/Archivansicht.",
         "Eine leere Queue verhindert nicht den direkten Zugriff auf einen gespeicherten Entwurf.",
         "Der Rückweg erhält Bestand, Filter, Seite, Auswahl und Fokus. Öffnen startet weder Upload noch neue Verarbeitung."
+      ],
+      "screens": [
+        "management",
+        "archive",
+        "uploadqueue"
       ]
     },
     {
@@ -593,6 +724,10 @@
         "Ein verknüpftes Motiv mit zwei Archivständen erscheint einmal. Nur vorhandene Daten und passende Aktionen erscheinen; Nur lokal erhält nicht zuerst leere Amazon-Hinweise und deaktivierte Kontoaktionen.",
         "Ein Archivdatensatz beweist keine lokal verfügbaren Bytes. Cloud-/fehlende Dateien zeigen eine passende Bereitstellungs- oder Ortungsaktion; Nur online hat keine erfundene Dateiaktion.",
         "Der 10.000er-Bestand behält begrenzte Seiten, Suche und genaue Auswahl. Die nächste Aufgabe steht vor vollständiger Produktmatrix und historischen Details."
+      ],
+      "screens": [
+        "management",
+        "live"
       ]
     },
     {
@@ -617,6 +752,9 @@
         "A–Z und Newest liefern über alle Seiten eine global korrekte Reihenfolge. Zähler unterscheiden Gesamtmenge, Treffer, Seite und Auswahl.",
         "Der sichtbare Ausschnitt bleibt begrenzt; Mehrfachauswahl über Seiten bleibt exakt. Produktgruppen und volle Statusverteilung stehen optional unter Details.",
         "Ein Link zum gemeinsamen Designbestand öffnet dieselbe exakte Identität statt einen zweiten Bestand aufzubauen."
+      ],
+      "screens": [
+        "live"
       ]
     },
     {
@@ -637,6 +775,9 @@
         "HTTP 500/409 mit gültigem ok:false und ein Transportfehler erhalten den letzten gültigen Bestand samt Auswahl.",
         "Der Fehler zeigt eine kurze Ursache und Erneut laden im selben Bereich; Retry wird nicht fälschlich verborgen.",
         "Ein späterer gültiger Zustand wird genau einmal übernommen. Die Fehleranzeige startet keinen erneuten Account-Read, Upload oder Providerauftrag."
+      ],
+      "screens": [
+        "live"
       ]
     },
     {
@@ -659,6 +800,10 @@
         "Der Übergang running → finished mit neuer Kontorevision aktualisiert Treffer, Zeilen, Lesedatum und geöffnetes Detail ohne Bedienaktion.",
         "Genau eine konsistente Aktualisierung erhält Suche, Seite, Auswahl, Fokus und manuelle Eingaben. Alte Antworten überschreiben keinen neueren Kontext.",
         "Fehler und Pause bleiben vom letzten gültigen Lesestand unterscheidbar und haben eine passende direkte Aktion; kein zusätzlicher Amazon-Read wird durch bloßes Neuzeichnen ausgelöst."
+      ],
+      "screens": [
+        "management",
+        "live"
       ]
     },
     {
@@ -680,6 +825,11 @@
         "Eine bewusste Erweiterung nennt vor Queuen die genauen Produkte, Märkte und die betroffene Designmenge. Kein stiller Ersatz durch alle Produkte oder markets:null.",
         "Reines Öffnen oder wiederholtes Öffnen erzeugt null Queueänderungen und null neue Schreibaufträge. Vorhandene Schreibguards bleiben beim zuständigen Owner.",
         "Die Regression vergleicht aktuellen Queue-Scope vor und nach direktem Handoff; sie darf ohne echten Amazon-Schreibvorgang laufen."
+      ],
+      "screens": [
+        "management",
+        "live",
+        "uploadqueue"
       ]
     },
     {
@@ -700,6 +850,10 @@
         "Ein unterbrochener Verkaufsteil einer Erstlesung zeigt bei den betroffenen Designs unbekannt statt no sales in a year.",
         "Null und positive Verkäufe beziehen sich auf den tatsächlich bekannten Zeitraum; fehlende Zuordnung bleibt sichtbar.",
         "Filter und Priorisierung behandeln unbekannte Werte gesondert. Kein automatisches Entfernen oder Neuproduzieren wegen fehlender Kenntnis."
+      ],
+      "screens": [
+        "management",
+        "live"
       ]
     }
   ]

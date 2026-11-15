@@ -52,7 +52,8 @@
     requestAnimationFrame(updateScreenButtons);
   }
   function activateScreenHash() {
-    const topic = getTopic(location.hash.slice(1));
+    let key;try { key = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const topic = getTopic(key);
     if (!topic || topic.kind !== 'screen') return;
     const button = document.querySelector(`#flowwave-bento-concept button[data-screen="${topic.id}"]`);
     if (button) button.click();

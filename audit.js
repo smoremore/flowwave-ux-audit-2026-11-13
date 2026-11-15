@@ -710,7 +710,7 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
 
   grid.innerHTML = findings.map(finding => `<article class="finding-card" id="${escape(finding.id)}" data-priority-value="${escape(finding.priority)}" data-category="${escape(finding.category)}" data-audit-area="${escape(areaOf.get(finding.id))}">
     <div class="finding-card-top"><div class="finding-meta"><a class="finding-id" href="#${escape(finding.id)}" aria-label="Direktlink zu Finding ${escape(finding.id)}">${escape(finding.id)}</a><span class="finding-priority"><i class="priority-dot ${finding.priority === 'P1' ? 'p1' : 'p2'}" aria-hidden="true"></i>${escape(finding.priority)}</span><span class="finding-category">${escape(finding.category)}</span></div><h3>${escape(finding.title)}</h3><p class="finding-summary">${escape(finding.summary)}</p></div>
-    <details class="finding-details"><summary>Beleg und Verbesserung<span class="sr-only"></span></summary><div class="finding-detail-body">${renderPart('Evidenzart', finding.basis || (['R1','R2','R3','R4','R6'].includes(finding.id) ? 'Native UI und Code' : 'Codebefund'))}${renderPart('Das Problem',finding.problem)}${renderPart('Der Vorschlag',finding.suggestion)}${renderPart('Das bleibt erhalten',finding.preserve)}${renderPart('Abnahmekriterium',finding.acceptance,'acceptance')}
+    <details class="finding-details"><summary>Beleg und Verbesserung<span class="sr-only"></span></summary><div class="finding-detail-body">${renderPart('Evidenzart', finding.basis || (['R1','R2','R3','R4','R6'].includes(finding.id) ? 'Native UI und Code' : 'Codebefund'))}${renderPart('Das Problem',finding.problem)}${renderPart('Der Vorschlag',finding.suggestion)}${renderPart('Das bleibt erhalten',finding.preserve)}${renderPart('Abnahmekriterium',finding.acceptance,'acceptance')}${window.FlowWaveAuditLinks?.findingLinks(finding.id)||''}
       <div class="detail-part"><h4>Quelle</h4><ul class="evidence-list">${(finding.evidence || []).map(evidence => `<li><code>${escape(evidence.file)}${evidence.line == null ? '' : `:${escape(evidence.line)}`}</code>${evidence.detail ? `<span>${escape(evidence.detail)}</span>` : ''}</li>`).join('')}</ul><p class="source-version">Installierte FlowWave ${escape(finding.sourceVersion || '1.4.286')} · Quellstand ${escape(finding.sourceCommit || '9c4f181')}</p></div>
     </div></details><div class="finding-feedback af-topic-action"><button class="af-feedback-button" type="button" data-feedback-topic="finding-${escape(finding.id)}" aria-label="Feedback zu Finding ${escape(finding.id)}: ${escape(finding.title)}">Kommentieren <span aria-hidden="true">↗</span></button></div></article>`).join('');
 
@@ -753,7 +753,8 @@ window.flowwaveFindings.sort((a,b) => auditPriorityOrder.indexOf(a.id)-auditPrio
     requestAnimationFrame(() => card.scrollIntoView({block:'start',behavior:'instant'}));
   }
   function showLinkedArea() {
-    const id=location.hash.replace(/^#area-/,'');
+    let anchor;try{anchor=decodeURIComponent(location.hash.slice(1));}catch{return;}
+    const id=anchor.replace(/^area-/,'');
     if(!areaTitle.has(id))return;
     window.FlowWaveAuditTabs?.revealFor(grid);
     selectedPriority='all';category.value=id;showAllMatching=true;applyFilters();

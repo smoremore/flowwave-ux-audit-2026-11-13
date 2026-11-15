@@ -25,7 +25,7 @@
   function card(task) {
     return `<details class="team-task" id="task-${esc(task.id)}" ${open.has(task.id)?'open':''}>
       <summary><span class="team-task-id">${esc(task.id)}</span><span class="team-task-priority team-task-priority--${task.priority}">${task.priority}</span><span class="team-task-copy"><strong>${esc(task.title)}</strong><small>${esc(task.area)} · ${esc(task.kind)}</small></span><span class="team-task-status">${esc(task.status)}</span><span aria-hidden="true" class="team-task-plus">+</span></summary>
-      <div class="team-task-body"><p class="team-task-outcome">${esc(task.outcome)}</p><dl class="team-task-meta"><div><dt>Zuständigkeit · Rolle</dt><dd>${esc(task.owner)}</dd></div><div><dt>Vorausgehende Aufgaben</dt><dd>${task.depends.length?task.depends.map(taskLink).join(' · '):'Keine'}</dd></div></dl><h4>Konkrete Umsetzung</h4><p>${esc(task.work)}</p><h4>Abnahmekriterien</h4><ol>${task.acceptance.map(text=>`<li>${esc(text)}</li>`).join('')}</ol><div class="team-task-links"><span>Auditbasis</span>${task.sources.map(id=>`<a href="#${esc(id)}">${esc(id)}</a>`).join('')}<a href="#task-${esc(task.id)}" aria-label="Direktlink zur Aufgabe ${esc(task.id)}">Direktlink ↗</a><button class="af-feedback-button" type="button" data-feedback-topic="task-${esc(task.id)}">Aufgabe kommentieren ↗</button></div></div></details>`;
+      <div class="team-task-body"><p class="team-task-outcome">${esc(task.outcome)}</p><dl class="team-task-meta"><div><dt>Zuständigkeit · Rolle</dt><dd>${esc(task.owner)}</dd></div><div><dt>Vorausgehende Aufgaben</dt><dd>${task.depends.length?task.depends.map(taskLink).join(' · '):'Keine'}</dd></div></dl><h4>Konkrete Umsetzung</h4><p>${esc(task.work)}</p><h4>Abnahmekriterien</h4><ol>${task.acceptance.map(text=>`<li>${esc(text)}</li>`).join('')}</ol>${window.FlowWaveAuditLinks?.taskLinks(task)||''}<div class="team-task-links"><span>Auditbasis</span>${task.sources.map(id=>`<a href="#${esc(id)}">${esc(id)}</a>`).join('')}<a href="#task-${esc(task.id)}" aria-label="Direktlink zur Aufgabe ${esc(task.id)}">Direktlink ↗</a><button class="af-feedback-button" type="button" data-feedback-topic="task-${esc(task.id)}">Aufgabe kommentieren ↗</button></div></div></details>`;
   }
   function render() {
     const text = query.value.trim().toLocaleLowerCase('de');
@@ -45,14 +45,14 @@
   query.addEventListener('input',render);
   reset.addEventListener('click',()=>{priorities.value=area.value=phase.value='all';order.value='priority';query.value='';render();query.focus();});
   function revealLinkedTask(requestedId) {
-    const anchor = location.hash.slice(1);
+    let anchor;try{anchor=decodeURIComponent(location.hash.slice(1));}catch{return;}
     if (typeof requestedId!=='string'&&['team-tasks','upload-findings','management-audit','plan'].includes(anchor)) {
       const target = anchor==='plan'?'team-tasks':anchor;
       window.FlowWaveAuditTabs?.revealFor(document.getElementById(target));
       requestAnimationFrame(()=>document.getElementById(target)?.scrollIntoView({block:'start',behavior:'instant'}));
       return;
     }
-    const id = typeof requestedId==='string'?requestedId:location.hash.replace(/^#task-/,'');
+    const id = typeof requestedId==='string'?requestedId:anchor.replace(/^task-/,'');
     if (!data.tasks.some(task=>task.id===id)) return;
     window.FlowWaveAuditTabs?.revealFor(host);
     priorities.value=area.value=phase.value='all';query.value='';open.add(id);render();

@@ -41,8 +41,9 @@
     for(const [key,button]of buttons){button.setAttribute('aria-selected',String(key===id));button.tabIndex=key===id?0:-1;}
     document.dispatchEvent(new CustomEvent('flowwave:audit-tabchange',{detail:{tab:id}}));
   }
+  function fragmentID(hash){try{return decodeURIComponent(String(hash||'').replace(/^#/,''));}catch{return null;}}
   function idForHash(hash){
-    let id;try{id=decodeURIComponent(String(hash||'').replace(/^#/,''));}catch{return null;}
+    const id=fragmentID(hash);if(id===null)return null;
     if(!id||id==='top')return 'overview';
     if(id.startsWith('screen-')||id==='concept'||id==='areas')return 'screens';
     if(id.startsWith('task-')||['team-tasks','plan','upload-findings'].includes(id))return 'tasks';
@@ -53,7 +54,8 @@
   function revealFor(target){
     const id=typeof target==='string'?idForHash(target):target?.closest?.('[data-audit-panel]')?.dataset.auditPanel;
     if(id)activate(id);
-    const element=typeof target==='string'?document.getElementById(target.replace(/^#/,'')):target;
+    const element=typeof target==='string'?document.getElementById(fragmentID(target)||''):target;
+    if(element?.matches('details.concept-note')){element.open=true;requestAnimationFrame(()=>element.scrollIntoView({block:'start',behavior:'instant'}));}
     for(let parent=element?.parentElement;parent;parent=parent.parentElement){if(parent.matches('details.audit-screen-directory'))parent.open=true;}
     return !!id;
   }
@@ -91,9 +93,18 @@
   },true);
   const followHash=()=>revealFor(location.hash);
   window.addEventListener('hashchange',followHash);window.addEventListener('popstate',followHash);
-  let printScroll=0;
-  window.addEventListener('beforeprint',()=>{printScroll=window.scrollY;printing=true;for(const panel of panels.values())panel.hidden=false;});
-  window.addEventListener('afterprint',()=>{printing=false;activate(active);requestAnimationFrame(()=>window.scrollTo({top:printScroll,behavior:'instant'}));});
+  let printScroll=0,printDetails=[];
+  window.addEventListener('beforeprint',()=>{
+    printScroll=window.scrollY;printing=true;
+    for(const panel of panels.values())panel.hidden=false;
+    // Task rendering has its own print-state owner; never touch the live screen controls.
+    printDetails=[...main.querySelectorAll('details')].filter(node=>!node.closest('#flowwave-bento-concept')&&!node.matches('.team-task')).map(node=>[node,node.open]);
+    printDetails.forEach(([node])=>{node.open=true;});
+  });
+  window.addEventListener('afterprint',()=>{
+    printDetails.forEach(([node,open])=>{if(node.isConnected)node.open=open;});printDetails=[];
+    printing=false;activate(active);requestAnimationFrame(()=>window.scrollTo({top:printScroll,behavior:'instant'}));
+  });
   window.FlowWaveAuditTabs=Object.freeze({revealFor,select:id=>choose(id),active:()=>active});
-  activate(idForHash(location.hash)||'overview');
+  if(!revealFor(location.hash))activate('overview');
 })();
