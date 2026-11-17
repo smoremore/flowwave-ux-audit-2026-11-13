@@ -10,11 +10,12 @@
     {id:'findings',target:'findings',nodes:sections.filter(n=>n.matches('.findings-section'))},
     {id:'screens',target:'concept',nodes:sections.filter(n=>n.matches('.concept-section,.app-scope-section'))},
     {id:'tasks',target:'team-tasks',nodes:sections.filter(n=>n.matches('.team-backlog'))},
+    {id:'regressions',target:'feature-history',nodes:sections.filter(n=>n.matches('.feature-history-section'))},
     {id:'method',target:'coverage',nodes:sections.filter(n=>n.matches('.coverage-section,.concept-log-section'))}
   ];
   const panels=new Map(),buttons=new Map();
   const scrollTargets=new Map();
-  const counts={findings:window.FlowWaveManagementAudit?.areas.reduce((n,a)=>n+a.ids.length,0)||38,tasks:window.FlowWaveTeamTasks?.tasks.length||28};
+  const counts={findings:window.FlowWaveManagementAudit?.areas.reduce((n,a)=>n+a.ids.length,0)||38,tasks:window.FlowWaveTeamTasks?.tasks.length||28,regressions:window.FlowWaveFeatureHistory?.entries.length||0};
   for(const spec of specs){
     const panel=document.createElement('div');panel.className='audit-tabpanel';panel.id=`audit-panel-${spec.id}`;
     panel.dataset.auditPanel=spec.id;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',`audit-tab-${spec.id}`);panel.tabIndex=0;
@@ -39,6 +40,7 @@
     active=id;
     for(const [key,panel]of panels)panel.hidden=!printing&&key!==id;
     for(const [key,button]of buttons){button.setAttribute('aria-selected',String(key===id));button.tabIndex=key===id?0:-1;}
+    requestAnimationFrame(()=>buttons.get(id)?.scrollIntoView({block:'nearest',inline:'nearest'}));
     document.dispatchEvent(new CustomEvent('flowwave:audit-tabchange',{detail:{tab:id}}));
   }
   function fragmentID(hash){try{return decodeURIComponent(String(hash||'').replace(/^#/,''));}catch{return null;}}
@@ -47,6 +49,7 @@
     if(!id||id==='top')return 'overview';
     if(id.startsWith('screen-')||id==='concept'||id==='areas')return 'screens';
     if(id.startsWith('task-')||['team-tasks','plan','upload-findings'].includes(id))return 'tasks';
+    if(id==='feature-history'||id.startsWith('history-'))return 'regressions';
     if(id.startsWith('area-')||['findings','consistency','findingsGrid'].includes(id))return 'findings';
     if(['coverage','concept-log','preserve'].includes(id)||/^K\d+$/.test(id))return 'method';
     const element=document.getElementById(id);return element?.closest('[data-audit-panel]')?.dataset.auditPanel||null;
@@ -79,6 +82,8 @@
     if(topic?.kind==='finding'&&window.FlowWaveAuditFindings){window.FlowWaveAuditFindings.reveal(topic.id);return true;}
     if(topic?.kind==='task'&&window.FlowWaveTeamTaskView){window.FlowWaveTeamTaskView.reveal(topic.id);return true;}
     if(topic?.kind==='screen'&&window.FlowWaveConceptCore){window.FlowWaveConceptCore.show(topic.id);return true;}
+    if(topic?.kind==='regression'&&window.FlowWaveHistoryView){window.FlowWaveHistoryView.reveal(topic.id);return true;}
+    if(id.startsWith('history-')&&window.FlowWaveHistoryView){window.FlowWaveHistoryView.reveal(id.slice(8));return true;}
     // Area filtering is owned by audit.js; a same-fragment click has no native hashchange.
     if(id.startsWith('area-')&&window.FlowWaveManagementAudit?.areas.some(area=>area.id===id.slice(5))){window.dispatchEvent(new Event('hashchange'));return true;}
     return false;

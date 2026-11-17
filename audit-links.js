@@ -20,8 +20,9 @@
     const host=document.querySelector('[data-screen-audit-links]');
     const definition=screens[id];if(!host||!definition)return;
     const relatedTasks=tasks.filter(task=>task.kind!=='Auditpaket'&&task.screens?.includes(id));
-    host.parentElement.querySelector('summary').textContent=`${definition.title} · ${definition.findings.length} ${definition.findings.length===1?'Finding':'Findings'} · ${relatedTasks.length} ${relatedTasks.length===1?'Aufgabe':'Aufgaben'}`;
-    host.innerHTML=`<p>Die Links verbinden App-Befunde, Gestaltungsvorschlag und offene Umsetzung. Der Screen ersetzt keine Produktionsabnahme.</p><div class="audit-related"><strong>Findings</strong><div class="audit-related-links">${definition.findings.map(finding=>link(`#${finding}`,finding)).join('')}</div></div><div class="audit-related"><strong>Aufgaben</strong><div class="audit-related-links">${relatedTasks.map(taskLink).join('')}</div></div>`;
+    const history=(window.FlowWaveFeatureHistory?.entries||[]).filter(entry=>entry.screens.includes(id));
+    host.parentElement.querySelector('summary').textContent=`${definition.title}${history.length?` · ${history.length} Rückblick`:''} · ${definition.findings.length} ${definition.findings.length===1?'Finding':'Findings'} · ${relatedTasks.length} ${relatedTasks.length===1?'Aufgabe':'Aufgaben'}`;
+    host.innerHTML=`<p>Die Links verbinden App-Befunde, Gestaltungsvorschlag und offene Umsetzung. Der Screen ersetzt keine Produktionsabnahme.</p><div class="audit-related"><strong>Findings</strong><div class="audit-related-links">${definition.findings.map(finding=>link(`#${finding}`,finding)).join('')}</div></div><div class="audit-related"><strong>Aufgaben</strong><div class="audit-related-links">${relatedTasks.map(taskLink).join('')}</div></div>${history.length?`<div class="audit-related"><strong>Feature-Rückblick</strong><div class="audit-related-links">${history.map(entry=>link(`#history-${entry.id}`,entry.id,entry.title)).join('')}</div></div>`:''}`;
   }
   window.FlowWaveAuditLinks=Object.freeze({findingLinks,taskLinks,screenTitle:id=>screens[id]?.title||id});
   document.addEventListener('flowwave:screenchange',event=>updateScreen(event.detail.screen));

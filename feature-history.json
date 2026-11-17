@@ -1,0 +1,1549 @@
+{
+  "date": "2026-11-17",
+  "first": {
+    "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+    "version": "1.3.0",
+    "date": "2026-08-26",
+    "subject": "FlowWave — erster Stand im Repository",
+    "onCurrentHistory": true
+  },
+  "baseline": {
+    "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+    "version": "1.4.292",
+    "date": "2026-11-17",
+    "subject": "docs: 1.4.292 installed",
+    "onCurrentHistory": true
+  },
+  "commitCount": 2896,
+  "milestones": [
+    {
+      "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+      "version": "1.3.0",
+      "date": "2026-08-26",
+      "subject": "FlowWave — erster Stand im Repository",
+      "onCurrentHistory": true
+    },
+    {
+      "commit": "50a7e07e54d60cd75831097ee2c20914495ea354",
+      "version": "1.4.0",
+      "date": "2026-09-05",
+      "subject": "Checkpoint current production workflows before Studio consolidation",
+      "onCurrentHistory": true
+    },
+    {
+      "commit": "294f3bdde20f6cef2a29260813481b9ef4f41d44",
+      "version": "1.4.169",
+      "date": "2026-10-11",
+      "subject": "fix: preserve linked artwork search and scope association reads",
+      "onCurrentHistory": true
+    },
+    {
+      "commit": "a321f31c48b643b154db0c8555722bea72d41be9",
+      "version": "1.4.243",
+      "date": "2026-10-19",
+      "subject": "docs: make main the canonical FlowWave branch",
+      "onCurrentHistory": true
+    },
+    {
+      "commit": "85e457eb6f546bca00e731d588726848544ba6d6",
+      "version": "1.4.287",
+      "date": "2026-11-13",
+      "subject": "chore: 1.4.287",
+      "onCurrentHistory": true
+    },
+    {
+      "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+      "version": "1.4.292",
+      "date": "2026-11-17",
+      "subject": "docs: 1.4.292 installed",
+      "onCurrentHistory": true
+    }
+  ],
+  "method": "2.896 erreichbare Commits zeitlich indexiert; gezielte Vorher-/Änderungs-/Heute-Quellvergleiche für 19 Funktionsfälle. Isolierte Funktionsproben sind als solche benannt, kein Durchlauf aller historischen App-Versionen.",
+  "limits": [
+    "Der erste gespeicherte Stand ist Vectobro 1.3.0 vom 26.08.2026; frühere Entwicklung ist nicht aus dieser Historie rekonstruierbar.",
+    "Vergleichsende ist der eingefrorene Main-Quellstand 1.4.292 / 7b560983 vom 17.11.2026. Der ältere lokale Arbeitsordner ist kein aktueller Vergleichsstand.",
+    "Nur Vorfahren dieses Main-Stands wurden als Entwicklung gewertet. Unverbundene Feature-Branches, geplante Funktionen und entfernte Dateinamen allein beweisen keine Regression.",
+    "Quellvergleich über alle Arbeitsbereiche, keine lückenlose Abnahme jeder Funktion in allen 2.896 Commits. Private Dateien, frühere Binärversionen und externe Anbieter wurden nicht ausgeführt.",
+    "Die bestehenden 38 UI/UX-Findings behalten ihre Datierung und Belege. Dieser Rückblick ersetzt keine erneute Prüfung dieser Befunde in 1.4.292."
+  ],
+  "coverage": [
+    {
+      "area": "Aufnahme und Bildwerkzeuge",
+      "result": "Create Artworks, Create Sets, Import, Imported Sets, Remaster, Vectorize, Upscale, Halftone, Effects und Repairs anhand ihrer Quellpfade verglichen. Ein verlorener UI-Weg, zwei reparierte Regressionen und bewusste Verlagerungen getrennt dokumentiert."
+    },
+    {
+      "area": "Listings, Review und Autopilot",
+      "result": "Vier Felder, Keywords, manuelle Überarbeitung, Fortsetzung, finale Checks und Startmanifest verglichen. Historische Reparaturen und die falsche 25er-Hilfe sind getrennt von aktuellen Funktionsverlusten erfasst."
+    },
+    {
+      "area": "Upload / Flying / Export",
+      "result": "Beide frühen Exportarten erhalten; eigener Amazon-Upload später hinzugekommen. Quellpfade vorhanden, keine reale Ausgabeabnahme."
+    },
+    {
+      "area": "Design Management",
+      "result": "Als neuer gemeinsamer Konten-/Archivbestand am26.10. eingeführt (0583bdef), heute noch vorhanden. Keine gleichnamige Anfangsfunktion als verloren behauptet."
+    },
+    {
+      "area": "Account Management",
+      "result": "Live-Lesung, Add-products/Refill/Change und genaue Schreibgrenzen vorhanden; UI-Schreibfreigabe bewusst anders geführt."
+    },
+    {
+      "area": "Settings / Backup / Regel-Restore",
+      "result": "Erhalten und modularisiert; konkrete Auto-Fenster-Restore-Regression historisch reproduziert und repariert."
+    },
+    {
+      "area": "Lokale Dateien / Archiv",
+      "result": "Neue Archiv- und FLOWWAVE-Struktur erweitert Quelle/Belege. Ein Quellvergleich beweist keine bytegenaue Migration privater Dateien."
+    },
+    {
+      "area": "Aktivität und Navigation",
+      "result": "Das ursprüngliche Activity Log ist erhalten; die bereichsübergreifende Aktivitätsübersicht wurde ergänzt. Frühe Werkzeugtabs wurden in den gemeinsamen Navigationsowner verlagert. Ein älterer besserer exakter Öffner für B2 ist dadurch nicht nachgewiesen."
+    }
+  ],
+  "entries": [
+    {
+      "id": "H01",
+      "key": "INPUT-01",
+      "title": "Additiver Rahmen ist im normalen UI nicht mehr erreichbar",
+      "area": "Effects / Finished",
+      "status": "lost_ui",
+      "priority": "P1",
+      "before": "Im ersten gespeicherten Stand öffnete die Finished-PNG-Kachel „Texture or frame“. Textur entfernte Tinte, Frame fügte einen sichtbaren Rahmen hinzu; Ergebnis als neue Datei, Original erhalten.",
+      "change": "Am 05.09.2026 (1.4.0) verschwand der Aufruf des Dialogs. Der danach unerreichbare Dialog wurde am 22.10.2026 entfernt.",
+      "now": "1.4.292 enthält den Legacy-Backendpfad weiterhin, aber keinen Client-Aufruf. Effects bietet stattdessen Konturverschleiß, der ausdrücklich keine Tinte bzw. keinen Rahmen hinzufügt. Das ist keine gleichwertige Ersetzung der additiven Rahmenfunktion.",
+      "impact": "Ein früher im Finished-Bereich bedienbarer Gestaltungsschritt lässt sich heute nicht über die normale Oberfläche auslösen. Keine Behauptung von Datenverlust.",
+      "recommendation": "Produktentscheidung dokumentieren: additiven Rahmen bewusst einstellen oder als optionale, klar benannte Effects-Aktion wieder anbinden. Keine automatische Reaktivierung durch den Audit.",
+      "acceptance": [
+        "Entscheidung über den früheren additiven Rahmen ist dokumentiert; Konturverschleiß wird nicht als Ersatz dafür bezeichnet.",
+        "Falls beibehalten: ein Finished-Motiv kann einen sichtbaren additiven Rahmen erhalten und als neue Variante speichern; Original und bestehende Exporte bleiben unverändert.",
+        "Textur und additiver Rahmen sind unabhängig wählbar; Vorschau und gespeichertes Ergebnis entsprechen demselben Seed und Umfang."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/app.js",
+          "line": 1279,
+          "detail": "Erreichbarer Finished-Kachelbutton im ersten Stand."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "src/apply-texture.js",
+          "line": 13,
+          "detail": "Additiver Rahmen wird ausdrücklich von subtraktiver Textur getrennt."
+        },
+        {
+          "commit": "50a7e07e54d60cd75831097ee2c20914495ea354",
+          "date": "2026-09-05",
+          "version": "1.4.0",
+          "file": "public/app.js",
+          "line": 5029,
+          "detail": "Der frühere texture-Aktionszweig fehlt nach dem Checkpoint; nur Remove verbleibt in diesem Zweig."
+        },
+        {
+          "commit": "ed98876329543adeffb2bc29a2b2ebbe587127fa",
+          "date": "2026-10-22",
+          "version": "1.4.246",
+          "file": "public/index.html",
+          "line": 4422,
+          "detail": "Späterer Effects-Editor statt gelöschtem Legacy-Dialog; Commit ed988763 benennt die Entfernung des bereits unerreichbaren Dialogs."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 5616,
+          "detail": "Heutiger UI-Vertrag: Konturverschleiß fügt keinen Rahmen hinzu."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/texture-routes.js",
+          "line": 68,
+          "detail": "Legacy-Backend ist noch vorhanden; kein Beweis für Erreichbarkeit im UI."
+        }
+      ],
+      "screens": [
+        "effects"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "RH-01"
+      ],
+      "limits": [
+        "Quell- und Erreichbarkeitsbeleg; keine echte Pixel-/Native-UI-Ausführung und keine Produktentscheidung für Wiederaufnahme."
+      ],
+      "intent": "Die heutige Edge-wear-Semantik ist absichtlich definiert. Ob das Wegfallen des separaten additiven Rahmenwerkzeugs bewusst gewünscht war, ist aus diesen Änderungen nicht belegt."
+    },
+    {
+      "id": "H02",
+      "key": "pipeline-autopilot-limit-copy",
+      "title": "Die Autopilot-Hilfe nennt noch eine entfernte 25er-Grenze",
+      "area": "Autopilot",
+      "status": "copy_gap",
+      "priority": "P1",
+      "before": "Vor d0d0c884 begrenzt LIMIT=25 die Auswahl und den Start.",
+      "change": "d0d0c884 (26.10., 1.4.247) entfernte den festen Auswahl-/Startdeckel. Bereits 1.4.286/287 und heute 1.4.292 arbeiten alle explizit gewählten Workflows ab. Die allgemeine Hilfe in index.html blieb bei 25 pro Start.",
+      "now": "1.4.292 startet das ganze eingefrorene Manifest ohne LIMIT-Deckel; public/index.html:2987 behauptet weiterhin up to 25 per start. Das ist eine heute quellbelegte Aussage-Inkonsistenz, kein Verlust der Stapelfunktion.",
+      "impact": "Das Team kann die tatsächliche Reichweite unterschätzen oder im Audit fälschlich eine heutige 25er-Funktionsgrenze annehmen. Neustartfeste Gesamtaufträge oder fertige Uploads sind durch diesen Codebeleg nicht bewiesen.",
+      "recommendation": "Autopilot-Hilfe und künftige technische Aufgaben an den wirklichen aktuellen Startowner angleichen; die separate Aufgabe für einen dauerhaften Gesamtauftrag nicht als bloßes Entfernen einer bereits entfernten Zahl formulieren.",
+      "acceptance": [
+        "Hilfe nennt keine nicht vorhandene 25er-Auswahlgrenze.",
+        "Eine synthetische Auswahl mit mehr als 25 Workflows wird genau einmal vollständig an die vorhandenen einzelnen Start-Claims gebunden.",
+        "Geänderte/definitiv verweigerte Geschwister werden gemeldet; unbekannte Antworten behalten ihre eigene Wiederaufnahme und erweitern keine Auswahl."
+      ],
+      "evidence": [
+        {
+          "commit": "eb9a67f12a25c934380cfa098d1c8f4425a21ae5",
+          "date": "2026-10-26",
+          "version": "1.4.247",
+          "file": "public/autopilot.js",
+          "line": 9,
+          "detail": "Vorher const LIMIT=25; Auswahl und Start hatten explizite LIMIT-Guards."
+        },
+        {
+          "commit": "d0d0c884dd7f81c72644fef1fda170955ec6384c",
+          "date": "2026-10-26",
+          "version": "1.4.247",
+          "file": "public/autopilot.js",
+          "line": 9,
+          "detail": "Änderungsdiff entfernt LIMIT und durchläuft alle explizit gewählten Workflows."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/autopilot.js",
+          "line": 480,
+          "detail": "Aktueller Start friert das ganze Manifest ein und durchläuft es mit Einzelguards."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 2987,
+          "detail": "Heutige Hilfebeschreibung enthält weiterhin up to 25 per start."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "test/autopilot-workspace-browser.test.mjs",
+          "line": 506,
+          "detail": "Aktueller Test nennt ausdrücklich no cap of 25 per start."
+        },
+        {
+          "commit": "9c4f18147ed61c343b2f99d1788187a0b7683bb2",
+          "date": "2026-11-13",
+          "version": "1.4.286",
+          "file": "public/autopilot.js",
+          "line": 481,
+          "detail": "1.4.286: gesamte Auswahl als Manifest, kein LIMIT, nur leere Auswahl wird abgebrochen; Schleife über alle Manifest-IDs bei 487."
+        },
+        {
+          "commit": "9c4f18147ed61c343b2f99d1788187a0b7683bb2",
+          "date": "2026-11-13",
+          "version": "1.4.286",
+          "file": "src/hub-routes.js",
+          "line": 204,
+          "detail": "1.4.286: Start-API nimmt genau eine Workflow-ID und aktuelle Revision je Request an; keine 25er-Batchzulassung an dieser Stelle."
+        },
+        {
+          "commit": "85e457eb6f546bca00e731d588726848544ba6d6",
+          "date": "2026-11-13",
+          "version": "1.4.287",
+          "file": "public/autopilot.js",
+          "line": 481,
+          "detail": "1.4.287: gesamte Auswahl als Manifest, kein LIMIT, nur leere Auswahl wird abgebrochen; Schleife über alle Manifest-IDs bei 487."
+        },
+        {
+          "commit": "85e457eb6f546bca00e731d588726848544ba6d6",
+          "date": "2026-11-13",
+          "version": "1.4.287",
+          "file": "src/hub-routes.js",
+          "line": 204,
+          "detail": "1.4.287: Start-API nimmt genau eine Workflow-ID und aktuelle Revision je Request an; keine 25er-Batchzulassung an dieser Stelle."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/hub-routes.js",
+          "line": 204,
+          "detail": "Aktueller Endpunkt ist weiterhin einzelner Workflow/start mit exaktem Revision- und Folderguard, keine feste25er-Startauswahl."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "test/autopilot-workspace-browser.test.mjs",
+          "line": 500,
+          "detail": "Testfixture setzt 28 Workflows; Selectall enthält 28, Start sendet exakt die 28 IDs. Hier gelesen, nicht neu ausgeführt."
+        }
+      ],
+      "screens": [
+        "autopilot",
+        "settings"
+      ],
+      "relatedFindings": [
+        "N4",
+        "B1"
+      ],
+      "relatedTasks": [
+        "FW-04",
+        "FW-08"
+      ],
+      "limits": [],
+      "auditCorrection": true
+    },
+    {
+      "id": "H03",
+      "key": "INPUT-02",
+      "title": "Bereits behaltene Remaster-Varianten konnten zeitweise nicht sauber angezeigt und übernommen werden",
+      "area": "Remaster",
+      "status": "restored",
+      "priority": "P2",
+      "before": "Keep und Add to working folder waren vorhanden.",
+      "change": "4b1b489d (23.09.,1.4.33) entfernte die Definition evidenceAllowsPromotion, ließ aber einen Verweis im kept-Renderzweig stehen. Dieser Zweig kann eine ReferenceError werfen.",
+      "now": "3660982a (24.09.,weiterhin1.4.33) beseitigte den alten Verweis. Heute ist Keep & add ein erreichbarer, zweistufiger exakter Serverweg; bei Add-Fehler bleibt Kept mit erneut erreichbarem Add erhalten.",
+      "impact": "Historische Unterbrechung der Übernahme eines gespeicherten Ergebnisses; kein aktuell offener Funktionsverlust in diesem Quellweg.",
+      "recommendation": "Als historisch zurückgekehrt dokumentieren und den gezielten Keep→Add-/Render-Regressionstest beibehalten.",
+      "acceptance": [
+        "Ein kept-Kandidat rendert ohne Fehler und bietet Add an.",
+        "Keep & add übernimmt genau denselben Kandidaten; eine Wiederholung erzeugt keine neue Generierung oder fremde Zuordnung."
+      ],
+      "evidence": [
+        {
+          "commit": "4b1b489dd6e89bc1d06ee68bce6331eabc62de42",
+          "date": "2026-09-23",
+          "version": "1.4.33",
+          "file": "public/app.js",
+          "line": 26240,
+          "detail": "Kept-Zweig referenziert die bereits entfernte Variable."
+        },
+        {
+          "commit": "3660982aebf0292ebf41d49788f3ae9f0a133476",
+          "date": "2026-09-24",
+          "version": "1.4.33",
+          "file": "public/app.js",
+          "line": 26470,
+          "detail": "Restreferenz entfernt; Fixcommit liegt im heutigen Verlauf."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 29163,
+          "detail": "Aktueller primärer Ein-Klick-Bedienweg."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 33965,
+          "detail": "Keep und Promote sind separate exakte Servertransaktionen mit erhaltener Recovery."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "test/contact-sheet-local-handoff-browser.test.mjs",
+          "line": 263,
+          "detail": "Vorhandener spezifischer Regressionstest; in diesem Audit nicht als erneut bestanden behauptet."
+        }
+      ],
+      "screens": [
+        "remaster"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-15",
+        "FW-06"
+      ],
+      "limits": [
+        "Neu bewertet am Code; alter echter Browsernachweis gehört zu seinem damaligen Fixstand."
+      ]
+    },
+    {
+      "id": "H04",
+      "key": "INPUT-03",
+      "title": "Der explizite Ideen-Schritt vor dem Zeichnen ist heute wieder vorhanden",
+      "area": "Create Sets",
+      "status": "restored",
+      "priority": "P2",
+      "before": "Der erste Repositorystand enthielt noch kein Create Sets. Eine spätere sprachmodellgestützte Ideenentwicklung vor dem Zeichnen ist in der Entwicklung dokumentiert.",
+      "change": "Der Images-API-Wechsel am 05.11. ist als Verlust der impliziten Ideenphase dokumentiert. Vor Recipe5 hatten freie Sets keinen separaten hostgebundenen Ideen-Writer; der gerichtete Recipe4-Weg war getrennt.",
+      "now": "2d6c241a/fc3ae350 vom12.11. (1.4.281) ergänzen Recipe5 und Reviewreparaturen. 1.4.292 schreibt und speichert die Designideen, bevor es Sheets zeichnet, und verwendet deren gebundene Reihenfolge.",
+      "impact": "Historisch fehlende Produktionsstufe ist im heutigen Code wieder enthalten. Gleichbleibende kreative Qualität kann daraus nicht abgeleitet werden.",
+      "recommendation": "Als zurückgekehrte Funktion mit Qualitäts-Prüfbedarf führen; kein weiterer Live-Generierungslauf im Audit.",
+      "acceptance": [
+        "Ein neuer freier Recipe5-Auftrag zeichnet kein Blatt vor gespeicherten gültigen Ideen.",
+        "Fortsetzen liest abgeschlossene Ideen-Receipts, ohne bereits fertige Ideen oder Bilder erneut zu erzeugen.",
+        "Ein eigener produktiver Qualitätsvergleich bleibt von der strukturellen Wiederherstellung getrennt."
+      ],
+      "evidence": [
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/create-idea-step.js",
+          "line": 1,
+          "detail": "Retrospektiver Entwicklungshinweis zu Verlust und Wiederherstellung; keine neu gemessene Qualitätsaussage."
+        },
+        {
+          "commit": "25ea4cfba13cfdaa85432e805464cd695558a240",
+          "date": "2026-11-12",
+          "version": "1.4.281",
+          "file": "src/image-studio-service.js",
+          "line": 2493,
+          "detail": "Vor Recipe5 nur der eigene gerichtete Planpfad, noch kein allgemeiner Ideen-Writer."
+        },
+        {
+          "commit": "2d6c241a9be1c6e178e11164802c014531aa4827",
+          "date": "2026-11-12",
+          "version": "1.4.281",
+          "file": "src/image-studio-service.js",
+          "line": 2540,
+          "detail": "Wieder eingeführter Hostschritt vor dem Zeichnen."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/image-studio-service.js",
+          "line": 3355,
+          "detail": "Der Hostschritt besteht in 1.4.292 fort."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/image-studio-service.js",
+          "line": 3548,
+          "detail": "Heute tatsächlich angebundener Writer und Speicherung."
+        }
+      ],
+      "screens": [
+        "sets",
+        "create"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-03",
+        "FW-15"
+      ],
+      "limits": [
+        "Der genaue alte Qualitätsabfall wird durch Entwicklungsnotizen beschrieben, nicht durch diesen Audit erneut gemessen."
+      ]
+    },
+    {
+      "id": "H05",
+      "key": "INPUT-04",
+      "title": "Studio-IP-Prüfung und automatische Korrekturschleifen wurden absichtlich entfernt",
+      "area": "Create / Remaster / Review",
+      "status": "intentional",
+      "priority": "P2",
+      "before": "Frühere Studio-/Remaster-Pfade enthielten Inhaltsprüfungen und automatische Korrekturfolgen.",
+      "change": "19f21094 und924da126 (22.10.,1.4.246) entfernen nach k19 bewusst bereits unerreichbare Studio-IP-Entscheidungs- und Autokorrekturpfade.",
+      "now": "Bildproduktion kann ohne Zwischen-IP-Dossier fortschreiten. Inhaltliche Artwork-Prüfung und explizite Korrektur gehören ins finale Review.",
+      "impact": "Die entfernten Worker-/UI-Funktionen sind eine bewusste Prozessänderung und dürfen nicht als unbeabsichtigter Verlust gezählt oder automatisch reaktiviert werden.",
+      "recommendation": "Als bewusste Ablösung mit erhaltenem fachlichem Zweck im finalen Review dokumentieren.",
+      "acceptance": [
+        "Create, Import, Remaster und lokale Bildwerkzeuge benötigen keinen Zwischen-IP-Worker.",
+        "Der finale Review-Einstieg und explizite motivgebundene Korrektur bleiben erreichbar; kein automatischer Korrektur-/Prüfloop."
+      ],
+      "evidence": [
+        {
+          "commit": "85304780e5a6ca5367f98ab6bb96e54c2c395855",
+          "date": "2026-10-22",
+          "version": "1.4.246",
+          "file": "src/image-studio-service.js",
+          "line": 1085,
+          "detail": "Historischer automatischer Korrekturpfad vor der Bereinigung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "AGENTS.md",
+          "line": 109,
+          "detail": "Heutige ausdrückliche Prozessgrenze."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/artwork-repairs.js",
+          "line": 331,
+          "detail": "Heutiges Werkzeug verweist fachlich an finales Review."
+        }
+      ],
+      "screens": [
+        "create",
+        "sets",
+        "remaster",
+        "review",
+        "checks"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-07",
+        "FW-04"
+      ],
+      "limits": [
+        "Prozessänderung belegt; aktuelle gesamte Review-Produktionsfähigkeit nicht erneut abgenommen."
+      ]
+    },
+    {
+      "id": "H06",
+      "key": "INPUT-05",
+      "title": "Druckformat, finale SVG-/PNG-Ausgabe und Halftone sind nicht verschwunden",
+      "area": "Vectorize / Upscale / Halftone",
+      "status": "preserved",
+      "priority": "P2",
+      "before": "1.3.0 beschreibt finale Vektordaten,4500×5400-PNG,300DPI und Sicherheitsrand. Halftone war als Upscale-Entscheidung vorhanden.",
+      "change": "Kein Verlust belegt.",
+      "now": "1.4.292 besitzt weiterhin denselben lokalen Finalizer und Vector-Output-Owner. Upscale-Halftone samt Batch-Setup und zusätzlichem Finishing/Halftone-Werkzeug ist vorhanden. Die geänderte Navigation ist kein Verlust des Rechenschritts.",
+      "impact": "Die beschriebene Grundfunktion besteht im aktuellen Quellstand weiter; das belegt keine vollständige Produktionsabnahme.",
+      "recommendation": "Als erhaltene Kernfunktion führen; native Pixel-/Exportnachweise bleiben eigenständige Abnahme.",
+      "acceptance": [
+        "Bestehende Tests für SVG/PNG-Paar, Druckmaße,DPI und Sicherheitsrand bleiben Teil der Lieferabnahme.",
+        "Halftone ist aus seinem aktuellen Werkzeug/Setup erreichbar, ohne die Quelle zu überschreiben."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "README.txt",
+          "line": 16,
+          "detail": "Ursprünglicher Funktionsumfang."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/finalize.js",
+          "line": 44,
+          "detail": "Heutige Druckmaße; folgendeZeilen5400/300."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/vector-output.js",
+          "line": 45,
+          "detail": "createFinalRenderer ist der weiterhin aktive Besitzer des SVG-/PNG-Abschlusses."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 1833,
+          "detail": "Aktuelles Halftone-Batchsetup."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/halftone.js",
+          "line": 53,
+          "detail": "Aktueller lokaler Rechenschritt."
+        }
+      ],
+      "screens": [
+        "vectorize",
+        "upscale",
+        "halftone",
+        "review"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-14",
+        "FW-18"
+      ],
+      "limits": [
+        "Quellvergleich, kein frischer Vollauflösungs-Export oder Anbieteraufruf."
+      ]
+    },
+    {
+      "id": "H07",
+      "key": "INPUT-06",
+      "title": "Motivauswahl, Ausschnittübergabe und lokale Reparatur bestehen weiter",
+      "area": "Create Sets / Imported Sets / Import / Repairs",
+      "status": "expanded",
+      "priority": "P2",
+      "before": "Diese Bereiche waren im ersten1.3.0-Stand noch nicht enthalten; sie kamen später hinzu.",
+      "change": "Kein Verlust belegt.",
+      "now": "Create Sets und Imported Sets verwenden weiterhin unveränderliche Annotationen/Revisionen und exakte Batch-Queuewege zu Remaster. Ordnerimport mit More versions und lokale Repairs besitzen eigene aktive UI-/Service-Owner. Fehlende Funktionen in1.3.0 sind hier keine Regression.",
+      "impact": "Die beschriebene Grundfunktion besteht im aktuellen Quellstand weiter; das belegt keine vollständige Produktionsabnahme.",
+      "recommendation": "Im Zeitverlauf als hinzugefügt/erhalten führen. Die bestehenden UX-Findings zu großen Beständen und Filterrückwegen bleiben separat, bis am jeweiligen neueren Stand geprüft.",
+      "acceptance": [
+        "Eine gespeicherte Motivauswahl bleibt nach Ansichtswechsel und Neustart über ihre Annotation-/Revisionsidentität zugeordnet.",
+        "Erneute Übergabe dupliziert keine bestehenden Kinder; Original und zusätzliche Importversionen bleiben erhalten.",
+        "Repairs zeigt den gewählten lokalen Vorschaubereich und übernimmt nur bewusst die neue Version."
+      ],
+      "evidence": [
+        {
+          "commit": "455aecde603d18820df419a3305f9ed658220657",
+          "date": "2026-10-22",
+          "version": "1.4.246",
+          "file": "public/app.js",
+          "line": 30641,
+          "detail": "Konkrete sheetGridSuggestion-Funktion der Create-Sets-Grid-/Queue-Erweiterung im erreichbaren Verlauf."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/image-studio-routes.js",
+          "line": 1692,
+          "detail": "Weiter vorhandener Batch-Übergabepfad."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/image-studio-routes.js",
+          "line": 1592,
+          "detail": "Annotationen und Revisionswege erhalten."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/folder-import.js",
+          "line": 10,
+          "detail": "Weiter vorhandene UI für zusätzliche Importversionen."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/artwork-repairs.js",
+          "line": 321,
+          "detail": "Weiter vorhandene lokale Reparaturvorschau."
+        }
+      ],
+      "screens": [
+        "sets",
+        "import",
+        "collections",
+        "repairs"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-02",
+        "FW-03"
+      ],
+      "limits": [
+        "Keine neue native Mengenabnahme; vorhandene UX-Befunde werden nicht durch bloße Codepräsenz als gelöst erklärt."
+      ]
+    },
+    {
+      "id": "H08",
+      "key": "pipeline-research-continuation",
+      "title": "Gespeicherte Artwork-Recherche war nach Anbieter-Erweiterung nicht mehr fortsetzbar",
+      "area": "Listings & Review",
+      "status": "restored",
+      "priority": "P1",
+      "before": "Die Anzeige konnte die Fortsetzbarkeit eines vorhandenen Artwork-Checks ermitteln.",
+      "change": "Seit 13a27ca (15.10., 1.4.219) lieferte der Host zusätzlich den gespeicherten Anbieter; die Anzeige-Allowlist verweigerte dieses Feld. Dadurch fehlten Fortsetzung und ergänzender Abgleich.",
+      "now": "8aee17c9 (21.10., 1.4.245) lässt ausschließlich den Anbieter des gespeicherten Records zu. Diese Prüfung besteht in 1.4.292 weiter.",
+      "impact": "Historisch verschwanden passende Wiederaufnahmeaktionen, obwohl der gespeicherte Check vorhanden war. Kein aktueller Verlust aus diesem Fehler belegt.",
+      "recommendation": "Den gespeicherten Codex- und Claude-Record samt Fortsetzungsaktion in die Release-Regressionsmatrix aufnehmen; keine neue Reparatur dieses bereits korrigierten Fehlers einplanen.",
+      "acceptance": [
+        "Eigener gespeicherter Anbieter erhält die zulässige Fortsetzungsaktion.",
+        "Ein fremder Anbieter wird weiterhin abgewiesen.",
+        "Öffnen der Prüfung startet keine neue Vollprüfung."
+      ],
+      "evidence": [
+        {
+          "commit": "13a27cab8ccf85bb43ee2fc944fceb0f0d858ec7",
+          "date": "2026-10-15",
+          "version": "1.4.219",
+          "file": "server.js",
+          "line": 20882,
+          "detail": "Host fügt provider für den gespeicherten Check hinzu."
+        },
+        {
+          "commit": "8aee17c97388ee89bd89b0b1f4b7c983f2062d45",
+          "date": "2026-10-21",
+          "version": "1.4.245",
+          "file": "src/review-artwork-check-store.js",
+          "line": 933,
+          "detail": "Fix erweitert erlaubte Anzeigemetadaten um den identischen gespeicherten provider."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/review-artwork-check-store.js",
+          "line": 1004,
+          "detail": "Aktueller Allowlist- und Anbieter-Gleichheitsguard; Fortsetzung wird anschließend abgeleitet."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/ip-checks.js",
+          "line": 5875,
+          "detail": "Client nimmt gültige continue-research/reconcile-supplemental-Claims weiter an."
+        }
+      ],
+      "screens": [
+        "review",
+        "checks"
+      ],
+      "relatedFindings": [
+        "R2",
+        "R4"
+      ],
+      "relatedTasks": [
+        "FW-07"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H09",
+      "key": "pipeline-workspace-artwork-check",
+      "title": "Finale Artwork-Prüfung war in registrierten Arbeitsordnern blockiert",
+      "area": "Listings & Review",
+      "status": "restored",
+      "priority": "P0",
+      "before": "Artwork-Checks verwendeten eine zum Checkstore passende Ordneridentität.",
+      "change": "1b2f92b6 (15.10., 1.4.220) führte remount-stabile Claims für registrierte Ordner ein; der Store akzeptierte zunächst nur die Live-Geräteidentität. Finalchecks wurden mit ARTWORK_CHECK_FOLDER_CHANGED verweigert.",
+      "now": "65c3f6df (02.11., 1.4.259) verbindet den Store mit der vom Host abgeleiteten dauerhaften Ordneridentität. In 1.4.292 sind dieser Adapter und der Abgleich weiterhin vorhanden.",
+      "impact": "Historisch konnte ein vorhandener Arbeitsordner weder den manuellen noch den automatischen finalen Artwork-Check starten. Keine aktuelle Blockade durch diesen behobenen Identitätsfehler belegt.",
+      "recommendation": "Registered/unregistered Workspace und Remount-Fall als getrennte Release-Smokefälle bewahren. Nicht reale Artwork-Checks zum Nachweis erneut starten.",
+      "acceptance": [
+        "Live-Identität und vom Host bestätigte dauerhafte Identität desselben Ordners werden akzeptiert.",
+        "Eine fremde, vom Request gelieferte Identität wird abgewiesen.",
+        "Vorhandene Prüfungen und Originale bleiben unverändert."
+      ],
+      "evidence": [
+        {
+          "commit": "1b2f92b6fa008588839253b129200ca25c28cd41",
+          "date": "2026-10-15",
+          "version": "1.4.220",
+          "file": "server.js",
+          "line": 20619,
+          "detail": "Einführung der dauerhaften Workspace-Claims; genauer Zusammenhang im Reparaturdiff belegt."
+        },
+        {
+          "commit": "65c3f6dfcbc4502f4a73881ec8fbf083d287214c",
+          "date": "2026-11-02",
+          "version": "1.4.259",
+          "file": "src/review-artwork-check-store.js",
+          "line": 1059,
+          "detail": "prepare akzeptiert zusätzlich die sichere Host-Ableitung derselben Ordneridentität."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/review-artwork-check-store.js",
+          "line": 1119,
+          "detail": "Aktueller Vergleich gegen Live- oder Host-dauerhafte Identität."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 23593,
+          "detail": "Aktueller ReviewArtworkCheckStore erhält durableIpFolderIdentity."
+        }
+      ],
+      "screens": [
+        "review",
+        "checks"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-07",
+        "FW-10"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H10",
+      "key": "pipeline-legacy-listing-admission",
+      "title": "Vorhandene Legacy-Listings stoppten den Hub- und Autopilot-Weg",
+      "area": "Listings & Review",
+      "status": "restored",
+      "priority": "P0",
+      "before": "Der früheste versionierte Stand enthält bereits den Import vorhandener Listing-Ordner und die Unterscheidung ihrer Texte.",
+      "change": "Der neue Workflow-Leseweg nahm gespeicherte Texte nur in generated/edited/ready an. Der explizite Charakterisierungstest b35c1967 (10.11., 1.4.276) zeigt WORKFLOW_LISTING_STALE für einen Legacy-Eintrag. Der erstmalig auslösende Integrationscommit ist hier nicht bisektiert.",
+      "now": "5f366228 (10.11., 1.4.276) ergänzt den gespeicherten Legacy-Textpfad und schützt ihn gegen automatische Überarbeitung. 1.4.292 erlaubt legacy weiter und bewahrt dessen Originalfelder.",
+      "impact": "Historisch konnte ein importiertes Listing allein wegen seines Zustands nicht im Produktionsweg weitergehen. Das war ein Integrationsverlust, keine fehlende Importfunktion.",
+      "recommendation": "Legacy-Import → gespeicherten Text prüfen → Review/Ready als eigenen Regressionstest bewahren; vom gesonderten Export-Originalverlust unterscheiden.",
+      "acceptance": [
+        "Legacy-Text bleibt byte-/feldgleich, wenn nur sein Check angefordert wird.",
+        "Listing-Phase nimmt den exakten Legacy-Record samt Revision an.",
+        "Legacy-Tag bleibt nach zulässiger Freigabe erhalten."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/app.js",
+          "line": 128,
+          "detail": "Import älterer Listings existiert bereits im ersten Repository-Stand 1.3.0."
+        },
+        {
+          "commit": "b35c1967be966b7a7bfe405e728ded36f3e309a7",
+          "date": "2026-11-10",
+          "version": "1.4.276",
+          "file": "test/legacy-listing-workflow.test.mjs",
+          "line": 48,
+          "detail": "Vor-Fix-Charakterisierung verweigert den Legacy-Workflow mit WORKFLOW_LISTING_STALE."
+        },
+        {
+          "commit": "5f366228eb87d9b0dfbccbc9bcea1056aff20586",
+          "date": "2026-11-10",
+          "version": "1.4.276",
+          "file": "server.js",
+          "line": 17750,
+          "detail": "Fix fügt legacy zum gespeicherten Workflow-Listingpfad hinzu; Version im Commit 1.4.276."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 18690,
+          "detail": "Aktuelle Zulassung nimmt generated/edited/ready/legacy unter denselben exakten Bindungen an."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/listing-check.js",
+          "line": 60,
+          "detail": "isLegacyListingText bewahrt Originaltext auch nach späterem Ready."
+        }
+      ],
+      "screens": [
+        "listings",
+        "autopilot",
+        "designs"
+      ],
+      "relatedFindings": [
+        "R1",
+        "L1"
+      ],
+      "relatedTasks": [
+        "FW-06",
+        "FW-12"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H11",
+      "key": "pipeline-automatic-ready-display",
+      "title": "Automatisch freigegebener Zustand war in Designs und Autopilot nicht sichtbar",
+      "area": "Autopilot / Review",
+      "status": "restored",
+      "priority": "P1",
+      "before": "Der Host erzeugte einen bestätigten automatischen Ready-Beleg.",
+      "change": "Der Client verlangte zusätzlich listingInput und output, die die Review-Projektion nicht immer übermittelt. Ein gültiger Server-Ready konnte deshalb wie eine weitere offene finale Entscheidung wirken.",
+      "now": "c1f52f64 und 6108785f (17.11., Quellpaket 1.4.291; enthalten in 1.4.292) verwenden den exakten aktuellen Host-Beleg und nennen ausgeklammerte Marktplätze.",
+      "impact": "Historischer Darstellungs-/Integrationsverlust des erreichten Zustands; nicht als nachgewiesene fehlende Serverfreigabe beschreiben.",
+      "recommendation": "Echten Server-Datenschnitt der Ready-Projektion als UI-Regressionsfixture erhalten; nicht allein einen künstlichen vollständigen Clientrecord testen.",
+      "acceptance": [
+        "Bestätigtes Ready wird auch ohne nicht gelieferte input/output-Felder angezeigt.",
+        "Fehlender oder widersprüchlicher Beleg erzeugt weiterhin kein Ready.",
+        "Ausgenommene Marktplätze stehen in Designs und Autopilot gleich."
+      ],
+      "evidence": [
+        {
+          "commit": "c1f52f64077f01f2f9976a488d1e5de53ac6a573",
+          "date": "2026-11-17",
+          "version": "1.4.291",
+          "file": "public/hub.js",
+          "line": 300,
+          "detail": "Vor-Fix-Client verlangt unter anderem workflow.output und listingInput."
+        },
+        {
+          "commit": "c1f52f64077f01f2f9976a488d1e5de53ac6a573",
+          "date": "2026-11-17",
+          "version": "1.4.291",
+          "file": "server.js",
+          "line": 12616,
+          "detail": "Serverprojektion bindet Ready an Workflow, exakten Output, Revision und Marktausschlüsse."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/hub.js",
+          "line": 303,
+          "detail": "Aktueller Client liest allein den vollständigen Host-Ready-Beleg für die Darstellung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/autopilot.js",
+          "line": 31,
+          "detail": "Autopilot verwendet dieselbe Ready-Satzfunktion."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "test/automatic-ready-words.test.mjs",
+          "line": 99,
+          "detail": "Aktueller Regressionstest für echte Serverform ohne listingInput und output."
+        }
+      ],
+      "screens": [
+        "designs",
+        "autopilot",
+        "review"
+      ],
+      "relatedFindings": [
+        "R1",
+        "N4"
+      ],
+      "relatedTasks": [
+        "FW-07",
+        "FW-08"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H12",
+      "key": "pipeline-keywords-preserved",
+      "title": "Keyword-Hinzufügen und -Entfernen ist erhalten",
+      "area": "Listings & Review",
+      "status": "preserved",
+      "priority": null,
+      "before": "Schon 1.3.0 (erster Commit) sammelt mehrere use/drop-Entscheidungen pro Listing.",
+      "change": null,
+      "now": "1.4.292 besitzt weiterhin die getrennte use/drop-Sammlung, das Ergänzen statt Ersetzen, das Zurücknehmen einzelner Begriffe und den Übergang in den Überarbeitungsauftrag. Die Beschriftung ist nicht wörtlich Keyword Adds/Removals.",
+      "impact": "Kein quellbelegter Funktionsverlust. Die aktuelle Darstellungs-/Auffindbarkeitsfrage bleibt von fehlender Funktion zu trennen.",
+      "recommendation": "Bei einem UI-Umbau die bestehende Daten- und Handlerlogik übernehmen, statt eine zweite Keyword-Systematik zu bauen.",
+      "acceptance": [
+        "Zwei nacheinander hinzugefügte Begriffe bleiben beide im Auftrag.",
+        "Use und Drop bleiben getrennt und ein einzelner Begriff ist zurücknehmbar.",
+        "Übernahme in den Auftrag startet noch keine ungewollte Schreibaktion."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/app.js",
+          "line": 3541,
+          "detail": "Erster Stand trennt use- und drop-Entscheidungen."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 13638,
+          "detail": "Aktueller Renderer bildet use und drop weiter getrennt ab."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 13746,
+          "detail": "Aktuelle begriffeUebernehmen-Funktion ergänzt vorhandene Entscheidungen ohne Duplikate."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 13669,
+          "detail": "Klickhandler ermöglicht das erneute Herausnehmen bereits zugeordneter Begriffe."
+        }
+      ],
+      "screens": [
+        "listings"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-12"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H13",
+      "key": "pipeline-manual-and-rewrite-preserved",
+      "title": "Manuelle Felder, Einzelüberarbeitung und Stapelauftrag sind erhalten",
+      "area": "Listings & Review",
+      "status": "preserved",
+      "priority": null,
+      "before": "1.3.0 bietet vier editierbare Listing-Felder, eigene Speicherung, Undo, Rewrite now und Add to queue.",
+      "change": null,
+      "now": "1.4.292 besitzt dieselben vier editierbaren Felder, lokale Save/Undo-Grenzen und beide Schreibwege. Save erscheint erst bei einer Änderung; das ist keine Entfernung.",
+      "impact": "Kein quellbelegter Verlust dieser Kernhandlungen. Geringere Sichtbarkeit im leeren/ungänderten Zustand kann als UI-Frage weiter diskutiert werden.",
+      "recommendation": "Die vorhandenen Save-/Undo- und Einzel-/Stapelhandler in neue Kacheln integrieren; keine vermeintlich fehlenden Funktionen neu erfinden.",
+      "acceptance": [
+        "Eine manuelle Feldänderung zeigt Save und Undo; Undo lässt Kommentar/Keywordauswahl bestehen.",
+        "Rewrite now bindet nur dieses Listing; Add to queue erhält dessen genauen Auftrag.",
+        "Ordnerwechsel verwirft ungespeicherte Änderungen nicht still."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/app.js",
+          "line": 3189,
+          "detail": "Erster Stand mit manueller Speicherung und Undo."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/app.js",
+          "line": 3273,
+          "detail": "Erster Stand besitzt Rewrite now und Add to queue."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 12705,
+          "detail": "Aktueller Kartenrenderer erzeugt weiterhin FIELDS mit konkreten Textfeldern."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 12752,
+          "detail": "Aktueller manueller Save/Undo-Abschnitt."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 12835,
+          "detail": "Aktuelle Rewrite-now- und Queuebuttons."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 5942,
+          "detail": "Aktueller Ordnerwechsel-Guard für ungespeicherte Listings."
+        }
+      ],
+      "screens": [
+        "listings"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-12"
+      ],
+      "limits": []
+    },
+    {
+      "id": "H14",
+      "key": "HM-01",
+      "title": "Auto-Uploadfenster machten alte Vollbackups zeitweise unbrauchbar",
+      "area": "Settings / Backup / Upload",
+      "status": "restored",
+      "priority": "P1",
+      "before": "Vor Auto: gültiges Zahlenbackup konnte auf Zahlenkonfiguration wiederhergestellt werden.",
+      "change": "26.10.: Auto eingeführt. Restore verglich weiterhin Typ der lokalen Einstellung statt gültige Werte. 26.10.: eigener Wertepfad für1/2/3/auto repariert beide Richtungen.",
+      "now": "Beide Richtungen zulässig; ungültige Werte weiterhin abgewiesen.",
+      "impact": "Nach Einführung der Auto-Fenster scheiterte der vollständige Restore zwischen Zahlenwert und Auto an einer Typprüfung. Seit1.4.251 korrigiert; heutiger1.4.292-Quellpfad besteht die Gegenprobe.",
+      "recommendation": "Bestehenden Regressionsfall im Release-Gate behalten; keine neue offene Reparatur erfinden.",
+      "acceptance": [
+        "Zahlenbackup auf Auto-Mac und Auto-Backup auf Zahlen-Mac bleiben zulässig.",
+        "Ungültige Werte verweigern den Restore; lokale Identität bleibt geschützt."
+      ],
+      "evidence": [
+        {
+          "commit": "ef66e21dca621a1e49d28c63913a1d5e28cc0461",
+          "date": "2026-10-26",
+          "version": "1.4.247",
+          "file": "server.js",
+          "line": 28795,
+          "detail": "Vorheriger Restorepfad."
+        },
+        {
+          "commit": "1cd23716ea403650f0ee98cf2b9c8034dcd934ac",
+          "date": "2026-10-26",
+          "version": "1.4.247",
+          "file": "server.js",
+          "line": 638,
+          "detail": "Neue Standardeinstellung hat einen anderen Typ als alte Zahlenbackups."
+        },
+        {
+          "commit": "1cd23716ea403650f0ee98cf2b9c8034dcd934ac",
+          "date": "2026-10-26",
+          "version": "1.4.247",
+          "file": "server.js",
+          "line": 28840,
+          "detail": "Fehler im betroffenen Zwischenstand."
+        },
+        {
+          "commit": "5deac7e0068b640cb6470862ee013a83e7c5b90b",
+          "date": "2026-10-26",
+          "version": "1.4.251",
+          "file": "server.js",
+          "line": 30416,
+          "detail": "Gezielte Reparatur vor der generischen Typprüfung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 31360,
+          "detail": "Heutiger Korrekturpfad bleibt vorhanden."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "test/settings-restore-limits-server.test.mjs",
+          "line": 154,
+          "detail": "Regressionsfall im heutigen Test erhalten."
+        }
+      ],
+      "screens": [
+        "settings",
+        "uploadqueue"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-09"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    },
+    {
+      "id": "H15",
+      "key": "HM-02",
+      "title": "Export bewahrt das Legacy-Original heute; ältere Verluste werden dadurch nicht rekonstruiert",
+      "area": "Review / Export / Legacy",
+      "status": "historical_defect",
+      "priority": "P1",
+      "before": "Export löscht importierte Tabelle und Legacy-Originalfelder.",
+      "change": "Späterer Checkpoint bewahrt die externe Tabellenquelle, löscht aber weiterhin listing.legacy. 11.11.: Export behält das Original und Legacy-Zuordnung ausdrücklich bei.",
+      "now": "Korrekturpfad vorhanden; keine automatische Rekonstruktion schon gelöschter Originale nachgewiesen.",
+      "impact": "Der frühe Export entfernte den Legacy-Marker und anfangs sogar die importierte Tabelle. Seit1.4.278 bleibt das gespeicherte Legacy-Original erhalten. Schon der erste Repository-Stand zeigt den alten Verlustpfad; eine spätere Einführungsregression ist damit nicht belegt.",
+      "recommendation": "Als reparierten historischen Verlust führen. Optional separat und nur lesend prüfen, ob vor dem Fix exportierte Nutzerdaten aus Originaltabellen/Backups rekonstruierbar sind. Kein tatsächlicher privater Datenverlust wird hier behauptet.",
+      "acceptance": [
+        "Neue Exporte behalten Legacy-Original, Quellverweis und Legacy-Einordnung.",
+        "Eine optionale Altdatenprüfung nennt exakte betroffene Records und vorhandene Sicherungsquellen, verändert aber keine Originale ohne eigenen Wiederherstellungsauftrag."
+      ],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "server.js",
+          "line": 3005,
+          "detail": "Historischer Exportpfad entfernte die Tabelle; kein aktueller Löschpfad behauptet."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "server.js",
+          "line": 3010,
+          "detail": "Verlust war bereits im ersten Commit enthalten."
+        },
+        {
+          "commit": "50a7e07e54d60cd75831097ee2c20914495ea354",
+          "date": "2026-09-05",
+          "version": "1.4.0",
+          "file": "server.js",
+          "line": 12727,
+          "detail": "Legacy-Original im späteren Zwischenstand weiter entfernt."
+        },
+        {
+          "commit": "441fc508233c5ab794fa40ce5abf8dfd61ba8848",
+          "date": "2026-11-11",
+          "version": "1.4.278",
+          "file": "server.js",
+          "line": 25413,
+          "detail": "Tatsächlicher Vor-Fix-Stamp."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 26458,
+          "detail": "Heutiger Stamp hält Original und Quellverweis."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 26467,
+          "detail": "Preserved ist heute mit tatsächlich erhaltenem Original gekoppelt."
+        }
+      ],
+      "screens": [
+        "review",
+        "listings",
+        "archive"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-14"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    },
+    {
+      "id": "H16",
+      "key": "HM-03",
+      "title": "Gespeicherte Vectorizer-Kennwörter bewusst durch Browser-Sitzung ersetzt",
+      "area": "Settings / Verbindung",
+      "status": "intentional",
+      "priority": "P2",
+      "before": "Optionaler Auto-Sign-in speichert Kennwort in settings.json; manuelle Browser-Anmeldung ebenfalls vorhanden.",
+      "change": "Keine E-Mail-/Kennwortspeicherung; browser-data-Sitzung als Anschlussweg.",
+      "now": "Open sign-in, Test und Clear browser session weiterhin in Settings.",
+      "impact": "Die früheren E-Mail-/Kennwortfelder und unbeaufsichtigte Passwortanmeldung wurden entfernt. Anmelden und Sitzungswiederverwendung bleiben über die eigene Browser-Sitzung erreichbar. Das ist eine beabsichtigte Sicherheits-/Bedienänderung, keine verschwundene Anmeldung.",
+      "recommendation": "Nicht als Rückschritt zählen und keinen Kennwortspeicher zurückbauen. Den direkten Anmelde-/Wiederaufnahmeweg erhalten.",
+      "acceptance": [],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/index.html",
+          "line": 1119,
+          "detail": "Alter optionaler Kennwortpfad."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/index.html",
+          "line": 1135,
+          "detail": "Alter Speicherauslöser."
+        },
+        {
+          "commit": "50a7e07e54d60cd75831097ee2c20914495ea354",
+          "date": "2026-09-05",
+          "version": "1.4.0",
+          "file": "public/index.html",
+          "line": 2928,
+          "detail": "Expliziter Ersatz mit Browser-Sitzung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 4451,
+          "detail": "Aktueller direkter Anmeldeauslöser."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 4457,
+          "detail": "Sitzungsverwaltung bleibt erreichbar."
+        }
+      ],
+      "screens": [
+        "settings",
+        "vectorize"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-13"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    },
+    {
+      "id": "H17",
+      "key": "HM-04",
+      "title": "Flying-Export und Text+Artwork-Export sind weiterhin vorhanden",
+      "area": "Export / Upload",
+      "status": "expanded",
+      "priority": "P2",
+      "before": "Review-Export und Text+Artwork-Export vorhanden.",
+      "change": "Die Funktion wurde erweitert; kein Verlust belegt.",
+      "now": "Beide Endpunkte plus eigene Upload-Queue vorhanden; Export mit Belegen/Wiederherstellung erweitert.",
+      "impact": "Der Übergang zur eigenen Upload-Queue hat den alten ZIP-/XLSX-Export nicht ersetzt. Review-Export und separater Text+Artwork-Export bestehen daneben weiter; ein Export ist weiterhin kein Nachweis einer Amazon-Veröffentlichung.",
+      "recommendation": "Als erhaltene Funktion führen; vorhandenes R7/FW-14 behandelt Erreichbarkeit statt einen erfundenen Featureverlust.",
+      "acceptance": [],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/index.html",
+          "line": 788,
+          "detail": "Früher Text+Artwork-Auslöser."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "server.js",
+          "line": 2271,
+          "detail": "Früher eigener Exportendpunkt."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "server.js",
+          "line": 2920,
+          "detail": "Früher Review-/Flying-Export."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 2905,
+          "detail": "Heutiger Text+Artwork-Auslöser."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 3886,
+          "detail": "Heutiger Review-Exportauslöser."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 21040,
+          "detail": "Heutiger eigener Exportendpunkt."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 3307,
+          "detail": "Heutiger Review-Exportendpunkt."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "server.js",
+          "line": 26615,
+          "detail": "Zusätzliche Wiederherstellung."
+        }
+      ],
+      "screens": [
+        "review",
+        "listings",
+        "uploadqueue"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-14",
+        "FW-09"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    },
+    {
+      "id": "H18",
+      "key": "HM-05",
+      "title": "Backup, zweiter Speicherort und Restore wurden nicht entfernt",
+      "area": "Settings / Backup / Dateien",
+      "status": "expanded",
+      "priority": "P2",
+      "before": "Backup now, Ordnerwahl, Reveal und Regel-Restore vorhanden.",
+      "change": "Die Funktion wurde erweitert; kein Verlust belegt.",
+      "now": "Gleiche Backup-Aktionen plus Vollbackup-Download/Restore; Term-Regel-Restore im IP-Decision-Owner.",
+      "impact": "Backup now, anderer Ordner und Finder-Ziel bestehen seit dem Anfang weiter. Der heutige Vollrestore hat einen Dateivorschau-/Bestätigungsschritt. Term-Regel-Backup ist in einen eigenen Owner verlagert; der entfernte alte Handler ist kein fehlendes Feature.",
+      "recommendation": "Als erhalten/verlagert kennzeichnen. Der Auto-Fenster-Zwischenfehler ist separat HM-01, nicht der Verlust des ganzen Restorefeatures.",
+      "acceptance": [],
+      "evidence": [
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/index.html",
+          "line": 997,
+          "detail": "Früher manueller Backupauslöser."
+        },
+        {
+          "commit": "726a3e3ee518cc33fb92f60205c6dcfe48a9fbbd",
+          "date": "2026-08-26",
+          "version": "1.3.0",
+          "file": "public/index.html",
+          "line": 1369,
+          "detail": "Früher Regel-Restoreauslöser."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 4226,
+          "detail": "Backup now bleibt."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 4221,
+          "detail": "Zweiter Ort bleibt wählbar."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/index.html",
+          "line": 4191,
+          "detail": "Vollrestore mit expliziter Bestätigung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/ip-decision-inbox.js",
+          "line": 994,
+          "detail": "Aktueller Regel-Restorehandler nach Modulverlagerung."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/app.js",
+          "line": 20215,
+          "detail": "Aktueller Full-Restore-Handler."
+        }
+      ],
+      "screens": [
+        "settings",
+        "archive"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "FW-09",
+        "FW-14"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    },
+    {
+      "id": "H19",
+      "key": "HM-06",
+      "title": "Fetch-Schreibfreigabe wechselte bewusst von ID-Liste auf internen Modus",
+      "area": "Account Management / Add products / Change",
+      "status": "intentional",
+      "priority": "P2",
+      "before": "Freigabe über konfigurierten Design-ID-Bereich.",
+      "change": "25.10.: interner off/test/on-Modus, Standard off; Ein-ID-Liste wird einmalig als Test übernommen, mehrdeutige Listen bleiben off.",
+      "now": "Schreibprüfung bleibt vor jeder betroffenen Amazon-Aktion wirksam.",
+      "impact": "Die manuelle fetchWriteDesigns-Einstellung verschwand zugunsten off/test/on mit eigener Übernahme. Ein blockierter Schreibmodus ist keine aus Versehen gelöschte Add-products-/Change-Funktion. Bestehende Freigaben und reale Ersttests lassen sich aus der UI allein nicht nachträglich als erfolgt beweisen.",
+      "recommendation": "Als bewusste Freigabegrenze dokumentieren. Ein fehlender Ersttest wird nicht durch Entsperren im Audit ersetzt; nötiger Handlungsweg soll kurz am betroffenen Auftrag stehen.",
+      "acceptance": [],
+      "evidence": [
+        {
+          "commit": "cc9793fd206a2b80d206ce3fef42b7e06867400c",
+          "date": "2026-10-25",
+          "version": "1.4.246",
+          "file": "server.js",
+          "line": 29336,
+          "detail": "Vorher: tatsächlicher Freigabeumfang kommt aus der Settings-ID-Liste."
+        },
+        {
+          "commit": "f53dba7febacca839eff37d2bb2efeb8bdf4e03d",
+          "date": "2026-10-25",
+          "version": "1.4.246",
+          "file": "src/merch-fetch-service.js",
+          "line": 116,
+          "detail": "Umstellung am25.10.: eigener Freigabespeicher ersetzt Settings-Liste."
+        },
+        {
+          "commit": "f53dba7febacca839eff37d2bb2efeb8bdf4e03d",
+          "date": "2026-10-25",
+          "version": "1.4.246",
+          "file": "src/fetch-write-mode.js",
+          "line": 89,
+          "detail": "Umstellung übernimmt eine eindeutige alte Ein-ID-Liste als Test; andere Listen bleiben off."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/merch-fetch-service.js",
+          "line": 212,
+          "detail": "Heutiger eigener Freigabeowner."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/merch-fetch-service.js",
+          "line": 913,
+          "detail": "Schreibumfang wird aus Freigabe und Queue abgeleitet."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "public/upload-live.js",
+          "line": 838,
+          "detail": "UI behandelt die Einschränkung ausdrücklich."
+        },
+        {
+          "commit": "7b560983b36ceb7427e27404bb305da06fb38c08",
+          "date": "2026-11-17",
+          "version": "1.4.292",
+          "file": "src/fetch-write-mode.js",
+          "line": 26,
+          "detail": "Sicherer Ausgangsmodus."
+        }
+      ],
+      "screens": [
+        "live",
+        "management",
+        "uploadqueue"
+      ],
+      "relatedFindings": [],
+      "relatedTasks": [
+        "MG-07"
+      ],
+      "limits": [
+        "Quellvergleich und ggf. isolierte Funktionsprobe; keine historischen Binärversionen oder privaten Nutzerdaten geprüft."
+      ]
+    }
+  ]
+}

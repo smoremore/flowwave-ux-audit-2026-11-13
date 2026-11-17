@@ -53,6 +53,10 @@
     const key = `task-${task.id}`;
     topics[key] = Object.freeze({key, kind:'task', id:task.id, label:`Aufgabe ${task.id}`, title:task.title, term:`flowwave-audit-2026-11-13/task/${task.id}`, anchor:key});
   });
+  (window.FlowWaveFeatureHistory?.entries || []).forEach(entry => {
+    const key=`regression-${entry.id}`;
+    topics[key]=Object.freeze({key,kind:'regression',id:entry.id,label:`Feature-Rückblick ${entry.id}`,title:entry.title,term:`flowwave-audit-2026-11-13/regression/${entry.id}`,anchor:`history-${entry.id}`});
+  });
   window.FlowWaveFeedbackConfig = Object.freeze({
     repo: 'smoremore/flowwave-ux-audit-2026-11-13',
     repoId: 'R_kgDOVsn2Ew',

@@ -181,6 +181,7 @@
         updateScreenButtons();
       } else if(topic.kind==='finding') window.FlowWaveAuditFindings?.reveal(topic.id);
       else if(topic.kind==='task') window.FlowWaveTeamTaskView?.reveal(topic.id);
+      else if(topic.kind==='regression') window.FlowWaveHistoryView?.reveal(topic.id);
       const trigger=topic.kind==='screen'?document.querySelector('[data-feedback-screen]'):document.querySelector(`[data-feedback-topic="${requested}"]`);
       window.FlowWaveAuditTabs?.revealFor(trigger);
       openFeedback(requested, trigger || document.querySelector('[data-audit-tab][aria-selected="true"]'));

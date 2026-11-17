@@ -1,6 +1,6 @@
 {
-  "version": "2026-11-15",
-  "status": "Planung mit dokumentiertem Management-Audit – keine Produktionsumsetzung",
+  "version": "2026-11-17",
+  "status": "Planung mit datierten UI- und Historienbefunden – keine Produktionsumsetzung",
   "priorityMeaning": {
     "P0": "Zuerst: großer Stapel und durchgängiger Weg bis Upload",
     "P1": "Danach: Bedienbarkeit und Bestandsmanagement",
@@ -34,7 +34,8 @@
         "import",
         "collections",
         "activity"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "FW-02",
@@ -75,6 +76,9 @@
         "repairs",
         "listings",
         "review"
+      ],
+      "historySources": [
+        "H07"
       ]
     },
     {
@@ -107,14 +111,18 @@
         "import",
         "collections",
         "sets"
+      ],
+      "historySources": [
+        "H04",
+        "H07"
       ]
     },
     {
       "id": "FW-04",
       "priority": "P0",
       "area": "Autopilot",
-      "title": "Einen großen Gesamtstapel einmal starten und selbstständig abarbeiten",
-      "kind": "Zielerweiterung",
+      "title": "Vorhandenen Gesamtstart erhalten und dauerhafte Wiederaufnahme absichern",
+      "kind": "Integration",
       "owner": "Workflow-Engine + Backend",
       "sources": [
         "B1",
@@ -126,19 +134,23 @@
         "FW-02",
         "FW-03"
       ],
-      "status": "Offen",
+      "status": "Gesamtstart vorhanden · Abnahme offen",
       "outcome": "Erfolgreiche Schritte und interne Teilmengen benötigen keine wiederholte Startbestätigung.",
-      "work": "Einen dauerhaften Gesamtauftrag mit exakten IDs, Revisionen, Route und Endpunkt einführen; zulässige Dispatch-Fenster darunter verwalten.",
+      "work": "Das bereits vollständige Startmanifest beibehalten und die veraltete 25er-Hilfe korrigieren. Dauerhafte Gesamtidentität, Routenbindung, Wiederaufnahme und Endpunkt abnehmen; keine künstlichen 25er-Fenster einführen.",
       "acceptance": [
-        "Vor einem Start sind die genaue Gesamtmenge, die Route, der Endpunkt und interne Teilmengen sichtbar. Ein einmal bestätigter Gesamtauftrag kann z. B. 1.000 gewählte Motive enthalten.",
-        "Die bestehende Grenze von höchstens 25 Workflows pro zugelassenem Start wird als Dispatch-Grenze erhalten. Weitere Fenster benötigen einen neu implementierten, validierten Gesamtauftrag; ein alter 25er-Receipt wird niemals still auf zusätzliche IDs erweitert.",
-        "Nach einem erfolgreichen Schritt oder abgeschlossenen Fenster geht nur die gespeicherte noch offene Teilmenge automatisch weiter: null weitere Startklicks und keine neue Auswahl.",
+        "Vor dem Start sind die genaue Gesamtmenge, Route und Endpunkt sichtbar. Der bereits vorhandene Startweg verarbeitet die gesamte ausdrücklich gewählte startfähige Teilmenge, z. B. mehr als 25 oder 1.000 Motive.",
+        "Weder UI noch Startmanifest erhalten eine künstliche 25er-Grenze. Bereits seit d0d0c884 (26.10.) gibt der Sammelstart einzelne Workflow-Aufträge ab; Hilfetext und Darstellung müssen diese tatsächliche Reichweite benennen.",
+        "Nach einem erfolgreichen Schritt setzt nur die gespeicherte noch offene Teilmenge fort: keine weiteren Startklicks, keine neue Auswahl und keine erneute Verarbeitung fertiger Ergebnisse.",
         "Neustart oder Verbindungsabbruch setzt denselben Gesamtauftrag fort. Fertige Ergebnisse werden nicht wiederholt; unklare Originalaufrufe werden vor einer neuen Sendung abgeglichen.",
         "Bildinhalt wird erst im finalen Review geprüft. Manuelle und Semi-Modi bleiben nutzbar; Stop beendet neue Sendungen und erhält eingehende Antworten.",
-        "Vor jedem neuen Providerturn, auch innerhalb eines 25er-Fensters, gelten die aktuellen Zugangs-, Budget- und Originalzustandsprüfungen. Bei gemeinsamem Ausfall oder null/unverifiziertem Guthaben bleibt die Queue gespeichert; keine kostenpflichtige Ausweichroute und kein stiller Modellwechsel."
+        "Vor jedem neuen Anbieterturn gelten die aktuellen Zugangs-, Budget- und Originalzustandsprüfungen. Bei gemeinsamem Ausfall oder null/unverifiziertem Guthaben bleibt die Queue gespeichert; keine kostenpflichtige Ausweichroute und kein stiller Modellwechsel."
       ],
       "screens": [
         "autopilot"
+      ],
+      "historySources": [
+        "H02",
+        "H05"
       ]
     },
     {
@@ -171,7 +183,8 @@
         "activity",
         "designs",
         "review"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "FW-06",
@@ -212,6 +225,10 @@
         "listings",
         "review",
         "uploadqueue"
+      ],
+      "historySources": [
+        "H03",
+        "H10"
       ]
     },
     {
@@ -246,6 +263,12 @@
       "screens": [
         "review",
         "checks"
+      ],
+      "historySources": [
+        "H05",
+        "H08",
+        "H09",
+        "H11"
       ]
     },
     {
@@ -281,6 +304,10 @@
         "review",
         "upload",
         "uploadqueue"
+      ],
+      "historySources": [
+        "H02",
+        "H11"
       ]
     },
     {
@@ -315,6 +342,11 @@
         "management",
         "archive",
         "live"
+      ],
+      "historySources": [
+        "H14",
+        "H17",
+        "H18"
       ]
     },
     {
@@ -361,6 +393,9 @@
         "uploadqueue",
         "management",
         "archive"
+      ],
+      "historySources": [
+        "H09"
       ]
     },
     {
@@ -388,7 +423,8 @@
       ],
       "screens": [
         "uploadqueue"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "FW-12",
@@ -419,6 +455,11 @@
       "screens": [
         "listings",
         "review"
+      ],
+      "historySources": [
+        "H10",
+        "H12",
+        "H13"
       ]
     },
     {
@@ -451,6 +492,9 @@
         "live",
         "activity",
         "settings"
+      ],
+      "historySources": [
+        "H16"
       ]
     },
     {
@@ -482,6 +526,12 @@
         "listings",
         "management",
         "archive"
+      ],
+      "historySources": [
+        "H06",
+        "H15",
+        "H17",
+        "H18"
       ]
     },
     {
@@ -511,6 +561,10 @@
       "screens": [
         "create",
         "remaster"
+      ],
+      "historySources": [
+        "H03",
+        "H04"
       ]
     },
     {
@@ -544,7 +598,8 @@
         "review",
         "checks",
         "activity"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "FW-17",
@@ -571,7 +626,8 @@
       "screens": [
         "effects",
         "halftone"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "FW-18",
@@ -596,6 +652,9 @@
       ],
       "screens": [
         "vectorize"
+      ],
+      "historySources": [
+        "H06"
       ]
     },
     {
@@ -621,7 +680,8 @@
       "screens": [
         "management",
         "archive"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "AU-02",
@@ -645,7 +705,8 @@
       ],
       "screens": [
         "live"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-01",
@@ -671,7 +732,8 @@
       ],
       "screens": [
         "management"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-02",
@@ -699,7 +761,8 @@
         "management",
         "archive",
         "uploadqueue"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-03",
@@ -728,7 +791,8 @@
       "screens": [
         "management",
         "live"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-04",
@@ -755,7 +819,8 @@
       ],
       "screens": [
         "live"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-05",
@@ -778,7 +843,8 @@
       ],
       "screens": [
         "live"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-06",
@@ -804,7 +870,8 @@
       "screens": [
         "management",
         "live"
-      ]
+      ],
+      "historySources": []
     },
     {
       "id": "MG-07",
@@ -830,6 +897,9 @@
         "management",
         "live",
         "uploadqueue"
+      ],
+      "historySources": [
+        "H19"
       ]
     },
     {
@@ -854,6 +924,31 @@
       "screens": [
         "management",
         "live"
+      ],
+      "historySources": []
+    },
+    {
+      "id": "RH-01",
+      "priority": "P1",
+      "area": "Effects",
+      "title": "Den weggefallenen additiven Rahmen bewusst entscheiden und bei Bedarf wieder anbinden",
+      "kind": "Historienbefund",
+      "owner": "Produkt + Bildwerkzeuge",
+      "sources": [],
+      "historySources": [
+        "H01"
+      ],
+      "depends": [],
+      "status": "Produktentscheidung offen",
+      "outcome": "Der frühere additive Rahmen wird bewusst eingestellt oder als klar benannte optionale Gestaltung wieder bedienbar.",
+      "work": "Produktentscheidung dokumentieren: additiven Rahmen bewusst einstellen oder als optionale, klar benannte Effects-Aktion wieder anbinden. Keine automatische Reaktivierung durch den Audit.",
+      "acceptance": [
+        "Entscheidung über den früheren additiven Rahmen ist dokumentiert; Konturverschleiß wird nicht als Ersatz dafür bezeichnet.",
+        "Falls beibehalten: ein Finished-Motiv kann einen sichtbaren additiven Rahmen erhalten und als neue Variante speichern; Original und bestehende Exporte bleiben unverändert.",
+        "Textur und additiver Rahmen sind unabhängig wählbar; Vorschau und gespeichertes Ergebnis entsprechen demselben Seed und Umfang."
+      ],
+      "screens": [
+        "effects"
       ]
     }
   ]
